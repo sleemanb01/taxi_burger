@@ -2,6 +2,7 @@ export type responseWToken = {
   id: string;
   email: string;
   token: string;
+  isAdmin: boolean;
 };
 
 export type AuthorizationRequest = Request<

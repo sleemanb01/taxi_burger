@@ -117,6 +117,7 @@ export const login = async (
     id: targetUser.id,
     email: targetUser.email,
     token,
+    isAdmin: targetUser.isAdmin,
   };
 
   res.json(ret);
@@ -199,6 +200,7 @@ export const signup = async (
     id: createdUser.id,
     email: createdUser.email,
     token,
+    isAdmin: false,
   };
 
   res.status(HTTP_RESPONSE_STATUS.Created).json(ret);

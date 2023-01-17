@@ -4,12 +4,13 @@ import Card from "../../shared/components/UIElements/Card";
 import Modal from "../../shared/components/UIElements/Modal";
 import { IStock } from "../../../typing/interfaces";
 
-import "./StockItem.css";
+import "../../user/components/Item.css";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { BACKEND_URL, ENDPOINT_STOCKS } from "../../../util/Constants";
+import Avatar from "../../shared/components/UIElements/Avatar";
 
 /* ************************************************************************************************** */
 
@@ -45,6 +46,8 @@ export function StockItem({
     } catch (err) {}
   };
 
+  console.log(user?.isAdmin);
+
   /* ************************************************************************************************** */
 
   return (
@@ -54,7 +57,7 @@ export function StockItem({
         show={isConfirmVisible}
         onCancel={closeConfirmHandler}
         header="Are you sure?"
-        footerClass="stock-item__modal-actions"
+        footerClass="item__modal-actions"
         footer={
           <React.Fragment>
             <Button inverse onClick={closeConfirmHandler}>
@@ -68,23 +71,28 @@ export function StockItem({
       >
         <p>Do you want to proceed and delete this!</p>
       </Modal>
-      <li className="stock-item">
-        <Card className={"stock-item__content"}>
-          {isLoading ? <LoadingSpinner asOverlay /> : <></>}
-          <div className="stock-item__image">
-            <img
-              src={BACKEND_URL ? BACKEND_URL + stock.image : ""}
-              alt={stock.name + "image"}
-            />
+      <li className="item">
+        <Card className="item__content">
+          <div className="item__image">
+            {stock.image && (
+              <Avatar
+                image={BACKEND_URL ? BACKEND_URL + stock.image : ""}
+                alt={stock.name + "image"}
+              />
+            )}
           </div>
-          <div className="stock-item__actions">
+          <div className="item__info">
+            <h2>{stock.name}</h2>
+            <h2>{stock.quantity}</h2>
+          </div>
+          {/* <div className="item__actions">
             {user && <Button to={`/stocks/${stock._id}`}>EDIT</Button>}
             {user && user.isAdmin && (
               <Button danger={true} onClick={openConfirmHandler}>
                 DELETE
               </Button>
             )}
-          </div>
+          </div> */}
         </Card>
       </li>
     </React.Fragment>

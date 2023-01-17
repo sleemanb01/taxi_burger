@@ -6,7 +6,6 @@ import { reducerFormStateInitVal } from "../../../hooks/useReducer";
 import { useNavigate } from "react-router-dom";
 import { EValidatorType } from "../../../typing/enums";
 import {
-  ERROR_DESCRIPTION_LENGTH,
   ERROR_TEXT_REQUIRED,
   ENDPOINT_STOCKS,
   ERROR_IMAGE,
@@ -51,6 +50,10 @@ function NewStock() {
       nav("/");
     } catch (err) {}
   };
+
+  if (!user.isAdmin) {
+    nav("/");
+  }
 
   return (
     <React.Fragment>

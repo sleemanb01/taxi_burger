@@ -27,6 +27,7 @@ export function AuthContextProvider({ children }: { children: JSX.Element }) {
         id: user.id,
         token: user.token,
         expiration: tokenExpirationDate.toISOString(),
+        isAdmin: user.isAdmin,
       })
     );
   }, []);

@@ -79,6 +79,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         id: targetUser.id,
         email: targetUser.email,
         token,
+        isAdmin: targetUser.isAdmin,
     };
     res.json(ret);
 });
@@ -133,6 +134,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         id: createdUser.id,
         email: createdUser.email,
         token,
+        isAdmin: false,
     };
     res.status(enums_1.HTTP_RESPONSE_STATUS.Created).json(ret);
 });

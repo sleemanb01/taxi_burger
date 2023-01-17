@@ -38,6 +38,6 @@ export type userWToken = {
   id: string;
   email: string;
   token: string;
-  tokenExpiration: Date;
   isAdmin: boolean;
+  tokenExpiration: Date;
 };
