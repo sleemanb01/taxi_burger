@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { IUser } from "../../../typing/interfaces";
 import { BACKEND_URL } from "../../../util/Constants";
 import Avatar from "../../shared/components/UIElements/Avatar";

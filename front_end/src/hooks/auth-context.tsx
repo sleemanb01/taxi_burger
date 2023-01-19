@@ -50,7 +50,7 @@ export function AuthContextProvider({ children }: { children: JSX.Element }) {
     } else {
       clearTimeout(logoutTimer);
     }
-  }, [auth?.token, logout, tokenExpirationDate]);
+  }, [auth, auth?.token, logout, tokenExpirationDate]);
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
