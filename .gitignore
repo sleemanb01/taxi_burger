@@ -35,3 +35,6 @@ build/
 
 # actions
 #.github/
+
+#pictures
+*.jpeg
