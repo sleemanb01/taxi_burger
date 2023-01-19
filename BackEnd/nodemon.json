@@ -1,8 +1,0 @@
-{
-  "env": {
-    "DB_USER": "taxiAdmin",
-    "DB_PASSWORD": "vutbcutbhqaz951",
-    "DB_NAME": "taxi_burger",
-    "JWT_KEY": "topSecret"
-  }
-}
