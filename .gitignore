@@ -8,7 +8,7 @@ yarn-ers
 
 # directories
 node_modules/
-.vscode/
+/**/.vscode/
 
 # testing
 /coverage
@@ -20,7 +20,7 @@ node_modules/
 **/.firebaserc
 
 # environment variables file
-**/nodemon.json
+/**/nodemon.json
 .DS_Store
 .env
 .env.production
