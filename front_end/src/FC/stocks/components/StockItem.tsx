@@ -72,7 +72,7 @@ export function StockItem({
         <p>Do you want to proceed and delete this!</p>
       </Modal>
       <li className="item">
-        <Card className="item__content">
+        <Card className="item-card item__content">
           <div className="item__image">
             {stock.image && (
               <Avatar

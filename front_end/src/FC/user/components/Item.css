@@ -15,10 +15,10 @@
   background: #292929;
 }
 
-.item a:hover,
+/* .item a:hover,
 .item a:active {
   background: #ffd900;
-}
+} */
 
 .card.item__content {
   padding: 0;
@@ -27,7 +27,7 @@
 .item__image {
   width: 4rem;
   height: 4rem;
-  margin-right: 1rem;
+  margin: 0 1rem;
 }
 
 .item__info h2 {
