@@ -28,7 +28,7 @@ function App() {
         authCtx.login(user);
       }
     }
-  }, [authCtx.login]);
+  }, [authCtx, authCtx.isLoggedIn]);
 
   let routes;
 

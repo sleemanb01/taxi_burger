@@ -8,7 +8,7 @@ import "../../user/components/Item.css";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+
 import { BACKEND_URL, ENDPOINT_STOCKS } from "../../../util/Constants";
 import Avatar from "../../shared/components/UIElements/Avatar";
 
@@ -22,14 +22,14 @@ export function StockItem({
   onDelete: Function;
 }) {
   const user = useContext(AuthContext).user;
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { error, sendRequest, clearError } = useHttpClient();
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   /* ************************************************************************************************** */
 
-  const openConfirmHandler = () => {
-    setIsConfirmVisible(true);
-  };
+  // const openConfirmHandler = () => {
+  //   setIsConfirmVisible(true);
+  // };
 
   const closeConfirmHandler = () => {
     setIsConfirmVisible(false);
