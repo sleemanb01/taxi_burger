@@ -9,7 +9,13 @@ export interface IUser {
 
 export interface IStock {
   _id?: string;
+  categoryId:ICategory['_id'];
   name: string;
   quantity: number;
-  image: string;
+  inUse:boolean;
+}
+
+export interface ICategory {
+  _id?: string;
+  name: string;
 }

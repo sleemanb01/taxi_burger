@@ -15,7 +15,7 @@ export function StocksList({
 }) {
   if (stocks.length === 0) {
     return (
-      <div className="stock-list center">
+      <div className="stock-list">
         <Card>
           <h2>No stocks found. Maybe create one?</h2>
           <Button to="/stocks/new">Add STOCK</Button>

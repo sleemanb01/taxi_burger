@@ -98,7 +98,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         alreadySigned = yield user_model_1.default.findOne({ email: email });
     }
     catch (_f) {
-        return next(new http_error_1.HttpError(messages_1.ERROR_SIGNUP, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error));
+        return next(new http_error_1.HttpError(messages_1.ERROR_EMAIL_EXIST, enums_1.HTTP_RESPONSE_STATUS.Bad_Request));
     }
     if (alreadySigned) {
         return next(new http_error_1.HttpError(messages_1.ERROR_EMAIL_EXIST, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));

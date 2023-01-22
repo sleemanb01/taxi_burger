@@ -12,12 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStock = exports.updateStock = exports.addStock = exports.getStock = void 0;
+exports.deleteCategory = exports.updateCategory = exports.addCategory = exports.getCategories = void 0;
 const express_validator_1 = require("express-validator");
 const http_error_1 = require("../models/http-error");
-const stock_model_1 = __importDefault(require("../models/stock.model"));
-const user_model_1 = __importDefault(require("../models/user.model"));
 const category_model_1 = __importDefault(require("../models/category.model"));
+const user_model_1 = __importDefault(require("../models/user.model"));
 const enums_1 = require("../types/enums");
 const messages_1 = require("../util/messages");
 /* ************************************************************** */
@@ -25,92 +24,80 @@ const internalError = () => {
     return new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
 };
 /* ************************************************************** */
-const getStock = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let stocks = [];
-    let categories;
+const getCategories = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let categories = [];
     try {
-        stocks = yield stock_model_1.default.find();
-        categories = yield getCategories();
-        if (!categories) {
-            throw "";
-        }
+        categories = yield category_model_1.default.find();
     }
     catch (_a) {
         return next(internalError());
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({
-        stocks: stocks.map((stock) => stock.toObject({ getters: true })),
-        categories: categories,
+        categories: categories.map((i) => i.toObject({ getters: true })),
     });
 });
-exports.getStock = getStock;
+exports.getCategories = getCategories;
 /* ************************************************************** */
-const getCategories = () => __awaiter(void 0, void 0, void 0, function* () {
-    let categories = [];
-    try {
-        categories = yield category_model_1.default.find();
-        return categories;
-    }
-    catch (_b) {
-        return null;
-    }
-});
-/* ************************************************************** */
-const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const addCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
     }
-    const { name, quantity, categoryId, inUse } = req.body;
+    const { name } = req.body;
     const creatorId = req.userData.userId;
     let targetUser;
     try {
         targetUser = yield user_model_1.default.findById(creatorId);
     }
-    catch (_c) {
+    catch (_b) {
         return next(new http_error_1.HttpError(messages_1.ERROR_LOGIN, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error));
     }
     if (!targetUser || !targetUser.isAdmin) {
         const error = new http_error_1.HttpError(messages_1.ERROR_UNAUTHORIZED, enums_1.HTTP_RESPONSE_STATUS.Unauthorized);
         return next(error);
     }
-    const newStock = new stock_model_1.default({
+    const newCategory = new category_model_1.default({
         name,
-        quantity,
-        categoryId,
-        inUse,
     });
+    let alreadySigned;
     try {
-        yield newStock.save();
+        alreadySigned = yield category_model_1.default.findOne({ name: name });
+    }
+    catch (_c) {
+        return next(new http_error_1.HttpError(messages_1.ERROR_EXISTS, enums_1.HTTP_RESPONSE_STATUS.Bad_Request));
+    }
+    try {
+        yield newCategory.save();
     }
     catch (_d) {
         return next(internalError());
     }
-    res.status(enums_1.HTTP_RESPONSE_STATUS.Created).json({ stock: newStock });
+    res.status(enums_1.HTTP_RESPONSE_STATUS.Created).json({ category: newCategory });
 });
-exports.addStock = addStock;
+exports.addCategory = addCategory;
 /* ************************************************************** */
-const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
     }
-    const { quantity } = req.body;
-    const stockId = req.params.placeId;
-    let stock;
+    const { name } = req.body;
+    const CategoryId = req.params.CategoryId;
+    let category;
     try {
-        stock = yield stock_model_1.default.findById(stockId);
+        category = yield category_model_1.default.findById(CategoryId);
     }
     catch (_e) {
         const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
-    if (!stock) {
+    if (!category_model_1.default) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_DATA, enums_1.HTTP_RESPONSE_STATUS.Not_Found));
     }
-    stock.quantity = quantity;
+    category = category;
+    category.name = name;
     try {
-        yield stock.save();
+        yield category.save();
     }
     catch (_f) {
         const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
@@ -118,21 +105,21 @@ const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
     res
         .status(enums_1.HTTP_RESPONSE_STATUS.OK)
-        .json({ stock: stock.toObject({ getters: true }) });
+        .json({ category: category.toObject({ getters: true }) });
 });
-exports.updateStock = updateStock;
+exports.updateCategory = updateCategory;
 /* ************************************************************** */
-const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const stockId = req.params.placeId;
-    let targetStock;
+const deleteCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const CategoryId = req.params.placeId;
+    let targetCategory;
     try {
-        targetStock = yield stock_model_1.default.findById(stockId);
+        targetCategory = yield category_model_1.default.findById(CategoryId);
     }
     catch (_g) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
-    if (!targetStock) {
+    if (!targetCategory) {
         const error = new http_error_1.HttpError(messages_1.ERROR_UNAUTHORIZED, enums_1.HTTP_RESPONSE_STATUS.Not_Found);
         return next(error);
     }
@@ -149,7 +136,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         return next(error);
     }
     try {
-        yield targetStock.remove();
+        yield targetCategory.remove();
     }
     catch (_j) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
@@ -157,4 +144,4 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({ message: messages_1.DELETED });
 });
-exports.deleteStock = deleteStock;
+exports.deleteCategory = deleteCategory;

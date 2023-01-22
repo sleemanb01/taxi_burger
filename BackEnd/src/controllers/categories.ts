@@ -1,11 +1,9 @@
 import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
-import fs from "fs";
 
 import { HttpError } from "../models/http-error";
-import Stock, { IStock } from "../models/stock.model";
+import Category, { ICategory } from "../models/category.model";
 import User from "../models/user.model";
-import Category from "../models/category.model";
 import { IUser } from "../models/user.model";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
 import { RequestWUser, AuthorizationRequest } from "../types/types";
@@ -17,6 +15,7 @@ import {
   ERROR_DELETE,
   ERROR_UNAUTHORIZED,
   DELETED,
+  ERROR_EXISTS,
 } from "../util/messages";
 
 /* ************************************************************** */
@@ -30,46 +29,27 @@ const internalError = () => {
 
 /* ************************************************************** */
 
-export const getStock = async (
+export const getCategories = async (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  let stocks = [];
-  let categories;
+  let categories = [];
 
   try {
-    stocks = await Stock.find();
-    categories = await getCategories();
-    if (!categories) {
-      throw "";
-    }
+    categories = await Category.find();
   } catch {
     return next(internalError());
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    stocks: stocks.map((stock) => stock.toObject({ getters: true })),
-    categories: categories,
+    categories: categories.map((i) => i.toObject({ getters: true })),
   });
 };
 
 /* ************************************************************** */
 
-const getCategories = async () => {
-  let categories = [];
-
-  try {
-    categories = await Category.find();
-    return categories;
-  } catch {
-    return null;
-  }
-};
-
-/* ************************************************************** */
-
-export const addStock = async (
+export const addCategory = async (
   req: RequestWUser,
   res: Response,
   next: NextFunction
@@ -85,7 +65,7 @@ export const addStock = async (
     );
   }
 
-  const { name, quantity, categoryId, inUse } = req.body;
+  const { name } = req.body;
   const creatorId = req.userData.userId;
   let targetUser: IUser | null;
 
@@ -105,25 +85,30 @@ export const addStock = async (
     return next(error);
   }
 
-  const newStock = new Stock({
+  const newCategory = new Category({
     name,
-    quantity,
-    categoryId,
-    inUse,
   });
 
+  let alreadySigned;
+
   try {
-    await newStock.save();
+    alreadySigned = await Category.findOne({ name: name });
+  } catch {
+    return next(new HttpError(ERROR_EXISTS, HTTP_RESPONSE_STATUS.Bad_Request));
+  }
+
+  try {
+    await newCategory.save();
   } catch {
     return next(internalError());
   }
 
-  res.status(HTTP_RESPONSE_STATUS.Created).json({ stock: newStock });
+  res.status(HTTP_RESPONSE_STATUS.Created).json({ category: newCategory });
 };
 
 /* ************************************************************** */
 
-export const updateStock = async (
+export const updateCategory = async (
   req: AuthorizationRequest,
   res: Response,
   next: NextFunction
@@ -139,12 +124,12 @@ export const updateStock = async (
     );
   }
 
-  const { quantity } = req.body;
-  const stockId = req.params.placeId;
-  let stock: IStock | null;
+  const { name } = req.body;
+  const CategoryId = req.params.CategoryId;
+  let category: ICategory | null;
 
   try {
-    stock = await Stock.findById(stockId);
+    category = await Category.findById(CategoryId);
   } catch {
     const error = new HttpError(
       ERROR_INTERNAL_SERVER,
@@ -153,16 +138,18 @@ export const updateStock = async (
     return next(error);
   }
 
-  if (!stock) {
+  if (!Category) {
     return next(
       new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
     );
   }
 
-  stock.quantity = quantity;
+  category = category as ICategory;
+
+  category.name = name;
 
   try {
-    await stock.save();
+    await category.save();
   } catch {
     const error = new HttpError(
       ERROR_INTERNAL_SERVER,
@@ -173,21 +160,21 @@ export const updateStock = async (
 
   res
     .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ stock: stock.toObject({ getters: true }) });
+    .json({ category: category.toObject({ getters: true }) });
 };
 
 /* ************************************************************** */
 
-export const deleteStock = async (
+export const deleteCategory = async (
   req: AuthorizationRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const stockId = req.params.placeId;
-  let targetStock;
+  const CategoryId = req.params.placeId;
+  let targetCategory;
 
   try {
-    targetStock = await Stock.findById(stockId);
+    targetCategory = await Category.findById(CategoryId);
   } catch {
     const error = new HttpError(
       ERROR_DELETE,
@@ -196,7 +183,7 @@ export const deleteStock = async (
     return next(error);
   }
 
-  if (!targetStock) {
+  if (!targetCategory) {
     const error = new HttpError(
       ERROR_UNAUTHORIZED,
       HTTP_RESPONSE_STATUS.Not_Found
@@ -224,7 +211,7 @@ export const deleteStock = async (
   }
 
   try {
-    await targetStock.remove();
+    await targetCategory.remove();
   } catch {
     const error = new HttpError(
       ERROR_DELETE,

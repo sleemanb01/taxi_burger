@@ -16,7 +16,7 @@ export function NavLinks() {
       </li>
       {auth.isLoggedIn && auth.user?.isAdmin && (
         <li>
-          <NavLink to="/stocks/new">ADD STOCK</NavLink>
+          <NavLink to={`/stocks/new/${undefined}`}>ADD STOCK</NavLink>
         </li>
       )}
       {!auth.isLoggedIn && (

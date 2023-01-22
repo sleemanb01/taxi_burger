@@ -13,6 +13,7 @@ export const ERROR_SIGNUP = "signing up failed please try again later!";
 export const ERROR_LOGIN = "loging up failed please try again later!";
 export const ERROR_INVALID_CREDENTIALS = "invalid credentials!";
 export const ERROR_UNAUTHORIZED = "UnAuthorized!!";
+export const ERROR_EXISTS = "Already exissting field!";
 
 /****************************************************************/
 

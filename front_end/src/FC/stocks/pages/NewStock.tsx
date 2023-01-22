@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { reducerFormStateInitVal } from "../../../hooks/useReducer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { EValidatorType } from "../../../typing/enums";
 import {
   ERROR_TEXT_REQUIRED,
   ENDPOINT_STOCKS,
-  ERROR_IMAGE,
   ERROR_NUMBER,
+  DEFAULT_HEADERS,
 } from "../../../util/Constants";
 import { Button } from "../../shared/components/FormElements/Button";
 import { Input } from "../../shared/components/FormElements/Input";
@@ -17,7 +17,7 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 import "./StockForm.css";
-import { ImageUpload } from "../../shared/components/FormElements/ImageUpload";
+import { ICategory } from "../../../typing/interfaces";
 
 function NewStock() {
   const [formState, inputHandler] = useForm(
@@ -25,10 +25,23 @@ function NewStock() {
     reducerFormStateInitVal.isValid
   );
   const nav = useNavigate();
+  const categoryId = useParams().categoryId;
 
   const user = useContext(AuthContext).user!;
 
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [inUse, setInUse] = useState(false);
+
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  useLayoutEffect(() => {
+    const categories = localStorage.getItem("categories");
+    if(categories)
+    {
+      setCategories(JSON.parse(categories));
+    }
+  }, []);
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -37,13 +50,16 @@ function NewStock() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("name", formState.inputs.name!.value);
-    formData.append("quantity", formState.inputs.quantity!.value);
-    formData.append("image", formState.inputs.image!.value);
+    const stock = {
+      name:formState.inputs.name!.value,
+      quantity:parseInt(formState.inputs.quantity!.value),
+      categoryId: selected!,
+      inUse
+    }
 
     try {
-      await sendRequest(ENDPOINT_STOCKS, "POST", formData, {
+      await sendRequest(ENDPOINT_STOCKS, "POST", JSON.stringify(stock), {
+        ...DEFAULT_HEADERS,
         Authorization: "Barer " + user.token,
       });
 
@@ -55,11 +71,33 @@ function NewStock() {
     nav("/");
   }
 
+  const selectChangeHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    
+    if(e.target.value === 'newCategory')
+    {
+      nav('/category/new');
+    }
+    
+    setSelected(e.target.value);
+  }
+  
+  const checkHandler = () => {
+    setInUse(prev => !prev);
+  }
+  
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       <form className="stock-form" onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
+        <select defaultValue={ 'default' } name="categories" onChange={selectChangeHandler} >
+        <option disabled value='default' key='default' > -- select an option -- </option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>{category.name}</option>
+              ))}
+              <option key='newCategory' value="newCategory">NEW CATEGORY</option>
+          </select>
         <Input
           id="name"
           element="input"
@@ -77,12 +115,12 @@ function NewStock() {
           errorText={ERROR_NUMBER}
           onInput={inputHandler}
         />
-        <ImageUpload
-          id="image"
-          onInput={inputHandler}
-          errorText={ERROR_IMAGE}
-        />
-        <Button type="submit" disabled={!formState.isValid}>
+        <label htmlFor="inUse">
+        <input className="checkBox" type="checkbox" id="inUse" checked={inUse} onChange={checkHandler} />
+        In use
+        </label>
+
+        <Button type="submit" disabled={!selected || !formState.isValid}>
           ADD STOCK
         </Button>
       </form>

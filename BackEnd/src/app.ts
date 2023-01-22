@@ -8,6 +8,7 @@ import { HTTP_RESPONSE_STATUS } from "./types/enums";
 import { ERROR_UNDEFINED_ROUTE, ERROR_UNKNOWN_ERROR } from "./util/messages";
 import mongoose from "mongoose";
 import path from "path";
+import { categoriesRoutes } from "./routes/categories";
 
 const PORT = 5000;
 const ENV = process.env;
@@ -30,6 +31,7 @@ app.use((_req, res, next) => {
 });
 
 app.use("/api/stocks", stockRoutes);
+app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((_req, _res, _next) => {

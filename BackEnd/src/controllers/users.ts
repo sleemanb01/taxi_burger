@@ -8,6 +8,7 @@ import { HttpError } from "../models/http-error";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
 import {
   ERROR_EMAIL_EXIST,
+  ERROR_EXISTS,
   ERROR_INTERNAL_SERVER,
   ERROR_INVALID_CREDENTIALS,
   ERROR_INVALID_INPUTS,
@@ -150,7 +151,7 @@ export const signup = async (
     alreadySigned = await User.findOne({ email: email });
   } catch {
     return next(
-      new HttpError(ERROR_SIGNUP, HTTP_RESPONSE_STATUS.Internal_Server_Error)
+      new HttpError(ERROR_EMAIL_EXIST, HTTP_RESPONSE_STATUS.Bad_Request)
     );
   }
 

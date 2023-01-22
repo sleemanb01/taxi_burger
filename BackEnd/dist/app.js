@@ -13,6 +13,7 @@ const enums_1 = require("./types/enums");
 const messages_1 = require("./util/messages");
 const mongoose_1 = __importDefault(require("mongoose"));
 const path_1 = __importDefault(require("path"));
+const categories_1 = require("./routes/categories");
 const PORT = 5000;
 const ENV = process.env;
 const URI = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASSWORD}@cluster0.dq09y8y.mongodb.net/${ENV.DB_NAME}?retryWrites=true&w=majority`;
@@ -26,6 +27,7 @@ app.use((_req, res, next) => {
     next();
 });
 app.use("/api/stocks", stock_1.stockRoutes);
+app.use("/api/categories", categories_1.categoriesRoutes);
 app.use("/api/users", users_1.usersRoutes);
 app.use((_req, _res, _next) => {
     const error = new http_error_1.HttpError(messages_1.ERROR_UNDEFINED_ROUTE, enums_1.HTTP_RESPONSE_STATUS.Not_Found);

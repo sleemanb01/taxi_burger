@@ -43,7 +43,13 @@ export const reducerFormStateInitVal: reducerFormState = {
   inputs: {
     name: reducerInputStateInitVal,
     quantity: reducerInputStateInitVal,
-    image: reducerInputStateInitVal,
+  },
+  isValid: false,
+};
+
+export const reducerFormStateCategoriesInitVal: reducerFormState = {
+  inputs: {
+    name: reducerInputStateInitVal,
   },
   isValid: false,
 };

@@ -16,19 +16,21 @@ const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));
 const Stocks = React.lazy(() => import("./FC/stocks/pages/Stocks"));
 const Auth = React.lazy(() => import("./FC/user/pages/Auth"));
+const NewCategory = React.lazy(() => import("./FC/stocks/pages/NewCategory"));
+const UpdateCategory = React.lazy(() => import('./FC/stocks/pages/UpdateCategory'));
 
 function App() {
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      const user: userWToken = JSON.parse(storedData);
+    const storedUser = localStorage.getItem("userData");
+    if (storedUser) {
+      const user: userWToken = JSON.parse(storedUser);
       if (user.token) {
         authCtx.login(user);
       }
     }
-  }, [authCtx, authCtx.isLoggedIn]);
+  }, []);
 
   let routes;
 
@@ -36,7 +38,9 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<Stocks />} />
-        <Route path="/stocks/new" element={<NewStock />} />
+        <Route path="/stocks/new/:categoryId" element={<NewStock />} />
+        <Route path="/category/new" element={<NewCategory />} />
+        <Route path="/category/:categoryId" element={<UpdateCategory/>} />
         <Route path="/users" element={<Users />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

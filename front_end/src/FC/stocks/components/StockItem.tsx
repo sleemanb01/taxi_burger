@@ -4,13 +4,13 @@ import Card from "../../shared/components/UIElements/Card";
 import Modal from "../../shared/components/UIElements/Modal";
 import { IStock } from "../../../typing/interfaces";
 
-import "../../user/components/Item.css";
+import "./StockItem.css";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 
-import { BACKEND_URL, ENDPOINT_STOCKS } from "../../../util/Constants";
-import Avatar from "../../shared/components/UIElements/Avatar";
+import { ENDPOINT_STOCKS } from "../../../util/Constants";
+import { useNavigate } from "react-router-dom";
 
 /* ************************************************************************************************** */
 
@@ -21,15 +21,16 @@ export function StockItem({
   stock: IStock;
   onDelete: Function;
 }) {
+  const nav = useNavigate();
   const user = useContext(AuthContext).user;
   const { error, sendRequest, clearError } = useHttpClient();
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   /* ************************************************************************************************** */
 
-  // const openConfirmHandler = () => {
-  //   setIsConfirmVisible(true);
-  // };
+  const openConfirmHandler = () => {
+    setIsConfirmVisible(true);
+  };
 
   const closeConfirmHandler = () => {
     setIsConfirmVisible(false);
@@ -46,9 +47,17 @@ export function StockItem({
     } catch (err) {}
   };
 
-  console.log(user?.isAdmin);
+  const clickHandler = (id: string) => {
+    if (user?.isAdmin) {
+      openConfirmHandler();
+    } else {
+      //edit
+    }
+  };
 
   /* ************************************************************************************************** */
+
+  const style = { backgroundColor: stock.inUse ? "yellow" : "" };
 
   return (
     <React.Fragment>
@@ -71,29 +80,17 @@ export function StockItem({
       >
         <p>Do you want to proceed and delete this!</p>
       </Modal>
-      <li className="item">
-        <Card className="item-card item__content">
-          <div className="item__image">
-            {stock.image && (
-              <Avatar
-                image={BACKEND_URL ? BACKEND_URL + stock.image : ""}
-                alt={stock.name + "image"}
-              />
-            )}
-          </div>
-          <div className="item__info">
-            <h2>{stock.name}</h2>
-            <h2>{stock.quantity}</h2>
-          </div>
-          {/* <div className="item__actions">
-            {user && <Button to={`/stocks/${stock._id}`}>EDIT</Button>}
-            {user && user.isAdmin && (
-              <Button danger={true} onClick={openConfirmHandler}>
-                DELETE
-              </Button>
-            )}
-          </div> */}
-        </Card>
+      <li
+        className="list-item"
+        onClick={() => {
+          clickHandler(stock._id!);
+        }}
+      >
+        <React.Fragment>
+          <span className="colored-circle" style={style} />
+        </React.Fragment>
+        <p>{stock.name}</p>
+        <h2>{stock.quantity}</h2>
       </li>
     </React.Fragment>
   );
