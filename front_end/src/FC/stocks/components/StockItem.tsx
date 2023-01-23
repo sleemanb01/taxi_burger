@@ -23,8 +23,12 @@ export function StockItem({
 }) {
   const nav = useNavigate();
   const user = useContext(AuthContext).user;
+  const [value, setValue] = useState(stock.quantity);
+  const [editStock, setEditStock] = useState(false);
   const { error, sendRequest, clearError } = useHttpClient();
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+
+  let clicks = 0;
 
   /* ************************************************************************************************** */
 
@@ -47,12 +51,25 @@ export function StockItem({
     } catch (err) {}
   };
 
-  const clickHandler = (id: string) => {
+  const clickHandler = () => {
     if (user?.isAdmin) {
-      openConfirmHandler();
-    } else {
-      //edit
+      clicks++;
+      if (clicks === 2) {
+        clicks = 0;
+        doubleClickHandler();
+      }
     }
+  };
+
+  const doubleClickHandler = () => {
+    if (user?.isAdmin) {
+      setEditStock((prev) => !prev);
+    }
+  };
+
+  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valueNumber = parseInt(e.target.value);
+    setValue(valueNumber);
   };
 
   /* ************************************************************************************************** */
@@ -80,17 +97,38 @@ export function StockItem({
       >
         <p>Do you want to proceed and delete this!</p>
       </Modal>
-      <li
-        className="list-item"
-        onClick={() => {
-          clickHandler(stock._id!);
-        }}
-      >
+      <li className="list-item" onClick={clickHandler}>
         <React.Fragment>
           <span className="colored-circle" style={style} />
         </React.Fragment>
         <p>{stock.name}</p>
-        <h2>{stock.quantity}</h2>
+        <h2>{value}</h2>
+        {/* <input
+          type="range"
+          value={stock.quantity}
+          min={1}
+          max={20}
+          step={1}
+          list="markers"
+        /> */}
+        <div>
+          <input
+            type="range"
+            name="temp"
+            min={1}
+            max={20}
+            step={1}
+            onChange={inputChangeHandler}
+          />
+        </div>
+        {editStock && (
+          <div className="item__actions">
+            <Button to={`/stocks/${stock._id}`}>EDIT</Button>
+            <Button danger={true} onClick={openConfirmHandler}>
+              DELETE
+            </Button>
+          </div>
+        )}
       </li>
     </React.Fragment>
   );

@@ -19,3 +19,16 @@ div .colored-circle {
     height: 15px;
     width: 15px;
   }
+  
+  option {
+    padding: 0;
+  }
+  
+  input[type="range"] {
+    width: 200px;
+    margin: 0;
+  }
+
+  input[type="range"] {
+    appearance: slider-vertical;
+  }
