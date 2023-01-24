@@ -132,7 +132,11 @@ export function StockItem({
         onTouchMove={touchMoveHandler}
       >
         {stock.image && (
-          <img className="item-img" src={BACKEND_URL + stock.image} />
+          <img
+            className="item-img"
+            src={BACKEND_URL + stock.image}
+            alt="item"
+          />
         )}
         <div className="item-info">
           <p>{stock.name}</p>
