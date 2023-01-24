@@ -9,7 +9,7 @@ import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 
-import { ENDPOINT_STOCKS } from "../../../util/Constants";
+import { BACKEND_URL, ENDPOINT_STOCKS } from "../../../util/Constants";
 import { useNavigate } from "react-router-dom";
 
 /* ************************************************************************************************** */
@@ -21,12 +21,14 @@ export function StockItem({
   stock: IStock;
   onDelete: Function;
 }) {
-  const nav = useNavigate();
+  // const nav = useNavigate();
   const user = useContext(AuthContext).user;
+  const { error, sendRequest, clearError } = useHttpClient();
+
   const [value, setValue] = useState(stock.quantity);
   const [editStock, setEditStock] = useState(false);
-  const { error, sendRequest, clearError } = useHttpClient();
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  // const [isEdit, setIsEdit] = useState(false);
 
   let clicks = 0;
 
@@ -39,6 +41,14 @@ export function StockItem({
   const closeConfirmHandler = () => {
     setIsConfirmVisible(false);
   };
+
+  // const openEditHandler = () => {
+  //   setIsEdit(true);
+  // };
+
+  // const closeEditHandler = () => {
+  //   setIsEdit(false);
+  // };
 
   const confirmDeleteHandler = async () => {
     closeConfirmHandler();
@@ -59,6 +69,8 @@ export function StockItem({
         doubleClickHandler();
       }
     }
+
+    // openEditHandler();
   };
 
   const doubleClickHandler = () => {
@@ -67,10 +79,10 @@ export function StockItem({
     }
   };
 
-  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const valueNumber = parseInt(e.target.value);
-    setValue(valueNumber);
-  };
+  // const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const valueNumber = parseInt(e.target.value);
+  //   setValue(valueNumber);
+  // };
 
   /* ************************************************************************************************** */
 
@@ -98,29 +110,27 @@ export function StockItem({
         <p>Do you want to proceed and delete this!</p>
       </Modal>
       <li className="list-item" onClick={clickHandler}>
-        <React.Fragment>
-          <span className="colored-circle" style={style} />
-        </React.Fragment>
-        <p>{stock.name}</p>
-        <h2>{value}</h2>
-        {/* <input
-          type="range"
-          value={stock.quantity}
-          min={1}
-          max={20}
-          step={1}
-          list="markers"
-        /> */}
+        {stock.image && (
+          <img className="item-img" src={BACKEND_URL + stock.image} />
+        )}
         <div>
-          <input
-            type="range"
-            name="temp"
-            min={1}
-            max={20}
-            step={1}
-            onChange={inputChangeHandler}
-          />
+          <p>{stock.name}</p>
+          <span className="colored-circle" style={style} />
         </div>
+        <h2>{value}</h2>
+        {/* <Modal show={isEdit} onCancel={closeEditHandler}>
+          <div>
+            <input
+              type="range"
+              name="temp"
+              min={1}
+              max={20}
+              step={1}
+              value={stock.quantity}
+              onChange={inputChangeHandler}
+            />
+          </div>
+        </Modal> */}
         {editStock && (
           <div className="item__actions">
             <Button to={`/stocks/${stock._id}`}>EDIT</Button>

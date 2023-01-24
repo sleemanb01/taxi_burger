@@ -9,10 +9,11 @@ export interface IUser {
 
 export interface IStock {
   _id?: string;
-  categoryId:ICategory['_id'];
+  categoryId: ICategory["_id"];
   name: string;
   quantity: number;
-  inUse:boolean;
+  inUse: boolean;
+  image: string;
 }
 
 export interface ICategory {

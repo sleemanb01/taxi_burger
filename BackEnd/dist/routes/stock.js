@@ -11,7 +11,7 @@ const auth_1 = require("../middleware/auth");
 const stock_1 = require("../controllers/stock");
 /* ************************************************************** */
 exports.stockRoutes = express_1.default.Router();
-exports.stockRoutes.get("/", stock_1.getStock);
+exports.stockRoutes.get("/", stock_1.getStocks);
 exports.stockRoutes.use(auth_1.authenticate);
 exports.stockRoutes.post("/", file_upload_1.fileUpload.single("image"), [
     (0, express_validator_1.check)("name").not().isEmpty(),

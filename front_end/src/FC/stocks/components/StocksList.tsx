@@ -18,7 +18,7 @@ export function StocksList({
       <div className="stock-list">
         <Card>
           <h2>No stocks found. Maybe create one?</h2>
-          <Button to="/stocks/new">Add STOCK</Button>
+          <Button to="/stocks/new/undefined">Add STOCK</Button>
         </Card>
       </div>
     );

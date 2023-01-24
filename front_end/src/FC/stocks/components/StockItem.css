@@ -6,6 +6,9 @@
     margin: 0 1rem;
     padding: 0 1rem;
     background-color: #eee;
+    border: solid #000;
+    border-width: 1px;
+    /* border-color: #000; */
 }
 
 .list-item p {
@@ -29,6 +32,8 @@ div .colored-circle {
     margin: 0;
   }
 
-  input[type="range"] {
-    appearance: slider-vertical;
+  .item-img {
+    margin: 0.5rem 0;
+    width: 5rem;
+    height: 5rem;
   }

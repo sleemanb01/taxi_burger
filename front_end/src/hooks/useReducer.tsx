@@ -22,6 +22,7 @@ export const inputReducer = (
   switch (action.type) {
     case EReducerActionType.CHNAGE: {
       let newVal = action.val;
+
       return {
         ...state,
         value: newVal,
@@ -43,6 +44,7 @@ export const reducerFormStateInitVal: reducerFormState = {
   inputs: {
     name: reducerInputStateInitVal,
     quantity: reducerInputStateInitVal,
+    image: reducerInputStateInitVal,
   },
   isValid: false,
 };

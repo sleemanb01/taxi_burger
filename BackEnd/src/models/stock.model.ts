@@ -9,6 +9,7 @@ export interface IStock extends Document {
   name: string;
   quantity: number;
   inUse: boolean;
+  image: string;
 }
 
 const stockSchema = new Schema<IStock>({
@@ -16,6 +17,7 @@ const stockSchema = new Schema<IStock>({
   categoryId: { type: Schema.Types.ObjectId, required: true, ref: "Category" },
   quantity: { type: Number, required: true },
   inUse: { type: Boolean, required: true },
+  image: { type: String, required: true },
 });
 
 export default mongoose.model<IStock>("Stock", stockSchema);

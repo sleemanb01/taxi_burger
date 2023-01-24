@@ -17,6 +17,7 @@ import {
   ERROR_DELETE,
   ERROR_UNAUTHORIZED,
   DELETED,
+  ERROR_DELETE_FILE,
 } from "../util/messages";
 
 /* ************************************************************** */
@@ -30,7 +31,7 @@ const internalError = () => {
 
 /* ************************************************************** */
 
-export const getStock = async (
+export const getStocks = async (
   _req: Request,
   res: Response,
   next: NextFunction
@@ -110,6 +111,7 @@ export const addStock = async (
     quantity,
     categoryId,
     inUse,
+    image: req.file?.path,
   });
 
   try {
@@ -139,7 +141,7 @@ export const updateStock = async (
     );
   }
 
-  const { quantity } = req.body;
+  const { quantity, name } = req.body;
   const stockId = req.params.placeId;
   let stock: IStock | null;
 
@@ -159,7 +161,9 @@ export const updateStock = async (
     );
   }
 
+  stock.name = name;
   stock.quantity = quantity;
+  stock.image = req.file?.path;
 
   try {
     await stock.save();
@@ -231,6 +235,12 @@ export const deleteStock = async (
       HTTP_RESPONSE_STATUS.Internal_Server_Error
     );
     return next(error);
+  }
+
+  if (req.file) {
+    fs.unlink(req.file.path, () => {
+      console.log(ERROR_DELETE_FILE);
+    });
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({ message: DELETED });
