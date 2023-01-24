@@ -5,15 +5,12 @@ import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { reducerFormStateInitVal } from "../../../hooks/useReducer";
 import { EValidatorType } from "../../../typing/enums";
-import { ICategory, IStock } from "../../../typing/interfaces";
+import { IStock } from "../../../typing/interfaces";
 import { reducerInputState } from "../../../typing/types";
 import {
-  ERROR_DESCRIPTION_LENGTH,
   ERROR_TEXT_REQUIRED,
   ENDPOINT_STOCKS,
-  DEFAULT_HEADERS,
   ERROR_IMAGE,
-  BACKEND_API_URL,
   BACKEND_URL,
 } from "../../../util/Constants";
 import { Button } from "../../shared/components/FormElements/Button";
@@ -72,7 +69,7 @@ function UpdateStock() {
     };
 
     fetchStock();
-  }, [sendRequest, stockId, setFormData]);
+  }, [sendRequest, stockId, user?.token, setFormData]);
 
   if (!loadedStock && !error) {
     return (

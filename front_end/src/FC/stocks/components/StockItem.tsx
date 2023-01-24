@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Button } from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
+
 import Modal from "../../shared/components/UIElements/Modal";
 import { IStock } from "../../../typing/interfaces";
 
@@ -10,7 +10,6 @@ import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 
 import { BACKEND_URL, ENDPOINT_STOCKS } from "../../../util/Constants";
-import { useNavigate } from "react-router-dom";
 
 /* ************************************************************************************************** */
 

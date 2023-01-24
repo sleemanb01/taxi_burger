@@ -6,7 +6,6 @@ import { ENDPOINT_STOCKS } from "../../../util/Constants";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
-import { StocksList } from "../components/StocksList";
 
 function Stocks() {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();

@@ -33,7 +33,7 @@ function App() {
         authCtx.login(user);
       }
     }
-  }, []);
+  }, [authCtx]);
 
   let routes;
 

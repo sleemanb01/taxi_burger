@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ICategory } from "../../../typing/interfaces";
 
@@ -10,6 +10,7 @@ function CategoryList({
   selected?: string;
 }) {
   const nav = useNavigate();
+
   const [categories, setCategories] = useState<ICategory[]>([]);
   useLayoutEffect(() => {
     const categories = localStorage.getItem("categories");

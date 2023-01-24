@@ -1,11 +1,8 @@
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
-import {
-  reducerFormStateInitVal,
-  reducerInputStateInitVal,
-} from "../../../hooks/useReducer";
+import { reducerInputStateInitVal } from "../../../hooks/useReducer";
 import { useNavigate } from "react-router-dom";
 import { EValidatorType } from "../../../typing/enums";
 import {
@@ -20,7 +17,6 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 import "./StockForm.css";
-import { ICategory } from "../../../typing/interfaces";
 import { ImageUpload } from "../../shared/components/FormElements/ImageUpload";
 import CategoryList from "../components/CategoryList";
 
