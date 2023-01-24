@@ -113,7 +113,7 @@ const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
     }
     const { quantity, name, categoryId, inUse } = req.body;
-    const stockId = req.params.stockId;
+    const stockId = req.params.placeId;
     let stock;
     try {
         stock = yield stock_model_1.default.findById(stockId);

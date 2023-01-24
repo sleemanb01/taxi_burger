@@ -68,7 +68,7 @@ export const ImageUpload = ({
       />
       <div className={`image-upload ${center && "center"}`}>
         <div className="image-upload__preview">
-          {previewUrl && <img src={previewUrl as string} alt="image Preview" />}
+          {previewUrl && <img src={previewUrl as string} alt="Preview" />}
           {!previewUrl && <p>Please pick an image.</p>}
         </div>
         <Button type="button" onClick={pickImageHandler}>

@@ -82,6 +82,7 @@ export function StockItem({
       firingFunc = singleClickHandler;
       firing = false;
     }, 250);
+    console.log(timer);
   };
 
   const swipeHandler = () => {
