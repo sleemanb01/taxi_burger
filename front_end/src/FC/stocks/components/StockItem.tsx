@@ -25,12 +25,15 @@ export function StockItem({
   const user = useContext(AuthContext).user;
   const { error, sendRequest, clearError } = useHttpClient();
 
-  const [value, setValue] = useState(stock.quantity);
+  const [currStock, setCurrStock] = useState(stock);
   const [editStock, setEditStock] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
-  // const [isEdit, setIsEdit] = useState(false);
 
-  let clicks = 0;
+  let timer: ReturnType<typeof setTimeout>;
+  let firing = false;
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const swipeDist = 100;
 
   /* ************************************************************************************************** */
 
@@ -42,13 +45,9 @@ export function StockItem({
     setIsConfirmVisible(false);
   };
 
-  // const openEditHandler = () => {
-  //   setIsEdit(true);
-  // };
-
-  // const closeEditHandler = () => {
-  //   setIsEdit(false);
-  // };
+  const editHandler = () => {
+    setEditStock((prev) => !prev);
+  };
 
   const confirmDeleteHandler = async () => {
     closeConfirmHandler();
@@ -61,32 +60,49 @@ export function StockItem({
     } catch (err) {}
   };
 
-  const clickHandler = () => {
-    if (user?.isAdmin) {
-      clicks++;
-      if (clicks === 2) {
-        clicks = 0;
-        doubleClickHandler();
-      }
-    }
-
-    // openEditHandler();
+  const singleClickHandler = () => {
+    console.log("single");
   };
 
   const doubleClickHandler = () => {
-    if (user?.isAdmin) {
-      setEditStock((prev) => !prev);
+    setCurrStock((prev) => ({ ...prev, inUse: !prev.inUse }));
+  };
+
+  let firingFunc = singleClickHandler;
+
+  const clickHandler = () => {
+    if (firing) {
+      firingFunc = doubleClickHandler;
+      return;
+    }
+
+    firing = true;
+    timer = setTimeout(function () {
+      firingFunc();
+
+      firingFunc = singleClickHandler;
+      firing = false;
+    }, 250);
+  };
+
+  const swipeHandler = () => {
+    editHandler();
+  };
+
+  const touchStartHandler = (event: React.TouchEvent) => {
+    touchEndX = event.touches[0].clientX;
+  };
+
+  const touchMoveHandler = (event: React.TouchEvent) => {
+    touchStartX = event.touches[0].clientX;
+    if (touchStartX - touchEndX > swipeDist && user?.isAdmin) {
+      swipeHandler();
     }
   };
 
-  // const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const valueNumber = parseInt(e.target.value);
-  //   setValue(valueNumber);
-  // };
-
   /* ************************************************************************************************** */
 
-  const style = { backgroundColor: stock.inUse ? "yellow" : "" };
+  const style = { backgroundColor: currStock.inUse ? "yellow" : "" };
 
   return (
     <React.Fragment>
@@ -109,15 +125,20 @@ export function StockItem({
       >
         <p>Do you want to proceed and delete this!</p>
       </Modal>
-      <li className="list-item" onClick={clickHandler}>
+      <li
+        className="list-item"
+        onClick={clickHandler}
+        onTouchStart={touchStartHandler}
+        onTouchMove={touchMoveHandler}
+      >
         {stock.image && (
           <img className="item-img" src={BACKEND_URL + stock.image} />
         )}
-        <div>
+        <div className="item-info">
           <p>{stock.name}</p>
-          <span className="colored-circle" style={style} />
+          <div className="colored-circle" style={style} />
         </div>
-        <h2>{value}</h2>
+        <h2>{currStock.quantity}</h2>
         {/* <Modal show={isEdit} onCancel={closeEditHandler}>
           <div>
             <input

@@ -8,18 +8,21 @@ export const ImageUpload = ({
   center = false,
   onInput,
   errorText,
+  image,
 }: {
   id: string;
   center?: boolean;
   onInput: Function;
   errorText: string;
+  image?: string;
 }) => {
   const ALLOWED_FILES = ".jpg,.png,.jpeg";
 
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
-    null
+    image || null
   );
+
   const [isValid, setIsValid] = useState(true);
   const filePickerRef = useRef<HTMLInputElement | null>(null);
 
@@ -42,7 +45,7 @@ export const ImageUpload = ({
       setFile(pickedFile);
       setIsValid(true);
       fileIsValid = true;
-    } else {
+    } else if (!previewUrl) {
       setIsValid(false);
       fileIsValid = false;
     }
@@ -65,7 +68,7 @@ export const ImageUpload = ({
       />
       <div className={`image-upload ${center && "center"}`}>
         <div className="image-upload__preview">
-          {previewUrl && <img src={previewUrl as string} alt="Preview" />}
+          {previewUrl && <img src={previewUrl as string} alt="image Preview" />}
           {!previewUrl && <p>Please pick an image.</p>}
         </div>
         <Button type="button" onClick={pickImageHandler}>

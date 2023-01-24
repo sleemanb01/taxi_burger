@@ -31,6 +31,27 @@ const internalError = () => {
 
 /* ************************************************************** */
 
+export const getStock = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.stockId;
+  let stock: IStock | null;
+
+  try {
+    stock = await Stock.findOne({ _id: id });
+  } catch {
+    return next(
+      new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
+    );
+  }
+
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
+};
+
+/* ************************************************************** */
+
 export const getStocks = async (
   _req: Request,
   res: Response,
@@ -141,7 +162,7 @@ export const updateStock = async (
     );
   }
 
-  const { quantity, name } = req.body;
+  const { quantity, name, categoryId, inUse } = req.body;
   const stockId = req.params.placeId;
   let stock: IStock | null;
 
@@ -163,7 +184,9 @@ export const updateStock = async (
 
   stock.name = name;
   stock.quantity = quantity;
+  stock.inUse = inUse;
   stock.image = req.file?.path;
+  stock.categoryId = categoryId;
 
   try {
     await stock.save();

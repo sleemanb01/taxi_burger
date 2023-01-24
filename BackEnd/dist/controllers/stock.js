@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStock = exports.updateStock = exports.addStock = exports.getStocks = void 0;
+exports.deleteStock = exports.updateStock = exports.addStock = exports.getStocks = exports.getStock = void 0;
 const express_validator_1 = require("express-validator");
 const fs_1 = __importDefault(require("fs"));
 const http_error_1 = require("../models/http-error");
@@ -26,6 +26,19 @@ const internalError = () => {
     return new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
 };
 /* ************************************************************** */
+const getStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.stockId;
+    let stock;
+    try {
+        stock = yield stock_model_1.default.findOne({ _id: id });
+    }
+    catch (_a) {
+        return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_DATA, enums_1.HTTP_RESPONSE_STATUS.Not_Found));
+    }
+    res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
+});
+exports.getStock = getStock;
+/* ************************************************************** */
 const getStocks = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let stocks = [];
     let categories;
@@ -36,7 +49,7 @@ const getStocks = (_req, res, next) => __awaiter(void 0, void 0, void 0, functio
             throw "";
         }
     }
-    catch (_a) {
+    catch (_b) {
         return next(internalError());
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({
@@ -52,13 +65,13 @@ const getCategories = () => __awaiter(void 0, void 0, void 0, function* () {
         categories = yield category_model_1.default.find();
         return categories;
     }
-    catch (_b) {
+    catch (_c) {
         return null;
     }
 });
 /* ************************************************************** */
 const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
+    var _d;
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
@@ -69,7 +82,7 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     try {
         targetUser = yield user_model_1.default.findById(creatorId);
     }
-    catch (_d) {
+    catch (_e) {
         return next(new http_error_1.HttpError(messages_1.ERROR_LOGIN, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error));
     }
     if (!targetUser || !targetUser.isAdmin) {
@@ -81,12 +94,12 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         quantity,
         categoryId,
         inUse,
-        image: (_c = req.file) === null || _c === void 0 ? void 0 : _c.path,
+        image: (_d = req.file) === null || _d === void 0 ? void 0 : _d.path,
     });
     try {
         yield newStock.save();
     }
-    catch (_e) {
+    catch (_f) {
         return next(internalError());
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.Created).json({ stock: newStock });
@@ -94,18 +107,18 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 exports.addStock = addStock;
 /* ************************************************************** */
 const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
+    var _g;
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
     }
-    const { quantity, name } = req.body;
-    const stockId = req.params.placeId;
+    const { quantity, name, categoryId, inUse } = req.body;
+    const stockId = req.params.stockId;
     let stock;
     try {
         stock = yield stock_model_1.default.findById(stockId);
     }
-    catch (_g) {
+    catch (_h) {
         const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
@@ -114,11 +127,13 @@ const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
     stock.name = name;
     stock.quantity = quantity;
-    stock.image = (_f = req.file) === null || _f === void 0 ? void 0 : _f.path;
+    stock.inUse = inUse;
+    stock.image = (_g = req.file) === null || _g === void 0 ? void 0 : _g.path;
+    stock.categoryId = categoryId;
     try {
         yield stock.save();
     }
-    catch (_h) {
+    catch (_j) {
         const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
@@ -134,7 +149,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         targetStock = yield stock_model_1.default.findById(stockId);
     }
-    catch (_j) {
+    catch (_k) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
@@ -147,7 +162,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         targetUser = yield user_model_1.default.findById(creatorId);
     }
-    catch (_k) {
+    catch (_l) {
         return next(new http_error_1.HttpError(messages_1.ERROR_LOGIN, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error));
     }
     if (!targetUser || !targetUser.isAdmin) {
@@ -157,7 +172,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         yield targetStock.remove();
     }
-    catch (_l) {
+    catch (_m) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }

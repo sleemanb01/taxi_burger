@@ -22,6 +22,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import "./StockForm.css";
 import { ICategory } from "../../../typing/interfaces";
 import { ImageUpload } from "../../shared/components/FormElements/ImageUpload";
+import CategoryList from "../components/CategoryList";
 
 function NewStock() {
   const [formState, inputHandler] = useForm(
@@ -37,18 +38,10 @@ function NewStock() {
 
   const user = useContext(AuthContext).user!;
 
-  const [categories, setCategories] = useState<ICategory[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [inUse, setInUse] = useState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
-  useLayoutEffect(() => {
-    const categories = localStorage.getItem("categories");
-    if (categories) {
-      setCategories(JSON.parse(categories));
-    }
-  }, []);
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -77,45 +70,16 @@ function NewStock() {
     nav("/");
   }
 
-  const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-
-    if (e.target.value === "newCategory") {
-      nav("/category/new");
-    }
-
-    setSelected(e.target.value);
-  };
-
   const checkHandler = () => {
     setInUse((prev) => !prev);
   };
-
-  // console.log(formState.inputs.quantity?.value);
 
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       <form className="stock-form" onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
-        <select
-          defaultValue={"default"}
-          name="categories"
-          onChange={selectChangeHandler}
-        >
-          <option disabled value="default" key="default">
-            {" "}
-            -- select an option --{" "}
-          </option>
-          {categories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.name}
-            </option>
-          ))}
-          <option key="newCategory" value="newCategory">
-            NEW CATEGORY
-          </option>
-        </select>
+        <CategoryList setSelected={setSelected} />
         <Input
           id="name"
           element="input"

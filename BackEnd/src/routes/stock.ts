@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import { fileUpload } from "../middleware/file-upload";
 import { authenticate } from "../middleware/auth";
 import {
+  getStock,
   getStocks,
   addStock,
   updateStock,
@@ -16,6 +17,8 @@ export const stockRoutes = express.Router();
 stockRoutes.get("/", getStocks);
 
 stockRoutes.use(authenticate);
+
+stockRoutes.get("/:stockId", getStock);
 
 stockRoutes.post(
   "/",

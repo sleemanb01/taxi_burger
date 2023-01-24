@@ -5,18 +5,24 @@ import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { reducerFormStateInitVal } from "../../../hooks/useReducer";
 import { EValidatorType } from "../../../typing/enums";
-import { IStock } from "../../../typing/interfaces";
+import { ICategory, IStock } from "../../../typing/interfaces";
 import { reducerInputState } from "../../../typing/types";
 import {
   ERROR_DESCRIPTION_LENGTH,
   ERROR_TEXT_REQUIRED,
   ENDPOINT_STOCKS,
+  DEFAULT_HEADERS,
+  ERROR_IMAGE,
+  BACKEND_API_URL,
+  BACKEND_URL,
 } from "../../../util/Constants";
 import { Button } from "../../shared/components/FormElements/Button";
+import { ImageUpload } from "../../shared/components/FormElements/ImageUpload";
 import { Input } from "../../shared/components/FormElements/Input";
 import Card from "../../shared/components/UIElements/Card";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import CategoryList from "../components/CategoryList";
 
 import "./StockForm.css";
 
@@ -24,8 +30,11 @@ function UpdateStock() {
   const user = useContext(AuthContext).user;
   const stockId = useParams().stockId;
   const nav = useNavigate();
+
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedStock, setLoaddedStock] = useState<IStock | null>(null);
+  const [selected, setSelected] = useState<string | undefined>(stockId);
+
   const [formState, inputHandler, setFormData] = useForm(
     reducerFormStateInitVal.inputs,
     true
@@ -34,18 +43,26 @@ function UpdateStock() {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const resData = await sendRequest(ENDPOINT_STOCKS + "/" + stockId);
+        const resData = await sendRequest(
+          ENDPOINT_STOCKS + "/" + stockId,
+          "GET",
+          null,
+          {
+            Authorization: "Barer " + user?.token,
+          }
+        );
         const stock = resData.stock;
+
         setLoaddedStock(stock);
 
         setFormData(
           {
-            title: {
-              value: stock.title,
+            name: {
+              value: stock.name,
               isValid: true,
             },
-            description: {
-              value: stock.description,
+            image: {
+              value: stock.image,
               isValid: true,
             },
           },
@@ -69,21 +86,18 @@ function UpdateStock() {
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    const stock = {
-      ...(loadedStock as IStock),
-      title: formState.inputs.title!.value,
-      description: formState.inputs.description!.value,
-    };
+
+    const formData = new FormData();
+    formData.append("categoryId", selected!);
+    formData.append("name", formState.inputs.name!.value);
+    formData.append("quantity", loadedStock!.quantity.toString());
+    formData.append("inUse", loadedStock!.inUse.toString());
+    formData.append("image", formState.inputs.image!.value);
+
     try {
-      await sendRequest(
-        ENDPOINT_STOCKS + "/" + stockId,
-        "PATCH",
-        JSON.stringify(stock),
-        {
-          "Content-Type": "application/json",
-          Authorization: "Barer " + user?.token,
-        }
-      );
+      await sendRequest(ENDPOINT_STOCKS + "/" + stockId, "PATCH", formData, {
+        Authorization: "Barer " + user?.token,
+      });
       nav("/" + user!.id + "/stocks");
     } catch (err) {}
   };
@@ -98,37 +112,30 @@ function UpdateStock() {
       )}
       {!isLoading && loadedStock && (
         <form className="stock-form" onSubmit={submitHandler}>
+          <CategoryList setSelected={setSelected} selected={selected} />
           <Input
-            id="title"
+            id="name"
             element="input"
             type="text"
-            label="Title"
+            label="Name"
             validators={[EValidatorType.REQUIRE]}
             errorText={ERROR_TEXT_REQUIRED}
             onInput={inputHandler}
             initValue={
-              (formState.inputs.title as reducerInputState).value as string
+              (formState.inputs.name as reducerInputState).value as string
             }
             initialIsValid={
-              (formState.inputs.title as reducerInputState).isValid
+              (formState.inputs.name as reducerInputState).isValid
             }
           />
-          <Input
-            id="description"
-            element="textArea"
-            label="Description"
-            validators={[EValidatorType.MINLENGTH]}
-            errorText={ERROR_DESCRIPTION_LENGTH}
+          <ImageUpload
+            center
+            id="image"
+            image={BACKEND_URL + loadedStock.image}
             onInput={inputHandler}
-            initValue={
-              (formState.inputs.description as reducerInputState)
-                .value as string
-            }
-            initialIsValid={
-              (formState.inputs.description as reducerInputState).isValid
-            }
+            errorText={ERROR_IMAGE}
           />
-          <Button type="submit" disabled={!formState.isValid}>
+          <Button type="submit" disabled={!!!selected || !formState.isValid}>
             UPDATE STOCK
           </Button>
         </form>

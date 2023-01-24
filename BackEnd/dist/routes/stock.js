@@ -13,6 +13,7 @@ const stock_1 = require("../controllers/stock");
 exports.stockRoutes = express_1.default.Router();
 exports.stockRoutes.get("/", stock_1.getStocks);
 exports.stockRoutes.use(auth_1.authenticate);
+exports.stockRoutes.get("/:stockId", stock_1.getStock);
 exports.stockRoutes.post("/", file_upload_1.fileUpload.single("image"), [
     (0, express_validator_1.check)("name").not().isEmpty(),
     (0, express_validator_1.check)("quantity").isNumeric().isLength({ min: 0, max: 100 }),
