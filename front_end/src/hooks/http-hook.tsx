@@ -16,7 +16,7 @@ export const useHttpClient = () => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
       activeHttpRequests.current.push(httpAbortCtrl);
-      
+
       try {
         const response = await fetch(BACKEND_API_URL + url, {
           method,
@@ -24,6 +24,8 @@ export const useHttpClient = () => {
           headers,
           signal: httpAbortCtrl.signal,
         });
+
+        console.log(response);
 
         const responseData = await response.json();
 
