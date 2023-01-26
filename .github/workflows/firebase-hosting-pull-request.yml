@@ -9,9 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # Environment variables
       - name: create env file
-        run: touch .env.production
+        run: touch .env
           echo "${{ secrets.ENV_VARS }}" >> .env
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
