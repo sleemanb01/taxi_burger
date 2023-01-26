@@ -35,7 +35,7 @@ yarn-error.log*
 build/
 
 # actions
-.github
+#.github
 
 #pictures
 *.jpeg
