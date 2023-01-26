@@ -54,7 +54,7 @@ const getStocks = (_req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({
         stocks: stocks.map((stock) => stock.toObject({ getters: true })),
-        categories: categories,
+        categories: categories.map((category) => category.toObject({ getters: true })),
     });
 });
 exports.getStocks = getStocks;

@@ -14,6 +14,7 @@ function CategoryList({
   const [categories, setCategories] = useState<ICategory[]>([]);
   useLayoutEffect(() => {
     const categories = localStorage.getItem("categories");
+
     if (categories) {
       setCategories(JSON.parse(categories));
     }

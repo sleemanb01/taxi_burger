@@ -73,7 +73,9 @@ export const getStocks = async (
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
     stocks: stocks.map((stock) => stock.toObject({ getters: true })),
-    categories: categories,
+    categories: categories.map((category) =>
+      category.toObject({ getters: true })
+    ),
   });
 };
 
