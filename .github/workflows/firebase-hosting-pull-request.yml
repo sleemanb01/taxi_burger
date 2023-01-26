@@ -12,7 +12,6 @@ jobs:
       # Environment variables
       - name: create env file
         run: |
-          cd functions
           touch .env.production
           echo "${{ secrets.ENV_VARS }}" >> .env
       - run: npm ci && npm run build
