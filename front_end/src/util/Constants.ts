@@ -24,4 +24,5 @@ export const ENDPOINT_SIGNUP = "users/signup";
 export const ENDPOINT_LOGIN = "users/login";
 export const ENDPOINT_GETUSERS = "users";
 export const ENDPOINT_STOCKS = "stocks";
+export const ENDPOINT_STOCKS_WIMAGE = "stocks/WImage";
 export const ENDPOINT_CATEGORIES = "categories";

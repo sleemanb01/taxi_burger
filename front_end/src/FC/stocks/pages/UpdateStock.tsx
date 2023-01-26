@@ -12,7 +12,13 @@ import {
   ENDPOINT_STOCKS,
   ERROR_IMAGE,
   BACKEND_URL,
+  DEFAULT_HEADERS,
+  ENDPOINT_STOCKS_WIMAGE,
 } from "../../../util/Constants";
+import {
+  stockPatchInfo,
+  stockPatchInfoWithoutImage,
+} from "../../../util/stock-update";
 import { Button } from "../../shared/components/FormElements/Button";
 import { ImageUpload } from "../../shared/components/FormElements/ImageUpload";
 import { Input } from "../../shared/components/FormElements/Input";
@@ -30,7 +36,7 @@ function UpdateStock() {
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedStock, setLoaddedStock] = useState<IStock | null>(null);
-  const [selected, setSelected] = useState<string | undefined>(stockId);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const [formState, inputHandler, setFormData] = useForm(
     reducerFormStateInitVal.inputs,
@@ -48,8 +54,9 @@ function UpdateStock() {
             Authorization: "Barer " + user?.token,
           }
         );
-        const stock = resData.stock;
+        const stock: IStock = resData.stock;
 
+        setSelected(stock.categoryId);
         setLoaddedStock(stock);
 
         setFormData(
@@ -84,17 +91,34 @@ function UpdateStock() {
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("categoryId", selected!);
-    formData.append("name", formState.inputs.name!.value);
-    formData.append("quantity", loadedStock!.quantity.toString());
-    formData.append("inUse", loadedStock!.inUse.toString());
-    formData.append("image", formState.inputs.image!.value);
+    let reqBody, reqHeaders, endPoint;
+
+    const currImage = formState.inputs.image!.value;
+    if (currImage === loadedStock?.image) {
+      console.log("image didnt changed");
+      let { body, headers } = stockPatchInfoWithoutImage(
+        { name: formState.inputs.name!.value, categoryId: selected! },
+        user!.token
+      );
+      reqBody = body;
+      reqHeaders = headers;
+      endPoint = ENDPOINT_STOCKS + "/" + stockId;
+    } else {
+      console.log("image changed");
+
+      const formData = new FormData();
+      formData.append("name", formState.inputs.name!.value);
+      formData.append("categoryId", selected!);
+      formData.append("image", formState.inputs.image!.value);
+
+      let { body, headers } = stockPatchInfo(formData, user!.token);
+      reqBody = body;
+      reqHeaders = headers;
+      endPoint = ENDPOINT_STOCKS_WIMAGE + "/" + stockId;
+    }
 
     try {
-      await sendRequest(ENDPOINT_STOCKS + "/" + stockId, "PATCH", formData, {
-        Authorization: "Barer " + user?.token,
-      });
+      await sendRequest(endPoint, "PATCH", reqBody, reqHeaders);
       nav("/" + user!.id + "/stocks");
     } catch (err) {}
   };

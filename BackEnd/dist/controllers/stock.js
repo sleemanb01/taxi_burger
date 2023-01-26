@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStock = exports.updateStock = exports.addStock = exports.getStocks = exports.getStock = void 0;
+exports.deleteStock = exports.updateStock = exports.updateStockWImage = exports.addStock = exports.getStocks = exports.getStock = void 0;
 const express_validator_1 = require("express-validator");
 const fs_1 = __importDefault(require("fs"));
 const http_error_1 = require("../models/http-error");
@@ -94,7 +94,7 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         quantity,
         categoryId,
         inUse,
-        image: (_d = req.file) === null || _d === void 0 ? void 0 : _d.path,
+        image: ((_d = req.file) === null || _d === void 0 ? void 0 : _d.path) || req.body.image,
     });
     try {
         yield newStock.save();
@@ -106,14 +106,14 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.addStock = addStock;
 /* ************************************************************** */
-const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateStockWImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
     }
-    const { quantity, name, categoryId, inUse } = req.body;
-    const stockId = req.params.placeId;
+    const { name, categoryId } = req.body;
+    const stockId = req.params.stockId;
     let stock;
     try {
         stock = yield stock_model_1.default.findById(stockId);
@@ -126,14 +126,49 @@ const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_DATA, enums_1.HTTP_RESPONSE_STATUS.Not_Found));
     }
     stock.name = name;
-    stock.quantity = quantity;
-    stock.inUse = inUse;
-    stock.image = (_g = req.file) === null || _g === void 0 ? void 0 : _g.path;
     stock.categoryId = categoryId;
+    if (req.file) {
+        fs_1.default.unlink(stock.image, () => {
+            console.log(messages_1.ERROR_DELETE_FILE);
+        });
+    }
+    stock.image = (_g = req.file) === null || _g === void 0 ? void 0 : _g.path;
     try {
         yield stock.save();
     }
     catch (_j) {
+        const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
+        return next(error);
+    }
+    res
+        .status(enums_1.HTTP_RESPONSE_STATUS.OK)
+        .json({ stock: stock.toObject({ getters: true }) });
+});
+exports.updateStockWImage = updateStockWImage;
+const updateStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_INPUTS, enums_1.HTTP_RESPONSE_STATUS.Unprocessable_Entity));
+    }
+    const { name, categoryId } = req.body;
+    const stockId = req.params.stockId;
+    let stock;
+    try {
+        stock = yield stock_model_1.default.findById(stockId);
+    }
+    catch (_k) {
+        const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
+        return next(error);
+    }
+    if (!stock) {
+        return next(new http_error_1.HttpError(messages_1.ERROR_INVALID_DATA, enums_1.HTTP_RESPONSE_STATUS.Not_Found));
+    }
+    stock.name = name;
+    stock.categoryId = categoryId;
+    try {
+        yield stock.save();
+    }
+    catch (_l) {
         const error = new http_error_1.HttpError(messages_1.ERROR_INTERNAL_SERVER, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
@@ -149,7 +184,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         targetStock = yield stock_model_1.default.findById(stockId);
     }
-    catch (_k) {
+    catch (_m) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }
@@ -162,7 +197,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         targetUser = yield user_model_1.default.findById(creatorId);
     }
-    catch (_l) {
+    catch (_o) {
         return next(new http_error_1.HttpError(messages_1.ERROR_LOGIN, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error));
     }
     if (!targetUser || !targetUser.isAdmin) {
@@ -172,7 +207,7 @@ const deleteStock = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         yield targetStock.remove();
     }
-    catch (_m) {
+    catch (_p) {
         const error = new http_error_1.HttpError(messages_1.ERROR_DELETE, enums_1.HTTP_RESPONSE_STATUS.Internal_Server_Error);
         return next(error);
     }

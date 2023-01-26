@@ -8,7 +8,6 @@ import { HttpError } from "../models/http-error";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
 import {
   ERROR_EMAIL_EXIST,
-  ERROR_EXISTS,
   ERROR_INTERNAL_SERVER,
   ERROR_INVALID_CREDENTIALS,
   ERROR_INVALID_INPUTS,

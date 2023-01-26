@@ -8,6 +8,7 @@ import {
   addStock,
   updateStock,
   deleteStock,
+  updateStockWImage,
 } from "../controllers/stock";
 
 /* ************************************************************** */
@@ -32,12 +33,15 @@ stockRoutes.post(
 
 stockRoutes.patch(
   "/:stockId",
-  fileUpload.single("image"),
-  [
-    check("name").not().isEmpty(),
-    check("quantity").isNumeric().isLength({ min: 0, max: 100 }),
-  ],
+  [check("name").not().isEmpty(), check("categoryId").not().isEmpty()],
   updateStock
+);
+
+stockRoutes.patch(
+  "/WImage/:stockId",
+  fileUpload.single("image"),
+  [check("name").not().isEmpty(), check("categoryId").not().isEmpty()],
+  updateStockWImage
 );
 
 stockRoutes.delete("/:placeId", deleteStock);

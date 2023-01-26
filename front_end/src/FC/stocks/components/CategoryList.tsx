@@ -43,7 +43,7 @@ function CategoryList({
           -- select an option --{" "}
         </option>
         {categories.map((category) => (
-          <option key={category._id} value={category.name}>
+          <option key={category._id} value={category._id}>
             {category.name}
           </option>
         ))}
