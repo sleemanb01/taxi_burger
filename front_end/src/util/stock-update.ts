@@ -1,5 +1,5 @@
 import { IStock } from "../typing/interfaces";
-import { DEFAULT_HEADERS, ENDPOINT_STOCKS } from "./Constants";
+import { DEFAULT_HEADERS } from "./Constants";
 
 export const stockPatchInfoWithoutImage = (
   stock: Partial<IStock>,
