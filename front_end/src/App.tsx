@@ -27,6 +27,8 @@ function App() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
+    console.log(storedUser);
+
     if (storedUser) {
       const user: userWToken = JSON.parse(storedUser);
       if (user.token) {

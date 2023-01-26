@@ -95,7 +95,7 @@ export function StockItem({
 
   const touchMoveHandler = (event: React.TouchEvent) => {
     touchStartX = event.touches[0].clientX;
-    if (touchStartX - touchEndX > swipeDist && user?.isAdmin) {
+    if (user?.isAdmin && touchStartX - touchEndX > swipeDist) {
       swipeHandler();
     }
   };
@@ -143,19 +143,6 @@ export function StockItem({
           <div className="colored-circle" style={style} />
         </div>
         <h2>{currStock.quantity}</h2>
-        {/* <Modal show={isEdit} onCancel={closeEditHandler}>
-          <div>
-            <input
-              type="range"
-              name="temp"
-              min={1}
-              max={20}
-              step={1}
-              value={stock.quantity}
-              onChange={inputChangeHandler}
-            />
-          </div>
-        </Modal> */}
         {editStock && (
           <div className="item__actions">
             <Button to={`/stocks/${stock._id}`}>EDIT</Button>

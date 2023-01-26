@@ -84,7 +84,6 @@ function Auth() {
           JSON.stringify(user),
           DEFAULT_HEADERS
         );
-        console.log(res);
 
         ctx.login(res!);
       } catch (err) {}
