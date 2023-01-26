@@ -20,6 +20,7 @@ node_modules/
 nodemon.json
 .DS_Store
 .env
+.env.development
 .env.production
 .env.local
 .env.development.local

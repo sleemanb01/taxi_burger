@@ -23,7 +23,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:stage": "env-cmd -f ./.stage.env npm run-script build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@types/google.maps": "^3.50.5",
     "@types/googlemaps": "^3.43.3",
-    "@types/react-transition-group": "^4.4.5"
+    "@types/react-transition-group": "^4.4.5",
+    "env-cmd": "^10.1.0"
   }
 }
