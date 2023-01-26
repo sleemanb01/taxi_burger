@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-       - name: create env file
-        run:
-          touch .env
-          echo "${{ secrets.ENV_VARS }}" >> .env
       - run: cd front_end && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
