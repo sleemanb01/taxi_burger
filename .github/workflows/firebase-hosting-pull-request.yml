@@ -13,7 +13,7 @@ jobs:
       - name: create env file
         run: |
           cd functions
-          touch .env
+          touch .env.production
           echo "${{ secrets.ENV_VARS }}" >> .env
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
