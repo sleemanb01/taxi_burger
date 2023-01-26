@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
        - name: create env file
-        run: |
+        run:
           touch .env.production
           echo "${{ secrets.ENV_VARS }}" >> .env
       - run: cd front_end && npm ci && npm run build
