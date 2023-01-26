@@ -12,7 +12,6 @@ import {
   ENDPOINT_STOCKS,
   ERROR_IMAGE,
   BACKEND_URL,
-  DEFAULT_HEADERS,
   ENDPOINT_STOCKS_WIMAGE,
 } from "../../../util/Constants";
 import {
