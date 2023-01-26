@@ -23,21 +23,21 @@ const UpdateCategory = React.lazy(
 );
 
 function App() {
-  const authCtx = useContext(AuthContext);
+  const { login, isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
     if (storedUser) {
       const user: userWToken = JSON.parse(storedUser);
       if (user.token) {
-        authCtx.login(user);
+        login(user);
       }
     }
-  }, [authCtx.login]);
+  }, [login]);
 
   let routes;
 
-  if (authCtx.isLoggedIn) {
+  if (isLoggedIn) {
     routes = (
       <Routes>
         <Route path="/" element={<Stocks />} />
