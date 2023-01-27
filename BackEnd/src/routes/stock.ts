@@ -9,6 +9,7 @@ import {
   updateStock,
   deleteStock,
   updateStockWImage,
+  updateStockPartial,
 } from "../controllers/stock";
 
 /* ************************************************************** */
@@ -32,9 +33,9 @@ stockRoutes.post(
 );
 
 stockRoutes.patch(
-  "/:stockId",
-  [check("name").not().isEmpty(), check("categoryId").not().isEmpty()],
-  updateStock
+  "/partial/:stockId",
+  [check("quantity").isInt({ min: 0, max: 20 }), check("inUse").isBoolean()],
+  updateStockPartial
 );
 
 stockRoutes.patch(
@@ -42,6 +43,12 @@ stockRoutes.patch(
   fileUpload.single("image"),
   [check("name").not().isEmpty(), check("categoryId").not().isEmpty()],
   updateStockWImage
+);
+
+stockRoutes.patch(
+  "/:stockId",
+  [check("name").not().isEmpty(), check("categoryId").not().isEmpty()],
+  updateStock
 );
 
 stockRoutes.delete("/:placeId", deleteStock);

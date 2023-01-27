@@ -18,6 +18,7 @@ exports.stockRoutes.post("/", file_upload_1.fileUpload.single("image"), [
     (0, express_validator_1.check)("name").not().isEmpty(),
     (0, express_validator_1.check)("quantity").isNumeric().isLength({ min: 0, max: 100 }),
 ], stock_1.addStock);
-exports.stockRoutes.patch("/:stockId", [(0, express_validator_1.check)("name").not().isEmpty(), (0, express_validator_1.check)("categoryId").not().isEmpty()], stock_1.updateStock);
+exports.stockRoutes.patch("/partial/:stockId", [(0, express_validator_1.check)("quantity").isInt({ min: 0, max: 20 }), (0, express_validator_1.check)("inUse").isBoolean()], stock_1.updateStockPartial);
 exports.stockRoutes.patch("/WImage/:stockId", file_upload_1.fileUpload.single("image"), [(0, express_validator_1.check)("name").not().isEmpty(), (0, express_validator_1.check)("categoryId").not().isEmpty()], stock_1.updateStockWImage);
+exports.stockRoutes.patch("/:stockId", [(0, express_validator_1.check)("name").not().isEmpty(), (0, express_validator_1.check)("categoryId").not().isEmpty()], stock_1.updateStock);
 exports.stockRoutes.delete("/:placeId", stock_1.deleteStock);

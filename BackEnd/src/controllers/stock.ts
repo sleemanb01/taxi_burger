@@ -210,6 +210,64 @@ export const updateStockWImage = async (
     .json({ stock: stock.toObject({ getters: true }) });
 };
 
+/* ************************************************************** */
+
+export const updateStockPartial = async (
+  req: AuthorizationRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError(
+        ERROR_INVALID_INPUTS,
+        HTTP_RESPONSE_STATUS.Unprocessable_Entity
+      )
+    );
+  }
+
+  const { quantity, inUse } = req.body;
+  const stockId = req.params.stockId;
+  let stock: IStock | null;
+
+  try {
+    stock = await Stock.findById(stockId);
+  } catch {
+    const error = new HttpError(
+      ERROR_INTERNAL_SERVER,
+      HTTP_RESPONSE_STATUS.Internal_Server_Error
+    );
+    return next(error);
+  }
+
+  if (!stock) {
+    return next(
+      new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
+    );
+  }
+
+  stock.quantity = quantity;
+  stock.inUse = inUse;
+
+  try {
+    await stock.save();
+  } catch {
+    const error = new HttpError(
+      ERROR_INTERNAL_SERVER,
+      HTTP_RESPONSE_STATUS.Internal_Server_Error
+    );
+    return next(error);
+  }
+
+  res
+    .status(HTTP_RESPONSE_STATUS.OK)
+    .json({ stock: stock.toObject({ getters: true }) });
+};
+
+/* ************************************************************** */
+
 export const updateStock = async (
   req: AuthorizationRequest,
   res: Response,

@@ -94,7 +94,6 @@ function UpdateStock() {
 
     const currImage = formState.inputs.image!.value;
     if (currImage === loadedStock?.image) {
-      console.log("image didnt changed");
       let { body, headers } = stockPatchInfoWithoutImage(
         { name: formState.inputs.name!.value, categoryId: selected! },
         user!.token
@@ -103,8 +102,6 @@ function UpdateStock() {
       reqHeaders = headers;
       endPoint = ENDPOINT_STOCKS + "/" + stockId;
     } else {
-      console.log("image changed");
-
       const formData = new FormData();
       formData.append("name", formState.inputs.name!.value);
       formData.append("categoryId", selected!);

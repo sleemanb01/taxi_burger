@@ -14,7 +14,7 @@ export const ERROR_IMAGE = "Please provide an image!";
 
 /* ************************************************************** */
 
-export const BACKEND_URL = "https://taxiburger.herokuapp.com/";
+export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const BACKEND_API_URL = BACKEND_URL + "api/";
 export const DEFAULT_HEADERS = { "Content-Type": "application/json" };
 
@@ -24,5 +24,6 @@ export const ENDPOINT_SIGNUP = "users/signup";
 export const ENDPOINT_LOGIN = "users/login";
 export const ENDPOINT_GETUSERS = "users";
 export const ENDPOINT_STOCKS = "stocks";
+export const ENDPOINT_STOCKS_PARTIAL = "stocks/partial";
 export const ENDPOINT_STOCKS_WIMAGE = "stocks/WImage";
 export const ENDPOINT_CATEGORIES = "categories";
