@@ -66,7 +66,7 @@ export function StockItem({
     ) {
       updateStockHandler();
     }
-  }, [currStock]);
+  }, [sendRequest, currStock, stock._id, stock, user?.token]);
 
   /* ************************************************************************************************** */
 
@@ -94,15 +94,6 @@ export function StockItem({
 
   const openQuantityEditHandler = () => {
     setQuantityEdit(true);
-  };
-
-  const updateBackEnd = async () => {
-    try {
-      await sendRequest(ENDPOINT_STOCKS + "/" + stock._id, "DELETE", null, {
-        Authorization: "Barer " + user?.token,
-      });
-      onDelete(stock._id);
-    } catch (err) {}
   };
 
   const closeQuantityEditHandler = () => {
