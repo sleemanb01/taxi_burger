@@ -12,7 +12,6 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import {
   BACKEND_URL,
   DEFAULT_HEADERS,
-  ENDPOINT_STOCKS,
   ENDPOINT_STOCKS_PARTIAL,
 } from "../../../util/Constants";
 import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
