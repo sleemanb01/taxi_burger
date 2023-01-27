@@ -21,7 +21,7 @@ nodemon.json
 .DS_Store
 .env
 .env.development
-.env.production
+#.env.production
 .env.staging
 .env.local
 .env.development.local
