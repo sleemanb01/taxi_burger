@@ -12,6 +12,7 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import {
   BACKEND_URL,
   DEFAULT_HEADERS,
+  ENDPOINT_STOCKS,
   ENDPOINT_STOCKS_PARTIAL,
 } from "../../../util/Constants";
 import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
@@ -89,6 +90,13 @@ export function StockItem({
 
   const confirmDeleteHandler = async () => {
     closeConfirmHandler();
+
+    try {
+      await sendRequest(ENDPOINT_STOCKS + "/" + stock._id, "DELETE", null, {
+        Authorization: "Barer " + user?.token,
+      });
+      onDelete(stock._id);
+    } catch (err) {}
   };
 
   const openQuantityEditHandler = () => {
