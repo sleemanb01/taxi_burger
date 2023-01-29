@@ -49,7 +49,7 @@ export function StockItem({
   useEffect(() => {
     const updateStockHandler = async () => {
       try {
-        const res = await sendRequest(
+        await sendRequest(
           ENDPOINT_STOCKS_PARTIAL + "/" + stock._id,
           "PATCH",
           JSON.stringify(currStock),
