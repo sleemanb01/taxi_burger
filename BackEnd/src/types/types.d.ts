@@ -24,3 +24,11 @@ export type RequestWUser = Request<
   ParsedQs,
   Record<string, any>
 > & { userData: { userId: string } };
+
+export type MulterRequest = Request<
+  ParamsDictionary,
+  any,
+  any,
+  ParsedQs,
+  Record<string, any>
+>;

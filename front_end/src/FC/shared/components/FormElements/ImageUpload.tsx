@@ -1,3 +1,4 @@
+import Compressor from "compressorjs";
 import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "./Button";
@@ -17,7 +18,7 @@ export const ImageUpload = ({
   image?: string;
 }) => {
   const ALLOWED_FILES = ".jpg,.png,.jpeg";
-
+  const COMPRESSING_PERCENTAGE = 0.6;
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
     image || null
@@ -37,13 +38,24 @@ export const ImageUpload = ({
     fileReader.readAsDataURL(file);
   }, [file]);
 
+  const compressImageHandler = (file: File) => {
+    new Compressor(file, {
+      quality: COMPRESSING_PERCENTAGE,
+      success: (compressedResult: File) => {
+        console.log("success", compressedResult.size);
+
+        setFile(compressedResult);
+      },
+    });
+  };
+
   const pickedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pickedFile: File | null = null;
     let fileIsValid = isValid;
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
-      setFile(pickedFile);
-      setIsValid(true);
+      compressImageHandler(pickedFile);
+
       fileIsValid = true;
     } else if (!previewUrl) {
       setIsValid(false);

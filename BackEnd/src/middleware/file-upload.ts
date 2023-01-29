@@ -1,9 +1,12 @@
 import multer, { FileFilterCallback } from "multer";
 import { v4 as uuidv4 } from "uuid";
+import { MulterRequest } from "../types/types";
 
-const FILE_LIMIT = 700000;
+const MB = 1024 * 1024;
+const FILE_LIMIT = 1 * MB;
 const PATH_IMAGES_UPLOAD = "uploads/images";
 const ERROR_MESSAGE = "Invalid mime type!";
+const ERROR_LIMIT_EXCEEDED = "File is too big!";
 
 const MIME_TYPE_MAP = new Map<string, string>([
   ["image/png", "png"],
@@ -15,7 +18,7 @@ type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
 const destFunc = (
-  _req: Express.Request,
+  _req: MulterRequest,
   _file: Express.Multer.File,
   cb: DestinationCallback
 ) => {
@@ -23,7 +26,7 @@ const destFunc = (
 };
 
 const fileNameFunc = (
-  _req: Express.Request,
+  _req: MulterRequest,
   file: Express.Multer.File,
   cb: FileNameCallback
 ) => {
@@ -32,12 +35,23 @@ const fileNameFunc = (
 };
 
 const fileFilterFunc = (
-  _req: Express.Request,
+  req: MulterRequest,
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
+  let errorMessage: string | null = null;
+  const size = parseInt(req.headers["content-length"]);
   const isValid = !!MIME_TYPE_MAP.get(file.mimetype);
-  isValid ? cb(null, isValid) : cb(new Error(ERROR_MESSAGE));
+  const isInLimit = size < FILE_LIMIT;
+
+  if (!isInLimit) {
+    errorMessage = ERROR_LIMIT_EXCEEDED;
+  }
+  if (!isValid) {
+    errorMessage = ERROR_MESSAGE;
+  }
+
+  errorMessage ? cb(new Error(errorMessage)) : cb(null, isValid);
 };
 
 export const fileUpload = multer({

@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((_req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", ENV.ORIGIN!);
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"

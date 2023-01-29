@@ -16,6 +16,8 @@ import {
 
 export const stockRoutes = express.Router();
 
+const MAX = 20;
+
 stockRoutes.get("/", getStocks);
 
 stockRoutes.use(authenticate);
@@ -25,13 +27,16 @@ stockRoutes.get("/:stockId", getStock);
 stockRoutes.post(
   "/",
   fileUpload.single("image"),
-  [check("name").not().isEmpty(), check("quantity").isInt({ min: 0, max: 20 })],
+  [
+    check("name").not().isEmpty(),
+    check("quantity").isInt({ min: 0, max: MAX }),
+  ],
   addStock
 );
 
 stockRoutes.patch(
   "/partial/:stockId",
-  [check("quantity").isInt({ min: 0, max: 20 }), check("inUse").isBoolean()],
+  [check("quantity").isInt({ min: 0, max: MAX }), check("inUse").isBoolean()],
   updateStockPartial
 );
 

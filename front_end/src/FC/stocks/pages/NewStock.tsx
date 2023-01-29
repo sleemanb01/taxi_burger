@@ -30,8 +30,6 @@ function NewStock() {
     false
   );
   const nav = useNavigate();
-  // const categoryId = useParams().categoryId;
-
   const user = useContext(AuthContext).user!;
 
   const [selected, setSelected] = useState<string | null>(null);
