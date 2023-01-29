@@ -25,10 +25,7 @@ stockRoutes.get("/:stockId", getStock);
 stockRoutes.post(
   "/",
   fileUpload.single("image"),
-  [
-    check("name").not().isEmpty(),
-    check("quantity").isNumeric().isLength({ min: 0, max: 100 }),
-  ],
+  [check("name").not().isEmpty(), check("quantity").isInt({ min: 0, max: 20 })],
   addStock
 );
 
