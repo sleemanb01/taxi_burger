@@ -144,7 +144,9 @@ export const addStock = async (
     return next(internalError());
   }
 
-  res.status(HTTP_RESPONSE_STATUS.Created);
+  res
+    .status(HTTP_RESPONSE_STATUS.Created)
+    .json({ stock: newStock.toObject({ getters: true }) });
 };
 
 /* ************************************************************** */

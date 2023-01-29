@@ -17,6 +17,7 @@ import {
 } from "../../../util/Constants";
 import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { HTTP_RESPONSE_STATUS } from "../../../typing/enums";
 
 /* ************************************************************************************************** */
 
@@ -49,7 +50,7 @@ export function StockItem({
   useEffect(() => {
     const updateStockHandler = async () => {
       try {
-        await sendRequest(
+        const res = await sendRequest(
           ENDPOINT_STOCKS_PARTIAL + "/" + stock._id,
           "PATCH",
           JSON.stringify(currStock),
@@ -67,6 +68,11 @@ export function StockItem({
       updateStockHandler();
     }
   }, [sendRequest, currStock, stock._id, stock, user?.token]);
+
+  const errorHandler = () => {
+    clearError();
+    setCurrStock(stock);
+  };
 
   /* ************************************************************************************************** */
 
@@ -173,7 +179,7 @@ export function StockItem({
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={clearError} />
+      <ErrorModal error={error} onClear={errorHandler} />
       {isLoading && (
         <div className="center">
           <LoadingSpinner asOverlay />

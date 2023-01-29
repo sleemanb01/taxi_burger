@@ -9,6 +9,7 @@ yarn-ers
 # directories
 node_modules/
 .vscode/
+dist/
 
 # testing
 /coverage
