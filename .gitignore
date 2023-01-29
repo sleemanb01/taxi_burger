@@ -16,6 +16,10 @@ dist/
 
 # Firebase config
 .firebaserc
+.firebase.json
+
+# Typescript
+tsconfig.json
 
 # environment variables file
 nodemon.json
