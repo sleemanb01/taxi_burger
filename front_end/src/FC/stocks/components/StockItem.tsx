@@ -17,7 +17,6 @@ import {
 } from "../../../util/Constants";
 import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import { HTTP_RESPONSE_STATUS } from "../../../typing/enums";
 
 /* ************************************************************************************************** */
 
@@ -68,11 +67,6 @@ export function StockItem({
       updateStockHandler();
     }
   }, [sendRequest, currStock, stock._id, stock, user?.token]);
-
-  const errorHandler = () => {
-    clearError();
-    setCurrStock(stock);
-  };
 
   /* ************************************************************************************************** */
 
@@ -173,6 +167,11 @@ export function StockItem({
     if (user?.isAdmin && touchStartX - touchEndX > swipeDist) {
       openEditHandler();
     }
+  };
+
+  const errorHandler = () => {
+    clearError();
+    setCurrStock(stock);
   };
 
   /* ************************************************************************************************** */

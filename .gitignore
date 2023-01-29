@@ -16,7 +16,7 @@ dist/
 
 # Firebase config
 .firebaserc
-.firebase.json
+firebase.json
 
 # Typescript
 tsconfig.json
