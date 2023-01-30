@@ -119,6 +119,9 @@ function UpdateStock() {
     } catch (err) {}
   };
 
+  const TXT_UPDATE = "עדכן מלאי";
+  const TXT_NAME = "שם";
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -134,7 +137,7 @@ function UpdateStock() {
             id="name"
             element="input"
             type="text"
-            label="Name"
+            label={TXT_NAME}
             validators={[EValidatorType.REQUIRE]}
             errorText={ERROR_TEXT_REQUIRED}
             onInput={inputHandler}
@@ -153,7 +156,7 @@ function UpdateStock() {
             errorText={ERROR_IMAGE}
           />
           <Button type="submit" disabled={!!!selected || !formState.isValid}>
-            UPDATE STOCK
+            {TXT_UPDATE}
           </Button>
         </form>
       )}

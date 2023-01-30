@@ -68,6 +68,11 @@ function NewStock() {
     setInUse((prev) => !prev);
   };
 
+  const TXT_ADD = "הוסף מלאי";
+  const TXT_NAME = "שם";
+  const TXT_QUANTITY = "כמות";
+  const TXT_INUSE = "בשימוש";
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -78,7 +83,7 @@ function NewStock() {
           id="name"
           element="input"
           type="text"
-          label="name"
+          label={TXT_NAME}
           validators={[EValidatorType.REQUIRE]}
           errorText={ERROR_TEXT_REQUIRED}
           onInput={inputHandler}
@@ -86,7 +91,7 @@ function NewStock() {
         <Input
           id="quantity"
           element="input"
-          label="quantity"
+          label={TXT_QUANTITY}
           validators={[EValidatorType.MIN, EValidatorType.MAX]}
           errorText={ERROR_NUMBER}
           onInput={inputHandler}
@@ -105,11 +110,11 @@ function NewStock() {
             checked={inUse}
             onChange={checkHandler}
           />
-          In use
+          {TXT_INUSE}
         </label>
 
         <Button type="submit" disabled={!!!selected || !formState.isValid}>
-          ADD STOCK
+          {TXT_ADD}
         </Button>
       </form>
     </React.Fragment>

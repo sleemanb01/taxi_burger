@@ -68,6 +68,9 @@ export const ImageUpload = ({
     filePickerRef.current!.click();
   };
 
+  const TXT_PICK_IMAGE = "בחר תמונה";
+  const TXT_ASSEST = "נא לבחור תמונה";
+
   return (
     <div className="form-control">
       <input
@@ -81,10 +84,10 @@ export const ImageUpload = ({
       <div className={`image-upload ${center && "center"}`}>
         <div className="image-upload__preview">
           {previewUrl && <img src={previewUrl as string} alt="Preview" />}
-          {!previewUrl && <p>Please pick an image.</p>}
+          {!previewUrl && <p>{TXT_ASSEST}</p>}
         </div>
         <Button type="button" onClick={pickImageHandler}>
-          PICK IMAGE
+          {TXT_PICK_IMAGE}
         </Button>
       </div>
       {!isValid && <p>{errorText}</p>}

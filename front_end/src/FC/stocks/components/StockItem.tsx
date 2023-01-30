@@ -176,6 +176,12 @@ export function StockItem({
 
   /* ************************************************************************************************** */
 
+  const TXT_CANCEL = "ביטול";
+  const TXT_EDIT = "ערוך";
+  const TXT_DELETE = "מחק";
+  const TXT_CONFIRM_DELETE = "אתה בטוח שאתה קוצה למחוק";
+  const TXT_CONFIRM = "אתה בטוח";
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={errorHandler} />
@@ -187,20 +193,20 @@ export function StockItem({
       <Modal
         show={isConfirmVisible}
         onCancel={closeConfirmHandler}
-        header="Are you sure?"
+        header={TXT_CONFIRM}
         footerClass="item__modal-actions"
         footer={
           <React.Fragment>
             <Button inverse onClick={closeConfirmHandler}>
-              CANCEL
+              {TXT_CANCEL}
             </Button>
             <Button danger onClick={confirmDeleteHandler}>
-              DELETE
+              {TXT_DELETE}
             </Button>
           </React.Fragment>
         }
       >
-        <p>Do you want to proceed and delete this!</p>
+        <p>{TXT_CONFIRM_DELETE}</p>
       </Modal>
       <Modal
         show={quantityEdit}
@@ -232,9 +238,9 @@ export function StockItem({
         <h2>{currStock.quantity}</h2>
         {editStock && (
           <div className="item__actions" ref={editRef}>
-            <Button to={`/stocks/${stock._id}`}>EDIT</Button>
+            <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button>
             <Button danger={true} onClick={openConfirmHandler}>
-              DELETE
+              {TXT_DELETE}
             </Button>
           </div>
         )}

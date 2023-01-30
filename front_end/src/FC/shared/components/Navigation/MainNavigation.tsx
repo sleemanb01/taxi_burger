@@ -17,6 +17,8 @@ export function MainNavigation() {
     setIsDrawerOpen(false);
   };
 
+  const TXT_TITLE = "טקסי בורגר";
+
   return (
     <React.Fragment>
       {isDrawerOpen && <BackDrop onClick={closeDrawerHandler} />}
@@ -35,7 +37,7 @@ export function MainNavigation() {
           <span />
         </button>
         <h1 className="main-navigation__title">
-          <Link to="/">Taxi Burger</Link>
+          <Link to="/">{TXT_TITLE}</Link>
         </h1>
         <nav className="main-navigation__header-nav">
           <NavLinks />

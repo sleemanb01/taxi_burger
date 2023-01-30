@@ -13,12 +13,15 @@ export function StocksList({
   stocks: IStock[];
   onDeletestock: Function;
 }) {
+  const TXT_EMPTY = "לא נמצא מלאי, הוסף חדש";
+  const TXT_ADD = "הוסף מלאי";
+
   if (stocks.length === 0) {
     return (
       <div className="stock-list">
         <Card>
-          <h2>No stocks found. Maybe create one?</h2>
-          <Button to="/stocks/new/undefined">Add STOCK</Button>
+          <h2>{TXT_EMPTY}</h2>
+          <Button to="/stocks/new/undefined">{TXT_ADD}</Button>
         </Card>
       </div>
     );

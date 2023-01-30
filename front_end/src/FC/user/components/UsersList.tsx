@@ -5,11 +5,13 @@ import { UserItem } from "./UserItem";
 import "./UsersList.css";
 
 export function UsersList({ users }: { users: IUser[] }) {
+  const TXT_NO_USERS = ".לא נמצאו משתמשים";
+
   if (users.length === 0) {
     return (
       <div className="center">
         <Card>
-          <h2>No users found.</h2>
+          <h2>{TXT_NO_USERS}</h2>
         </Card>
       </div>
     );

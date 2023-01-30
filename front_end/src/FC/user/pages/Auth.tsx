@@ -109,12 +109,20 @@ function Auth() {
 
   /* ************************************************************************************************** */
 
+  const TXT_LOGIN_REQUIRED = "!נדרשת כניסה";
+  const TXT_SWITCH_TO = "החלף ל ";
+  const TXT_LOGIN = "כניסה";
+  const TXT_SIGNUP = "הרשמה";
+  const TXT_NAME = "שם";
+  const TXT_EMAIL = "אימייל";
+  const TXT_PASSWORD = "סיסמה";
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
         <>{isLoading && <LoadingSpinner asOverlay />}</>
-        <h2>Login Required</h2>
+        <h2>{TXT_LOGIN_REQUIRED}</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
@@ -122,7 +130,7 @@ function Auth() {
               element="input"
               id="name"
               type="text"
-              label="Your Name"
+              label={TXT_NAME}
               validators={[EValidatorType.REQUIRE]}
               errorText={ERROR_TEXT_REQUIRED}
               onInput={inputHandler}
@@ -140,7 +148,7 @@ function Auth() {
             element="input"
             id="email"
             type="email"
-            label="E-Mail"
+            label={TXT_EMAIL}
             validators={[EValidatorType.EMAIL]}
             errorText={ERROR_VALID_EMAIL}
             onInput={inputHandler}
@@ -149,17 +157,17 @@ function Auth() {
             element="input"
             id="password"
             type="password"
-            label="Password"
+            label={TXT_PASSWORD}
             validators={[EValidatorType.MINLENGTH]}
             errorText={ERROR_DESCRIPTION_LENGTH}
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
-            {isLoginMode ? "LOGIN" : "SIGNUP"}
+            {isLoginMode ? TXT_LOGIN : TXT_SIGNUP}
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
-          {`SWITCH TO ${isLoginMode ? "SIGNUP" : "LOGIN"}`}
+          {`${TXT_SWITCH_TO} ${isLoginMode ? TXT_SIGNUP : TXT_LOGIN}`}
         </Button>
       </Card>
     </React.Fragment>

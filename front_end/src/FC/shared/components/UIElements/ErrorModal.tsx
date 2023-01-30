@@ -9,12 +9,14 @@ export function ErrorModal({
   onClear: Function;
   error: string | null;
 }) {
+  const TXT_OK = "בסדר";
+
   return (
     <Modal
       onCancel={onClear}
       header="An Error Occurred!"
       show={!!error}
-      footer={<Button onClick={onClear}>Okay</Button>}
+      footer={<Button onClick={onClear}>{TXT_OK}</Button>}
     >
       <p>{error}</p>
     </Modal>

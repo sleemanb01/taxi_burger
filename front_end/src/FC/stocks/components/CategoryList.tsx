@@ -30,9 +30,13 @@ function CategoryList({
     setSelected(e.target.value);
   };
 
+  const TXT_SELECT = "בחר קטגוריה";
+  const TXT_NEW_CATEGORY = "קטגוריה חדשה";
+  const TXT_CATEGORY = "קטגוריה";
+
   return (
     <React.Fragment>
-      <label htmlFor="categories">Category</label>
+      <label htmlFor="categories">{TXT_CATEGORY}</label>
       <select
         value={selected}
         name="categories"
@@ -40,8 +44,7 @@ function CategoryList({
         onChange={selectChangeHandler}
       >
         <option disabled value="default" key="default">
-          {" "}
-          -- select an option --{" "}
+          {`-- ${TXT_SELECT} --`}
         </option>
         {categories.map((category) => (
           <option key={category._id} value={category._id}>
@@ -49,7 +52,7 @@ function CategoryList({
           </option>
         ))}
         <option key="newCategory" value="newCategory">
-          NEW CATEGORY
+          {TXT_NEW_CATEGORY}
         </option>
       </select>
     </React.Fragment>
