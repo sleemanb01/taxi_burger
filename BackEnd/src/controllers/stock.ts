@@ -18,8 +18,10 @@ import {
   ERROR_UNAUTHORIZED,
   DELETED,
   ERROR_DELETE_FILE,
+  ERROR_UPLOAD_FILE,
 } from "../util/messages";
-import { fileUpload } from "../middleware/file-upload";
+import { deleteFileS3, getFileS3, uploadToS3 } from "../middleware/s3";
+import mongoose from "mongoose";
 
 /* ************************************************************** */
 
@@ -48,27 +50,42 @@ export const getStock = async (
     );
   }
 
+  if (!stock) {
+    return next(
+      new HttpError(
+        ERROR_INTERNAL_SERVER,
+        HTTP_RESPONSE_STATUS.Internal_Server_Error
+      )
+    );
+  }
+
+  stock.image = await getFileS3(stock.image);
+
   res.status(HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
 };
 
 /* ************************************************************** */
 
 export const getStocks = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  let stocks = [];
+  let stocks: IStock[] = [];
   let categories;
 
   try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
     stocks = await Stock.find();
-    categories = await getCategories();
-    if (!categories) {
-      throw "";
-    }
+    categories = await Category.find();
+    sess.commitTransaction();
   } catch {
     return next(internalError());
+  }
+
+  for (let i = 0; i < stocks.length; i++) {
+    stocks[i].image = await getFileS3(stocks[i].image);
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
@@ -77,19 +94,6 @@ export const getStocks = async (
       category.toObject({ getters: true })
     ),
   });
-};
-
-/* ************************************************************** */
-
-const getCategories = async () => {
-  let categories = [];
-
-  try {
-    categories = await Category.find();
-    return categories;
-  } catch {
-    return null;
-  }
 };
 
 /* ************************************************************** */
@@ -130,12 +134,22 @@ export const addStock = async (
     return next(error);
   }
 
+  const upload = await uploadToS3(req.file);
+  if (!upload.success) {
+    return next(
+      new HttpError(
+        ERROR_UPLOAD_FILE,
+        HTTP_RESPONSE_STATUS.Internal_Server_Error
+      )
+    );
+  }
+
   const newStock = new Stock({
     name,
     quantity,
     categoryId,
     inUse,
-    image: req.file?.path || req.body.image,
+    image: upload.data || req.body.image,
   });
 
   try {
@@ -191,11 +205,27 @@ export const updateStockWImage = async (
   stock.categoryId = categoryId;
 
   if (req.file) {
-    fs.unlink(stock.image, () => {
-      console.log(ERROR_DELETE_FILE);
-    });
+    const resError = await deleteFileS3(stock.image);
+    if (resError) {
+      return next(
+        new HttpError(
+          ERROR_DELETE_FILE,
+          HTTP_RESPONSE_STATUS.Internal_Server_Error
+        )
+      );
+    }
   }
-  stock.image = req.file?.path;
+
+  const upload = await uploadToS3(req.file);
+  if (!upload.success && upload.data) {
+    return next(
+      new HttpError(
+        ERROR_UPLOAD_FILE,
+        HTTP_RESPONSE_STATUS.Internal_Server_Error
+      )
+    );
+  }
+  stock.image = upload.data!;
 
   try {
     await stock.save();

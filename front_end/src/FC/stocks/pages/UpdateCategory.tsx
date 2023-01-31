@@ -77,7 +77,7 @@ function UpdateCategory() {
     );
   }
 
-  const TXT_UPDATE = "עדכן מלאי";
+  const TXT_UPDATE = "עדכן קטגוריה";
 
   return (
     <React.Fragment>

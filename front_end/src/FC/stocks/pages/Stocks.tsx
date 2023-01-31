@@ -21,6 +21,7 @@ function Stocks() {
 
         localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
         setCategories(fetchedCategoris);
+        console.log(res);
 
         setStocks(res.stocks);
       } catch (err) {}

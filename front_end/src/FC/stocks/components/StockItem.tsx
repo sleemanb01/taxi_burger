@@ -10,13 +10,17 @@ import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 
 import {
-  BACKEND_URL,
   DEFAULT_HEADERS,
   ENDPOINT_STOCKS,
   ENDPOINT_STOCKS_PARTIAL,
 } from "../../../util/Constants";
 import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 
 /* ************************************************************************************************** */
 
@@ -181,6 +185,7 @@ export function StockItem({
   const TXT_DELETE = "מחק";
   const TXT_CONFIRM_DELETE = "אתה בטוח שאתה קוצה למחוק";
   const TXT_CONFIRM = "אתה בטוח";
+  const TXT_QUANTITY = "כמות";
 
   return (
     <React.Fragment>
@@ -211,7 +216,7 @@ export function StockItem({
       <Modal
         show={quantityEdit}
         onCancel={closeQuantityEditHandler}
-        header={`${stock.name} quantity`}
+        header={`${stock.name} ${TXT_QUANTITY}`}
       >
         <NumberSlider
           defaultValue={stock.quantity}
@@ -224,7 +229,7 @@ export function StockItem({
         onTouchStart={touchStartHandler}
         onTouchMove={touchMoveHandler}
       >
-        {stock.image && (
+        {/* {stock.image && (
           <img
             className="item-img"
             src={BACKEND_URL + stock.image}
@@ -243,7 +248,30 @@ export function StockItem({
               {TXT_DELETE}
             </Button>
           </div>
-        )}
+        )} */}
+        <Card sx={{ maxWidth: 345 }}>
+          <CardMedia
+            sx={{ height: 140 }}
+            image={stock.image}
+            title="stock preview"
+          />
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              {stock.name}
+            </Typography>
+            <Typography variant="h5" component="div" align="center">
+              {stock.quantity}
+            </Typography>
+          </CardContent>
+          {editStock && (
+            <CardActions>
+              <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button>
+              <Button danger={true} onClick={openConfirmHandler}>
+                {TXT_DELETE}
+              </Button>
+            </CardActions>
+          )}
+        </Card>
       </li>
     </React.Fragment>
   );

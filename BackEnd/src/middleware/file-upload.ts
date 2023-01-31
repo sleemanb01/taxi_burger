@@ -17,13 +17,13 @@ const MIME_TYPE_MAP = new Map<string, string>([
 type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
-const destFunc = (
-  _req: MulterRequest,
-  _file: Express.Multer.File,
-  cb: DestinationCallback
-) => {
-  cb(null, PATH_IMAGES_UPLOAD);
-};
+// const destFunc = (
+//   _req: MulterRequest,
+//   _file: Express.Multer.File,
+//   cb: DestinationCallback
+// ) => {
+//   cb(null, PATH_IMAGES_UPLOAD);
+// };
 
 const fileNameFunc = (
   _req: MulterRequest,
@@ -57,7 +57,7 @@ const fileFilterFunc = (
 export const fileUpload = multer({
   limits: { fileSize: FILE_LIMIT },
   storage: multer.diskStorage({
-    destination: destFunc,
+    // destination: destFunc,
     filename: fileNameFunc,
   }),
   fileFilter: fileFilterFunc,

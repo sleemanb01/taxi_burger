@@ -32,3 +32,15 @@ export type MulterRequest = Request<
   ParsedQs,
   Record<string, any>
 >;
+
+export type S3ReturnType = {
+  success: boolean;
+  message: string;
+  data?: string;
+};
+
+export type S3UResult = {
+  Location: string;
+  Key: string;
+  Bucket: string;
+};

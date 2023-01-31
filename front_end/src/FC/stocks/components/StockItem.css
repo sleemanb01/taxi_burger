@@ -1,15 +1,16 @@
 
 .list-item {
-    display: inline-flex;
-    align-items: center;
-    flex-direction: row;
+    /* display: flex; */
+    /* align-items: center; */
+    /* flex-direction: column; */
     margin: 1rem;
-    padding: 0 1rem;
-    background-color: #eee;
-    border: solid #000;
-    border-width: 1px;
-    width: calc(40% - 2rem);
-    min-width: 11.5rem;
+    /* padding: 0 1rem; */
+    /* background-color: #eee; */
+    /* border: solid #000; */
+    /* border-width: 1px; */
+    /* width: calc(40% - 2rem);
+    min-width: 11.5rem; */
+    /* width: 100px; */
 }
 
 .list-item p {
@@ -29,7 +30,7 @@ div .colored-circle {
   }
   
   input[type="range"] {
-    width: 200px;
+    width: 20rem;
     margin: 0;
   }
 

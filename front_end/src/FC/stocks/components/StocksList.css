@@ -1,8 +1,9 @@
 .stock-list {
   list-style: none;
-  padding: 0.5rem;
-  /* width: 90%; */
-  /* max-width: 40rem; */
+  /* padding: 0.5rem; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 

@@ -32,7 +32,7 @@ function NewStock() {
   const nav = useNavigate();
   const user = useContext(AuthContext).user!;
 
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
   const [inUse, setInUse] = useState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();

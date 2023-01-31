@@ -20,12 +20,10 @@ import {
 
 /* ************************************************************** */
 
-const internalError = () => {
-  return new HttpError(
-    ERROR_INTERNAL_SERVER,
-    HTTP_RESPONSE_STATUS.Internal_Server_Error
-  );
-};
+const internalError = new HttpError(
+  ERROR_INTERNAL_SERVER,
+  HTTP_RESPONSE_STATUS.Internal_Server_Error
+);
 
 /* ************************************************************** */
 
@@ -39,7 +37,7 @@ export const getCategories = async (
   try {
     categories = await Category.find();
   } catch {
-    return next(internalError());
+    return next(internalError);
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
@@ -94,13 +92,17 @@ export const addCategory = async (
   try {
     alreadySigned = await Category.findOne({ name: name });
   } catch {
+    return next(internalError);
+  }
+
+  if (alreadySigned) {
     return next(new HttpError(ERROR_EXISTS, HTTP_RESPONSE_STATUS.Bad_Request));
   }
 
   try {
     await newCategory.save();
   } catch {
-    return next(internalError());
+    return next(internalError);
   }
 
   res.status(HTTP_RESPONSE_STATUS.Created).json({ category: newCategory });

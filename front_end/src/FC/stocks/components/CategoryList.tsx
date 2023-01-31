@@ -38,12 +38,12 @@ function CategoryList({
     <React.Fragment>
       <label htmlFor="categories">{TXT_CATEGORY}</label>
       <select
-        value={selected}
+        value={selected ? selected : "undefined"}
         name="categories"
         id="categories"
         onChange={selectChangeHandler}
       >
-        <option disabled value="default" key="default">
+        <option disabled value="undefined" key="undefined">
           {`-- ${TXT_SELECT} --`}
         </option>
         {categories.map((category) => (

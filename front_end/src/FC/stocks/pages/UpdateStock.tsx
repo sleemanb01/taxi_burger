@@ -151,7 +151,7 @@ function UpdateStock() {
           <ImageUpload
             center
             id="image"
-            image={BACKEND_URL + loadedStock.image}
+            image={loadedStock.image}
             onInput={inputHandler}
             errorText={ERROR_IMAGE}
           />
