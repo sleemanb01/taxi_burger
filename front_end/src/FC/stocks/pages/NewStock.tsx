@@ -3,7 +3,7 @@ import { AuthContext } from "../../../hooks/auth-context";
 import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { reducerInputStateInitVal } from "../../../hooks/useReducer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { EValidatorType } from "../../../typing/enums";
 import {
   ERROR_TEXT_REQUIRED,
@@ -32,7 +32,9 @@ function NewStock() {
   const nav = useNavigate();
   const user = useContext(AuthContext).user!;
 
-  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [selected, setSelected] = useState<string | undefined>(
+    useParams().categoryId
+  );
   const [inUse, setInUse] = useState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -78,7 +80,7 @@ function NewStock() {
       <ErrorModal error={error} onClear={clearError} />
       <form className="stock-form" onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
-        <CategoryList setSelected={setSelected} />
+        <CategoryList setSelected={setSelected} selected={selected} />
         <Input
           id="name"
           element="input"
