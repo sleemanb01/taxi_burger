@@ -38,7 +38,7 @@ function Stocks({
     };
 
     fetchStocks();
-  }, [sendRequest]);
+  }, [sendRequest, setter]);
 
   const stockDeletedHandler = (deletedstockId: string) => {
     setStocks((prevstocks) =>

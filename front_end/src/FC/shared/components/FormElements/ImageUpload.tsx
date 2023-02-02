@@ -1,5 +1,4 @@
 import imageCompression from "browser-image-compression";
-import Compressor from "compressorjs";
 import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "./Button";

@@ -177,7 +177,6 @@ export function StockItem({
   /* ************************************************************************************************** */
 
   const TXT_CANCEL = "ביטול";
-  const TXT_EDIT = "ערוך";
   const TXT_DELETE = "מחק";
   const TXT_CONFIRM_DELETE = "אתה בטוח שאתה קוצה למחוק";
   const TXT_CONFIRM = "אתה בטוח";

@@ -11,7 +11,6 @@ import {
   ERROR_TEXT_REQUIRED,
   ENDPOINT_STOCKS,
   ERROR_IMAGE,
-  BACKEND_URL,
   ENDPOINT_STOCKS_WIMAGE,
 } from "../../../util/Constants";
 import {

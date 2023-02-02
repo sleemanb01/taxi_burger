@@ -10,7 +10,6 @@ import { AuthContext } from "./hooks/auth-context";
 import { userWToken } from "./typing/types";
 import React from "react";
 import LoadingSpinner from "./FC/shared/components/UIElements/LoadingSpinner";
-import PrimarySearchAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
 import { IStock } from "./typing/interfaces";
 import { RTL } from "./FC/assest/RTL";
 import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
