@@ -4,7 +4,7 @@ import { MulterRequest } from "../types/types";
 
 const MB = 1024 * 1024;
 const FILE_LIMIT = 1 * MB;
-const PATH_IMAGES_UPLOAD = "uploads/images";
+// const PATH_IMAGES_UPLOAD = "uploads/images";
 const ERROR_MESSAGE = "Invalid mime type!";
 const ERROR_LIMIT_EXCEEDED = "File is too big!";
 
@@ -14,7 +14,7 @@ const MIME_TYPE_MAP = new Map<string, string>([
   ["image/jpg", "jpg"],
 ]);
 
-type DestinationCallback = (error: Error | null, destination: string) => void;
+// type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
 // const destFunc = (

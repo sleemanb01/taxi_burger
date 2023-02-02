@@ -1,4 +1,4 @@
-import { Suspense, useContext, useEffect } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -6,11 +6,14 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { MainNavigation } from "./FC/shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./hooks/auth-context";
 import { userWToken } from "./typing/types";
 import React from "react";
 import LoadingSpinner from "./FC/shared/components/UIElements/LoadingSpinner";
+import PrimarySearchAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
+import { IStock } from "./typing/interfaces";
+import { RTL } from "./FC/assest/RTL";
+import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
 
 const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));
@@ -23,6 +26,9 @@ const UpdateCategory = React.lazy(
 );
 
 function App() {
+  const [stocks, setStocks] = useState<IStock[]>([]);
+  const [displayArray, setDisplayArray] = useState<string[]>([]);
+
   const { login, isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
@@ -36,12 +42,32 @@ function App() {
     }
   }, [login]);
 
+  const categoryClickHandler = (id: string) => {
+    const alreadyExists = displayArray.includes(id);
+
+    if (alreadyExists) {
+      setDisplayArray((prev) => prev.filter((e) => e !== id));
+      return;
+    }
+
+    setDisplayArray((prev) => [...prev, id]);
+  };
+
   let routes;
 
   if (isLoggedIn) {
     routes = (
       <Routes>
-        <Route path="/" element={<Stocks />} />
+        <Route
+          path="/"
+          element={
+            <Stocks
+              setter={setStocks}
+              clickHandler={categoryClickHandler}
+              displayArray={displayArray}
+            />
+          }
+        />
         <Route path="/stocks/new/:categoryId" element={<NewStock />} />
         <Route path="/stocks/:stockId" element={<UpdateStock />} />
         <Route path="/category/new" element={<NewCategory />} />
@@ -53,7 +79,16 @@ function App() {
   } else {
     routes = (
       <Routes>
-        <Route path="/" element={<Stocks />} />
+        <Route
+          path="/"
+          element={
+            <Stocks
+              setter={setStocks}
+              clickHandler={categoryClickHandler}
+              displayArray={displayArray}
+            />
+          }
+        />
         <Route path="/users" element={<Users />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<Navigate to="/auth" replace />} />
@@ -63,18 +98,20 @@ function App() {
 
   return (
     <Router>
-      <MainNavigation />
-      <main>
-        <Suspense
-          fallback={
-            <div className="center">
-              <LoadingSpinner asOverlay />
-            </div>
-          }
-        >
-          {routes}
-        </Suspense>
-      </main>
+      <RTL>
+        <ResponsiveAppBar stocks={stocks} clickHandler={categoryClickHandler} />
+        <main>
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner asOverlay />
+              </div>
+            }
+          >
+            {routes}
+          </Suspense>
+        </main>
+      </RTL>
     </Router>
   );
 }

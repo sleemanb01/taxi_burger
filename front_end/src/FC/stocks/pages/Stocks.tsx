@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ICategory, IStock } from "../../../typing/interfaces";
 import { ENDPOINT_STOCKS } from "../../../util/Constants";
@@ -7,11 +9,20 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
 
-function Stocks() {
+function Stocks({
+  setter,
+  clickHandler,
+  displayArray,
+}: {
+  setter: Function;
+  clickHandler: Function;
+  displayArray: string[];
+}) {
+  const nav = useNavigate();
+  const isLoggedIn = useContext(AuthContext).isLoggedIn;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [displayArray, setDisplayArray] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -21,8 +32,7 @@ function Stocks() {
 
         localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
         setCategories(fetchedCategoris);
-        console.log(res);
-
+        setter(res.stocks);
         setStocks(res.stocks);
       } catch (err) {}
     };
@@ -36,16 +46,9 @@ function Stocks() {
     );
   };
 
-  const categoryClickHandler = (id: string) => {
-    const alreadyExists = displayArray.includes(id);
-
-    if (alreadyExists) {
-      setDisplayArray((prev) => prev.filter((e) => e !== id));
-      return;
-    }
-
-    setDisplayArray((prev) => [...prev, id]);
-  };
+  if (!isLoggedIn) {
+    nav("/Auth");
+  }
 
   if (categories.length === 0) {
     return <React.Fragment></React.Fragment>;
@@ -65,7 +68,7 @@ function Stocks() {
           isVisible={displayArray.includes(category._id!)}
           category={category}
           stocks={stocks}
-          clickHandler={categoryClickHandler}
+          clickHandler={clickHandler}
           deleteHandler={stockDeletedHandler}
         />
       ))}

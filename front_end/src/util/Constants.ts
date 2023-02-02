@@ -5,7 +5,7 @@ export const MAX = 100;
 
 /* ************************************************************** */
 
-export const ERROR_TEXT_REQUIRED = "Please enter a valid input!";
+export const ERROR_TEXT_REQUIRED = "נא הכנס שדה תקין!";
 export const ERROR_VALID_EMAIL = "Please enter a valid email!";
 export const ERROR_DESCRIPTION_LENGTH = `Please enter a description between ${MINLENGTH}-${MAXLENGTH} characters!`;
 export const ERROR_NUMBER = "please enter a valid number!";

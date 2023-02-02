@@ -1,5 +1,5 @@
 import { EReducerActionType, EValidatorType } from "./enums";
-import { IUser } from "./interfaces";
+import { ICategory, IStock, IUser } from "./interfaces";
 
 export type AuthCtx = {
   isLoggedIn: boolean;
@@ -40,4 +40,15 @@ export type userWToken = {
   token: string;
   isAdmin: boolean;
   tokenExpiration: Date;
+};
+
+export type StocksWCategories = {
+  stocks: IStock[];
+  categories: ICategory[];
+};
+
+export type partialStock = {
+  quantity: IStock["quantity"];
+  inUse: IStock["inUse"];
+  lowQuantity: IStock["lowQuantity"];
 };

@@ -14,6 +14,7 @@ usersRoutes.post(
   fileUpload.single("image"),
   [
     check("name").not().isEmpty(),
+    check("code").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
     check("password").isLength({ min: 8 }),
   ],
@@ -22,9 +23,6 @@ usersRoutes.post(
 
 usersRoutes.post(
   "/login",
-  [
-    check("email").normalizeEmail().isEmail(),
-    check("password").isLength({ min: 8 }),
-  ],
+  [check("code").not().isEmpty(), check("password").isLength({ min: 8 })],
   login
 );

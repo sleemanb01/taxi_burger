@@ -14,13 +14,17 @@ import {
   ENDPOINT_STOCKS,
   ENDPOINT_STOCKS_PARTIAL,
 } from "../../../util/Constants";
-import { NumberSlider } from "../../shared/components/FormElements/NumberSlider";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { SimpleDialog } from "../../components/Dialog";
+import { partialStock } from "../../../typing/types";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 /* ************************************************************************************************** */
 
@@ -31,10 +35,6 @@ export function StockItem({
   stock: IStock;
   onDelete: Function;
 }) {
-  interface partialStock {
-    quantity: IStock["quantity"];
-    inUse: IStock["inUse"];
-  }
   const user = useContext(AuthContext).user;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const editRef = useRef<HTMLInputElement | null>(null);
@@ -42,9 +42,9 @@ export function StockItem({
   const initValue: partialStock = {
     quantity: stock.quantity,
     inUse: stock.inUse,
+    lowQuantity: stock.lowQuantity,
   };
 
-  const [sliderValue, setSliderValue] = useState(stock.quantity);
   const [currStock, setCurrStock] = useState<partialStock>(initValue);
   const [quantityEdit, setQuantityEdit] = useState(false);
   const [editStock, setEditStock] = useState(false);
@@ -66,7 +66,8 @@ export function StockItem({
     };
     if (
       stock.quantity !== currStock.quantity ||
-      stock.inUse !== currStock.inUse
+      stock.inUse !== currStock.inUse ||
+      stock.lowQuantity !== currStock.lowQuantity
     ) {
       updateStockHandler();
     }
@@ -80,13 +81,11 @@ export function StockItem({
   let touchEndX = 0;
   const swipeDist = 100;
 
-  const style = { backgroundColor: currStock.inUse ? "yellow" : "" };
-
   /* ************************************************************************************************** */
 
-  const openConfirmHandler = () => {
-    setIsConfirmVisible(true);
-  };
+  // const openConfirmHandler = () => {
+  //   setIsConfirmVisible(true);
+  // };
 
   const closeConfirmHandler = () => {
     setIsConfirmVisible(false);
@@ -109,13 +108,10 @@ export function StockItem({
 
   const closeQuantityEditHandler = () => {
     setQuantityEdit(false);
-    if (sliderValue !== currStock.quantity) {
-      setCurrStock((prev) => ({ ...prev, quantity: sliderValue }));
-    }
   };
 
-  const quantityChangeHandler = (value: number) => {
-    setSliderValue(value);
+  const quantityChangeHandler = (edited: partialStock) => {
+    setCurrStock((prev) => ({ ...prev, ...edited }));
   };
 
   const openEditHandler = () => {
@@ -185,7 +181,6 @@ export function StockItem({
   const TXT_DELETE = "מחק";
   const TXT_CONFIRM_DELETE = "אתה בטוח שאתה קוצה למחוק";
   const TXT_CONFIRM = "אתה בטוח";
-  const TXT_QUANTITY = "כמות";
 
   return (
     <React.Fragment>
@@ -213,42 +208,19 @@ export function StockItem({
       >
         <p>{TXT_CONFIRM_DELETE}</p>
       </Modal>
-      <Modal
-        show={quantityEdit}
-        onCancel={closeQuantityEditHandler}
-        header={`${stock.name} ${TXT_QUANTITY}`}
-      >
-        <NumberSlider
-          defaultValue={stock.quantity}
-          onChange={quantityChangeHandler}
-        />
-      </Modal>
+
+      <SimpleDialog
+        open={quantityEdit}
+        onClose={closeQuantityEditHandler}
+        onChange={quantityChangeHandler}
+        stock={stock}
+      />
       <li
         className="list-item"
         onClick={clickHandler}
         onTouchStart={touchStartHandler}
         onTouchMove={touchMoveHandler}
       >
-        {/* {stock.image && (
-          <img
-            className="item-img"
-            src={BACKEND_URL + stock.image}
-            alt="item"
-          />
-        )}
-        <div className="item-info">
-          <p>{stock.name}</p>
-          <div className="colored-circle" style={style} />
-        </div>
-        <h2>{currStock.quantity}</h2>
-        {editStock && (
-          <div className="item__actions" ref={editRef}>
-            <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button>
-            <Button danger={true} onClick={openConfirmHandler}>
-              {TXT_DELETE}
-            </Button>
-          </div>
-        )} */}
         <Card sx={{ maxWidth: 345 }}>
           <CardMedia
             sx={{ height: 140 }}
@@ -260,15 +232,21 @@ export function StockItem({
               {stock.name}
             </Typography>
             <Typography variant="h5" component="div" align="center">
-              {stock.quantity}
+              {currStock.quantity}
             </Typography>
           </CardContent>
           {editStock && (
             <CardActions>
-              <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button>
-              <Button danger={true} onClick={openConfirmHandler}>
+              {/* <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button> */}
+              <IconButton aria-label="edit">
+                <EditIcon />
+              </IconButton>
+              {/* <Button danger={true} onClick={openConfirmHandler}>
                 {TXT_DELETE}
-              </Button>
+              </Button> */}
+              <IconButton aria-label="delete" color="error">
+                <DeleteIcon />
+              </IconButton>
             </CardActions>
           )}
         </Card>

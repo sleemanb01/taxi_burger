@@ -1,3 +1,4 @@
+import imageCompression from "browser-image-compression";
 import Compressor from "compressorjs";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -18,7 +19,14 @@ export const ImageUpload = ({
   image?: string;
 }) => {
   const ALLOWED_FILES = ".jpg,.png,.jpeg";
-  const COMPRESSING_PERCENTAGE = 0.6;
+  // const COMPRESSING_PERCENTAGE = 0.6;
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
     image || null
@@ -38,23 +46,31 @@ export const ImageUpload = ({
     fileReader.readAsDataURL(file);
   }, [file]);
 
-  const compressImageHandler = (file: File) => {
-    new Compressor(file, {
-      quality: COMPRESSING_PERCENTAGE,
-      success: (compressedResult: File) => {
-        console.log("success", compressedResult.size);
+  // const compressImageHandler = (file: File) => {
+  //   new Compressor(file, {
+  //     quality: COMPRESSING_PERCENTAGE,
+  //     success: (compressedResult: File) => {
+  //       console.log("success", compressedResult.size);
 
-        setFile(compressedResult);
-      },
-    });
-  };
+  //       setFile(compressedResult);
+  //     },
+  //   });
+  // };
 
-  const pickedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const pickedHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
     let pickedFile: File | null = null;
     let fileIsValid = isValid;
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
-      compressImageHandler(pickedFile);
+      // compressImageHandler(pickedFile);
+
+      try {
+        const compressedFile = await imageCompression(pickedFile, options);
+
+        setFile(compressedFile);
+      } catch (error) {
+        console.log(error);
+      }
 
       fileIsValid = true;
     } else if (!previewUrl) {

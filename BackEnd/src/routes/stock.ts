@@ -36,7 +36,11 @@ stockRoutes.post(
 
 stockRoutes.patch(
   "/partial/:stockId",
-  [check("quantity").isInt({ min: 0, max: MAX }), check("inUse").isBoolean()],
+  [
+    check("quantity").isInt({ min: 0, max: MAX }),
+    check("lowQuantity").isInt({ min: 0, max: MAX }),
+    check("inUse").isBoolean(),
+  ],
   updateStockPartial
 );
 

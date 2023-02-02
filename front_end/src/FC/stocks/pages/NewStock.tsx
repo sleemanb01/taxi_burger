@@ -46,12 +46,15 @@ function NewStock() {
       return;
     }
 
+    const DEFAULT_LOW_QUANTITY = 1;
+
     const formData = new FormData();
     formData.append("name", formState.inputs.name!.value);
     formData.append("quantity", formState.inputs.quantity!.value);
     formData.append("categoryId", selected!);
     formData.append("inUse", inUse.toString());
     formData.append("image", formState.inputs.image!.value);
+    formData.append("lowQuantity", DEFAULT_LOW_QUANTITY.toString());
 
     try {
       await sendRequest(ENDPOINT_STOCKS, "POST", formData, {

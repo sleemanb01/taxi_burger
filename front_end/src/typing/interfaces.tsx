@@ -1,7 +1,8 @@
 export interface IUser {
   _id?: string;
   name?: string;
-  email: string;
+  code: string;
+  email?: string;
   password?: string;
   image?: string;
   isAdmin?: boolean;
@@ -14,6 +15,7 @@ export interface IStock {
   quantity: number;
   inUse: boolean;
   image: string;
+  lowQuantity: number;
 }
 
 export interface ICategory {
