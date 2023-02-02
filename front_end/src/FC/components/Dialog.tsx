@@ -49,11 +49,11 @@ export function SimpleDialog({
     }
   };
 
-  const lowQuantityChangeHandler = (value: number) => {
-    if (value !== stock.lowQuantity) {
-      setEditLowQuantity(value);
-    }
-  };
+  // const lowQuantityChangeHandler = (value: number) => {
+  //   if (value !== stock.lowQuantity) {
+  //     setEditLowQuantity(value);
+  //   }
+  // };
 
   const closeHanler = () => {
     const editedStock: partialStock = {
