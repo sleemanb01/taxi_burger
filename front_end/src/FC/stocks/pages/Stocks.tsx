@@ -21,6 +21,7 @@ function Stocks({
   displayArray: string[];
 }) {
   const nav = useNavigate();
+  const isAdmin = useContext(AuthContext).user?.isAdmin;
 
   const isLoggedIn = useContext(AuthContext).isLoggedIn;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -79,18 +80,20 @@ function Stocks({
           deleteHandler={stockDeletedHandler}
         />
       ))}
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{
-          position: "fixed",
-          bottom: (theme) => theme.spacing(4),
-          right: (theme) => theme.spacing(4),
-        }}
-        onClick={addClickHandler}
-      >
-        <AddIcon />
-      </Fab>
+      {isAdmin && (
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{
+            position: "fixed",
+            bottom: (theme) => theme.spacing(4),
+            right: (theme) => theme.spacing(4),
+          }}
+          onClick={addClickHandler}
+        >
+          <AddIcon />
+        </Fab>
+      )}
     </React.Fragment>
   );
 }

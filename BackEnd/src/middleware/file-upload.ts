@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MulterRequest } from "../types/types";
 
 const MB = 1024 * 1024;
-const FILE_LIMIT = 1 * MB;
+const FILE_LIMIT = 1.5 * MB;
 // const PATH_IMAGES_UPLOAD = "uploads/images";
 const ERROR_MESSAGE = "Invalid mime type!";
 const ERROR_LIMIT_EXCEEDED = "File is too big!";
