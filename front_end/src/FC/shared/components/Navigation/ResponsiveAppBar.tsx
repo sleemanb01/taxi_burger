@@ -62,8 +62,6 @@ function ResponsiveAppBar({
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
 
-  const pages = [TXT_USERS, TXT_STOCKS];
-
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -121,7 +119,7 @@ function ResponsiveAppBar({
                 }}
               >
                 <MenuItem>{TXT_USERS}</MenuItem>
-                <MenuItem onClick={handleLogOut}>{TXT_STOCKS}</MenuItem>
+                <MenuItem onClick={stocksHandler}>{TXT_STOCKS}</MenuItem>
               </Menu>
             </Box>
             <Box sx={{ flex: 1, color: "primary.main" }}>
