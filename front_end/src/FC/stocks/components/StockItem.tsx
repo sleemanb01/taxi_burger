@@ -5,6 +5,7 @@ import Modal from "../../shared/components/UIElements/Modal";
 import { IStock } from "../../../typing/interfaces";
 
 import "./StockItem.css";
+
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
