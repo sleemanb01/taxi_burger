@@ -56,11 +56,14 @@ export function SimpleDialog({
   const lowQuantityChangeHandler = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const value = parseInt(e.currentTarget.value);
-    if (value !== stock.lowQuantity) {
-      setEditLowQuantity(value);
+    const rawValue = e.currentTarget.value;
+    if (!isNaN(parseInt(rawValue))) {
+      const value = parseInt(e.currentTarget.value);
+      if (value !== stock.lowQuantity) {
+        setEditLowQuantity(value);
+      }
+      setIsEdit(false);
     }
-    setIsEdit(false);
   };
 
   const closeHanler = () => {

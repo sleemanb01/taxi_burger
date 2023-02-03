@@ -8,6 +8,8 @@ import { ENDPOINT_STOCKS } from "../../../util/Constants";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
 function Stocks({
   setter,
@@ -21,8 +23,6 @@ function Stocks({
   const nav = useNavigate();
 
   const isLoggedIn = useContext(AuthContext).isLoggedIn;
-  const auth = useContext(AuthContext);
-  console.log(auth);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -47,6 +47,10 @@ function Stocks({
     setStocks((prevstocks) =>
       prevstocks.filter((p) => p._id !== deletedstockId)
     );
+  };
+
+  const addClickHandler = () => {
+    nav("/stocks/new/undefined");
   };
 
   if (!isLoggedIn) {
@@ -75,6 +79,18 @@ function Stocks({
           deleteHandler={stockDeletedHandler}
         />
       ))}
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{
+          position: "fixed",
+          bottom: (theme) => theme.spacing(4),
+          right: (theme) => theme.spacing(4),
+        }}
+        onClick={addClickHandler}
+      >
+        <AddIcon />
+      </Fab>
     </React.Fragment>
   );
 }
