@@ -26,6 +26,7 @@ import { partialStock } from "../../../typing/types";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 /* ************************************************************************************************** */
 
@@ -36,28 +37,29 @@ export function StockItem({
   stock: IStock;
   onDelete: Function;
 }) {
+  const nav = useNavigate();
   const user = useContext(AuthContext).user;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const editRef = useRef<HTMLInputElement | null>(null);
 
-  const initValue: partialStock = {
-    quantity: stock.quantity,
-    inUse: stock.inUse,
-    lowQuantity: stock.lowQuantity,
-  };
-
-  const [currStock, setCurrStock] = useState<partialStock>(initValue);
+  const [currStock, setCurrStock] = useState<IStock>(stock);
   const [quantityEdit, setQuantityEdit] = useState(false);
   const [editStock, setEditStock] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   useEffect(() => {
     const updateStockHandler = async () => {
+      const partial: partialStock = {
+        quantity: currStock.quantity,
+        lowQuantity: currStock.lowQuantity,
+        inUse: currStock.inUse,
+      };
+
       try {
         await sendRequest(
           ENDPOINT_STOCKS_PARTIAL + "/" + stock._id,
           "PATCH",
-          JSON.stringify(currStock),
+          JSON.stringify(partial),
           {
             ...DEFAULT_HEADERS,
             Authorization: "Barer " + user?.token,
@@ -84,9 +86,9 @@ export function StockItem({
 
   /* ************************************************************************************************** */
 
-  // const openConfirmHandler = () => {
-  //   setIsConfirmVisible(true);
-  // };
+  const openConfirmHandler = () => {
+    setIsConfirmVisible(true);
+  };
 
   const closeConfirmHandler = () => {
     setIsConfirmVisible(false);
@@ -121,6 +123,10 @@ export function StockItem({
 
   const closeEditHandler = () => {
     setEditStock(false);
+  };
+
+  const stockEditHandler = () => {
+    nav(`/stocks/${stock._id}`);
   };
 
   const handleClickOutside = (event: React.MouseEvent<HTMLElement>) => {
@@ -213,7 +219,7 @@ export function StockItem({
         open={quantityEdit}
         onClose={closeQuantityEditHandler}
         onChange={quantityChangeHandler}
-        stock={stock}
+        stock={currStock}
       />
       <li
         className="list-item"
@@ -237,14 +243,14 @@ export function StockItem({
           </CardContent>
           {editStock && (
             <CardActions>
-              {/* <Button to={`/stocks/${stock._id}`}>{TXT_EDIT}</Button> */}
-              <IconButton aria-label="edit">
+              <IconButton aria-label="edit" onClick={stockEditHandler}>
                 <EditIcon />
               </IconButton>
-              {/* <Button danger={true} onClick={openConfirmHandler}>
-                {TXT_DELETE}
-              </Button> */}
-              <IconButton aria-label="delete" color="error">
+              <IconButton
+                aria-label="delete"
+                color="error"
+                onClick={openConfirmHandler}
+              >
                 <DeleteIcon />
               </IconButton>
             </CardActions>

@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
@@ -16,6 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import "../../../../styles/styles.css";
 import { AuthContext } from "../../../../hooks/auth-context";
+import { useNavigate } from "react-router-dom";
 
 function ResponsiveAppBar({
   stocks,
@@ -24,6 +24,7 @@ function ResponsiveAppBar({
   stocks: IStock[];
   clickHandler: Function;
 }) {
+  const nav = useNavigate();
   const auth = React.useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -45,6 +46,10 @@ function ResponsiveAppBar({
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const stocksHandler = () => {
+    nav("/");
   };
 
   const handleLogOut = () => {
@@ -115,11 +120,8 @@ function ResponsiveAppBar({
                   display: { xs: "block" },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem>{TXT_USERS}</MenuItem>
+                <MenuItem onClick={handleLogOut}>{TXT_STOCKS}</MenuItem>
               </Menu>
             </Box>
             <Box sx={{ flex: 1, color: "primary.main" }}>

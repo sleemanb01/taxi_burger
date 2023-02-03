@@ -2,6 +2,11 @@
     text-align: end;
 }
 
+.align-center {
+    width: 2rem;
+    text-align: center;
+}
+
 .search-width {
     width: 11rem
 }

@@ -19,7 +19,10 @@ function Stocks({
   displayArray: string[];
 }) {
   const nav = useNavigate();
+
   const isLoggedIn = useContext(AuthContext).isLoggedIn;
+  const auth = useContext(AuthContext);
+  console.log(auth);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);

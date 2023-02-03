@@ -4,6 +4,9 @@ import { IStock } from "../../typing/interfaces";
 import Fab from "@mui/material/Fab";
 import { Box, DialogTitle, Slider, Stack } from "@mui/material";
 import { partialStock } from "../../typing/types";
+import Input from "@mui/material/Input";
+
+import "../../styles/styles.css";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -42,6 +45,7 @@ export function SimpleDialog({
 }: SimpleDialogProps) {
   const [editedQuantity, setEditedQuantity] = useState(stock.quantity);
   const [editlowQuantity, setEditLowQuantity] = useState(stock.lowQuantity);
+  const [isEdit, setIsEdit] = useState(false);
 
   const quantityChangeHandler = (value: number) => {
     if (value !== stock.quantity) {
@@ -49,23 +53,58 @@ export function SimpleDialog({
     }
   };
 
-  // const lowQuantityChangeHandler = (value: number) => {
-  //   if (value !== stock.lowQuantity) {
-  //     setEditLowQuantity(value);
-  //   }
-  // };
+  const lowQuantityChangeHandler = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const value = parseInt(e.currentTarget.value);
+    if (value !== stock.lowQuantity) {
+      setEditLowQuantity(value);
+    }
+    setIsEdit(false);
+  };
 
   const closeHanler = () => {
-    const editedStock: partialStock = {
-      quantity: editedQuantity,
-      lowQuantity: editlowQuantity,
-      inUse: stock.inUse,
-    };
-    onChange(editedStock);
+    if (
+      stock.quantity !== editedQuantity ||
+      stock.lowQuantity !== editlowQuantity
+    ) {
+      const editedStock: partialStock = {
+        quantity: editedQuantity,
+        lowQuantity: editlowQuantity,
+        inUse: stock.inUse,
+      };
+      onChange(editedStock);
+    }
     onClose();
   };
 
+  const singleClickHandler = (_: React.MouseEvent<HTMLElement>) => {};
+
+  const doubleClickHandler = () => {
+    setIsEdit((prev) => !prev);
+  };
+
   const TXT_QUANTITY = "כמות";
+  let timer: ReturnType<typeof setTimeout>;
+  let firing = false;
+
+  let firingFunc = singleClickHandler;
+
+  const clickHandler = (event: React.MouseEvent<HTMLElement>) => {
+    if (firing) {
+      firingFunc = doubleClickHandler;
+      return;
+    }
+
+    firing = true;
+    timer = setTimeout(function () {
+      firingFunc(event);
+
+      firingFunc = () => singleClickHandler(event);
+      firing = false;
+    }, 250);
+    console.log(timer);
+  };
 
   return (
     <Dialog onClose={closeHanler} open={open}>
@@ -78,6 +117,7 @@ export function SimpleDialog({
             className="slider-height"
             orientation="vertical"
             getAriaValueText={(value, _) => value.toString()}
+            key={`slider-${stock.quantity}`}
             defaultValue={stock.quantity}
             onChangeCommitted={(_, val) => quantityChangeHandler(val as number)}
             max={20}
@@ -86,8 +126,14 @@ export function SimpleDialog({
             marks={marks}
           />
         </Stack>
-        <Fab color="error" aria-label="add">
-          {stock.lowQuantity}
+        <Fab color="error" aria-label="add" onClick={clickHandler}>
+          <Input
+            className="align-center"
+            type="number"
+            onBlur={lowQuantityChangeHandler}
+            disabled={!isEdit}
+            defaultValue={stock.lowQuantity}
+          />
         </Fab>
       </Box>
     </Dialog>
