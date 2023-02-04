@@ -16,7 +16,7 @@ import {
 
 export const stockRoutes = express.Router();
 
-const MAX = 20;
+const MAX = 50;
 
 stockRoutes.get("/", getStocks);
 
@@ -38,7 +38,8 @@ stockRoutes.patch(
   "/partial/:stockId",
   [
     check("quantity").isInt({ min: 0, max: MAX }),
-    check("lowQuantity").isInt({ min: 0, max: MAX }),
+    check("minQuantity").isInt({ min: 0, max: MAX }),
+    check("maxQuantity").isInt({ min: 0, max: MAX }),
     check("inUse").isBoolean(),
   ],
   updateStockPartial

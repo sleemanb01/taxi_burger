@@ -60,6 +60,7 @@ export function AuthContextProvider({ children }: { children: JSX.Element }) {
         const user = {
           id: data.id,
           email: data.email,
+          name: data.name,
           token: data.token,
           tokenExpiration: new Date(data.expiration),
           isAdmin: data.isAdmin,

@@ -37,6 +37,7 @@ export type reducerFormAction = {
 export type userWToken = {
   id: string;
   email: string;
+  name: string;
   token: string;
   isAdmin: boolean;
   tokenExpiration: Date;
@@ -50,5 +51,6 @@ export type StocksWCategories = {
 export type partialStock = {
   quantity: IStock["quantity"];
   inUse: IStock["inUse"];
-  lowQuantity: IStock["lowQuantity"];
+  minQuantity: IStock["minQuantity"];
+  maxQuantity: IStock["maxQuantity"];
 };

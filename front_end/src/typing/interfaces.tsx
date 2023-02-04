@@ -15,7 +15,8 @@ export interface IStock {
   quantity: number;
   inUse: boolean;
   image: string;
-  lowQuantity: number;
+  minQuantity: number;
+  maxQuantity: number;
 }
 
 export interface ICategory {

@@ -46,7 +46,8 @@ function NewStock() {
       return;
     }
 
-    const DEFAULT_LOW_QUANTITY = 1;
+    const DEFAULT_MIN_QUANTITY = 1;
+    const DEFAULT_MAX_QUANTITY = 20;
 
     const formData = new FormData();
     formData.append("name", formState.inputs.name!.value);
@@ -54,7 +55,8 @@ function NewStock() {
     formData.append("categoryId", selected!);
     formData.append("inUse", inUse.toString());
     formData.append("image", formState.inputs.image!.value);
-    formData.append("lowQuantity", DEFAULT_LOW_QUANTITY.toString());
+    formData.append("minQuantity", DEFAULT_MIN_QUANTITY.toString());
+    formData.append("maxQuantity", DEFAULT_MAX_QUANTITY.toString());
 
     try {
       await sendRequest(ENDPOINT_STOCKS, "POST", formData, {

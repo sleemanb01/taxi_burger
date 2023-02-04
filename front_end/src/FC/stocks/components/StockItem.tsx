@@ -51,7 +51,8 @@ export function StockItem({
     const updateStockHandler = async () => {
       const partial: partialStock = {
         quantity: currStock.quantity,
-        lowQuantity: currStock.lowQuantity,
+        minQuantity: currStock.minQuantity,
+        maxQuantity: currStock.maxQuantity,
         inUse: currStock.inUse,
       };
 
@@ -70,7 +71,8 @@ export function StockItem({
     if (
       stock.quantity !== currStock.quantity ||
       stock.inUse !== currStock.inUse ||
-      stock.lowQuantity !== currStock.lowQuantity
+      stock.minQuantity !== currStock.minQuantity ||
+      stock.maxQuantity !== currStock.maxQuantity
     ) {
       updateStockHandler();
     }

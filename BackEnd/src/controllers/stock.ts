@@ -114,7 +114,8 @@ export const addStock = async (
     );
   }
 
-  const { name, quantity, categoryId, inUse, lowQuantity } = req.body;
+  const { name, quantity, categoryId, inUse, minQuantity, maxQuantity } =
+    req.body;
   const creatorId = req.userData.userId;
   let targetUser: IUser | null;
 
@@ -150,7 +151,8 @@ export const addStock = async (
     categoryId,
     inUse,
     image: upload.data || req.body.image,
-    lowQuantity,
+    minQuantity,
+    maxQuantity,
   });
 
   try {
@@ -261,7 +263,7 @@ export const updateStockPartial = async (
     );
   }
 
-  const { quantity, lowQuantity, inUse } = req.body;
+  const { quantity, minQuantity, maxQuantity, inUse } = req.body;
   const stockId = req.params.stockId;
   let stock: IStock | null;
 
@@ -281,9 +283,10 @@ export const updateStockPartial = async (
     );
   }
 
-  stock.quantity = quantity;
-  stock.lowQuantity = lowQuantity;
-  stock.inUse = inUse;
+  stock.quantity = quantity || stock.quantity;
+  stock.minQuantity = minQuantity || stock.minQuantity;
+  stock.maxQuantity = maxQuantity || stock.maxQuantity;
+  stock.inUse = inUse || stock.inUse;
 
   try {
     await stock.save();

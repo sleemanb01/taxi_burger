@@ -14,28 +14,6 @@ export interface SimpleDialogProps {
   onChange: (value: partialStock) => void;
   stock: IStock;
 }
-const marks = [
-  {
-    value: 0,
-    label: "0",
-  },
-  {
-    value: 5,
-    label: "5",
-  },
-  {
-    value: 10,
-    label: "10",
-  },
-  {
-    value: 15,
-    label: "15",
-  },
-  {
-    value: 20,
-    label: "20",
-  },
-];
 
 export function SimpleDialog({
   open,
@@ -44,8 +22,26 @@ export function SimpleDialog({
   stock,
 }: SimpleDialogProps) {
   const [editedQuantity, setEditedQuantity] = useState(stock.quantity);
-  const [editlowQuantity, setEditLowQuantity] = useState(stock.lowQuantity);
+  const [editMinQuantity, setEditMinQuantity] = useState(stock.minQuantity);
+  const [editMaxQuantity, setEditMaxQuantity] = useState(stock.maxQuantity);
   const [isEdit, setIsEdit] = useState(false);
+
+  const halfQuantity = editMaxQuantity / 2;
+
+  const marks = [
+    {
+      value: 0,
+      label: "0",
+    },
+    {
+      value: halfQuantity,
+      label: halfQuantity.toString(),
+    },
+    {
+      value: editMaxQuantity,
+      label: editMaxQuantity.toString(),
+    },
+  ];
 
   const quantityChangeHandler = (value: number) => {
     if (value !== stock.quantity) {
@@ -53,14 +49,21 @@ export function SimpleDialog({
     }
   };
 
-  const lowQuantityChangeHandler = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  const minMaxChangeHandler = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+    isLow: boolean
   ) => {
     const rawValue = e.currentTarget.value;
     if (!isNaN(parseInt(rawValue))) {
       const value = parseInt(e.currentTarget.value);
-      if (value !== stock.lowQuantity) {
-        setEditLowQuantity(value);
+      if (isLow) {
+        if (value !== stock.minQuantity) {
+          setEditMinQuantity(value);
+        }
+      } else {
+        if (value !== stock.maxQuantity) {
+          setEditMaxQuantity(value);
+        }
       }
       setIsEdit(false);
     }
@@ -69,11 +72,13 @@ export function SimpleDialog({
   const closeHanler = () => {
     if (
       stock.quantity !== editedQuantity ||
-      stock.lowQuantity !== editlowQuantity
+      stock.minQuantity !== editMinQuantity ||
+      stock.maxQuantity !== editMaxQuantity
     ) {
       const editedStock: partialStock = {
         quantity: editedQuantity,
-        lowQuantity: editlowQuantity,
+        minQuantity: editMinQuantity,
+        maxQuantity: editMaxQuantity,
         inUse: stock.inUse,
       };
       onChange(editedStock);
@@ -123,21 +128,33 @@ export function SimpleDialog({
             key={`slider-${stock.quantity}`}
             defaultValue={stock.quantity}
             onChangeCommitted={(_, val) => quantityChangeHandler(val as number)}
-            max={20}
+            max={editMaxQuantity}
             step={1}
             valueLabelDisplay="auto"
             marks={marks}
           />
         </Stack>
-        <Fab color="error" aria-label="add" onClick={clickHandler}>
-          <Input
-            className="align-center"
-            type="number"
-            onBlur={lowQuantityChangeHandler}
-            disabled={!isEdit}
-            defaultValue={stock.lowQuantity}
-          />
-        </Fab>
+        <Stack spacing={4}>
+          <Fab color="primary" aria-label="add" onClick={clickHandler}>
+            <Input
+              type="number"
+              className="align-center"
+              onBlur={(event) => minMaxChangeHandler(event, false)}
+              disabled={!isEdit}
+              defaultValue={editMaxQuantity}
+            />
+          </Fab>
+
+          <Fab color="error" aria-label="add" onClick={clickHandler}>
+            <Input
+              className="align-center"
+              type="number"
+              onBlur={(event) => minMaxChangeHandler(event, true)}
+              disabled={!isEdit}
+              defaultValue={editMinQuantity}
+            />
+          </Fab>
+        </Stack>
       </Box>
     </Dialog>
   );

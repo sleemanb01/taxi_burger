@@ -115,6 +115,7 @@ export const login = async (
 
   const ret: responseWToken = {
     id: targetUser.id,
+    name: targetUser.name,
     email: targetUser.email,
     token,
     isAdmin: targetUser.isAdmin,
@@ -210,6 +211,7 @@ export const signup = async (
 
   const ret: responseWToken = {
     id: createdUser.id,
+    name: createdUser.name,
     email: createdUser.email,
     token,
     isAdmin: false,

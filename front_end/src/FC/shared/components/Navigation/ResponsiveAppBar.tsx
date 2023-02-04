@@ -57,7 +57,8 @@ function ResponsiveAppBar({
     handleMenuClose();
   };
 
-  const TXT_PROFILE = "פרופיל";
+  const TXT_PROFILE = auth.user?.name;
+  // const TXT_PROFILE = "none";
   const TXT_LOGOUT = "התנתק";
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
