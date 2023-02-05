@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
@@ -10,6 +10,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import LandingPage from "../../assest/LandingPage";
 
 function Stocks({
   setter,
@@ -26,6 +27,14 @@ function Stocks({
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [showLandingPage, setShowLandingPage] = useState(true);
+
+  useLayoutEffect(() => {
+    const toRef = setTimeout(() => {
+      setShowLandingPage(false);
+      clearTimeout(toRef);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -53,18 +62,18 @@ function Stocks({
     nav("/stocks/new/undefined");
   };
 
-  if (categories.length === 0) {
-    return <React.Fragment></React.Fragment>;
+  if (showLandingPage || isLoading) {
+    return <LandingPage />;
   }
 
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
+      {/* {isLoading && (
         <div className="center">
           <LoadingSpinner asOverlay />
         </div>
-      )}
+      )} */}
       {categories.map((category) => (
         <CategoryItem
           key={category._id}

@@ -21,3 +21,15 @@
     align-items: center;
     margin: 2rem;
 }
+
+.landing-page__overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

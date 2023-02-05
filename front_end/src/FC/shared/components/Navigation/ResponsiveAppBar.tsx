@@ -16,6 +16,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import "../../../../styles/styles.css";
 import { AuthContext } from "../../../../hooks/auth-context";
 import { useNavigate } from "react-router-dom";
+import { log } from "console";
+import { useContext } from "react";
 
 function ResponsiveAppBar({
   stocks,
@@ -25,7 +27,7 @@ function ResponsiveAppBar({
   clickHandler: Function;
 }) {
   const nav = useNavigate();
-  const auth = React.useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -58,7 +60,6 @@ function ResponsiveAppBar({
   };
 
   const TXT_PROFILE = auth.user?.name;
-  // const TXT_PROFILE = "none";
   const TXT_LOGOUT = "התנתק";
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
