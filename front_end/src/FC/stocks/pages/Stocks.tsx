@@ -6,7 +6,6 @@ import { useHttpClient } from "../../../hooks/http-hook";
 import { ICategory, IStock } from "../../../typing/interfaces";
 import { ENDPOINT_STOCKS } from "../../../util/Constants";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";

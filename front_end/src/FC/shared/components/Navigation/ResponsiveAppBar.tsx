@@ -16,7 +16,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import "../../../../styles/styles.css";
 import { AuthContext } from "../../../../hooks/auth-context";
 import { useNavigate } from "react-router-dom";
-import { log } from "console";
 import { useContext } from "react";
 
 function ResponsiveAppBar({
