@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "../../shared/components/FormElements/Button";
 
 import Modal from "../../shared/components/UIElements/Modal";
@@ -40,7 +40,6 @@ export function StockItem({
   const nav = useNavigate();
   const user = useContext(AuthContext).user;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const editRef = useRef<HTMLInputElement | null>(null);
 
   const [currStock, setCurrStock] = useState<IStock>(stock);
   const [quantityEdit, setQuantityEdit] = useState(false);

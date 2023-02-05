@@ -1,4 +1,4 @@
-import { Suspense, useContext, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -14,7 +14,6 @@ import { IStock } from "./typing/interfaces";
 import { RTL } from "./FC/assest/RTL";
 import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
 import { useAuth } from "./hooks/auth-hook";
-import { log } from "console";
 
 const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));

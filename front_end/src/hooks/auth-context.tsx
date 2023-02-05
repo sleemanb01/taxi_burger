@@ -1,5 +1,5 @@
-import { createContext, useCallback, useEffect, useState } from "react";
-import { AuthCtx, userWToken } from "../typing/types";
+import { createContext } from "react";
+import { AuthCtx } from "../typing/types";
 
 export const AuthContext = createContext<AuthCtx>({
   isLoggedIn: false,

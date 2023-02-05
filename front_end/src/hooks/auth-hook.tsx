@@ -1,4 +1,3 @@
-import { log } from "console";
 import { useState, useCallback, useEffect } from "react";
 import { userWToken } from "../typing/types";
 
