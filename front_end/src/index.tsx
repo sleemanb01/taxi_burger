@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { AuthContextProvider } from "./hooks/auth-context";
 import { _default_theme } from "./styles/defaultTheme";
 import { ThemeProvider } from "@mui/material";
 
@@ -12,11 +11,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <ThemeProvider theme={_default_theme}>
-        <App />
-      </ThemeProvider>
-    </AuthContextProvider>
+    <ThemeProvider theme={_default_theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );
 

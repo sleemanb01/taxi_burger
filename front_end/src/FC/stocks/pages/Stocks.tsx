@@ -10,6 +10,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import CategoryItem from "../components/CategoryItem";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { log } from "console";
 
 function Stocks({
   setter,
@@ -23,7 +24,7 @@ function Stocks({
   const nav = useNavigate();
   const isAdmin = useContext(AuthContext).user?.isAdmin;
 
-  const isLoggedIn = useContext(AuthContext).isLoggedIn;
+  const token = useContext(AuthContext).user?.token;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -54,9 +55,10 @@ function Stocks({
     nav("/stocks/new/undefined");
   };
 
-  if (!isLoggedIn) {
-    nav("/Auth");
-  }
+  // if (!token) {
+  //   console.log("token", token);
+  //   nav("/Auth");
+  // }
 
   if (categories.length === 0) {
     return <React.Fragment></React.Fragment>;

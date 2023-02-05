@@ -4,8 +4,8 @@ import { ICategory, IStock, IUser } from "./interfaces";
 export type AuthCtx = {
   isLoggedIn: boolean;
   user: userWToken | undefined;
+  updateUser: (user: userWToken) => void;
   login: (user: userWToken) => void;
-  updatePerson: (user: userWToken) => void;
   logout: () => void;
 };
 

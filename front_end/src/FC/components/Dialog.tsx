@@ -99,19 +99,21 @@ export function SimpleDialog({
   let firingFunc = singleClickHandler;
 
   const clickHandler = (event: React.MouseEvent<HTMLElement>) => {
-    if (firing) {
-      firingFunc = doubleClickHandler;
-      return;
+    if (!isEdit) {
+      if (firing) {
+        firingFunc = doubleClickHandler;
+        return;
+      }
+
+      firing = true;
+      timer = setTimeout(function () {
+        firingFunc(event);
+
+        firingFunc = () => singleClickHandler(event);
+        firing = false;
+      }, 250);
+      console.log(timer);
     }
-
-    firing = true;
-    timer = setTimeout(function () {
-      firingFunc(event);
-
-      firingFunc = () => singleClickHandler(event);
-      firing = false;
-    }, 250);
-    console.log(timer);
   };
 
   return (

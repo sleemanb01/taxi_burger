@@ -131,15 +131,9 @@ export function StockItem({
     nav(`/stocks/${stock._id}`);
   };
 
-  const handleClickOutside = (event: React.MouseEvent<HTMLElement>) => {
-    if (editRef.current && !editRef.current.contains(event.target as Node)) {
-      closeEditHandler();
-    }
-  };
-
   const singleClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     if (editStock) {
-      handleClickOutside(event);
+      closeEditHandler();
     } else {
       openQuantityEditHandler();
     }

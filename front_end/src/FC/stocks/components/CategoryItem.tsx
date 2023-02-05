@@ -21,7 +21,11 @@ function CategoryItem({
   const classes = `category-content__item ${clickedStyle}`;
   return (
     <React.Fragment>
-      <div className={classes} onClick={() => clickHandler(category._id!)}>
+      <div
+        className={classes}
+        onClick={() => clickHandler(category._id!)}
+        id={category._id}
+      >
         <p>{category.name}</p>
       </div>
       {isVisible && (

@@ -15,7 +15,8 @@ export default function AutoComplete({
     if (!value) {
       return;
     }
-    clickHandler((value as IStock).categoryId);
+    const stock = value as IStock;
+    clickHandler(stock.categoryId);
   };
 
   const TXT_SEARCH = "חיפוש";

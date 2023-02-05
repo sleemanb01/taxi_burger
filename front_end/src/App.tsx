@@ -13,6 +13,8 @@ import LoadingSpinner from "./FC/shared/components/UIElements/LoadingSpinner";
 import { IStock } from "./typing/interfaces";
 import { RTL } from "./FC/assest/RTL";
 import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
+import { useAuth } from "./hooks/auth-hook";
+import { log } from "console";
 
 const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));
@@ -28,7 +30,7 @@ function App() {
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [displayArray, setDisplayArray] = useState<string[]>([]);
 
-  const { login, isLoggedIn } = useContext(AuthContext);
+  const { user, updateUser, login, logout } = useAuth();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
@@ -50,11 +52,16 @@ function App() {
     }
 
     setDisplayArray((prev) => [...prev, id]);
+    const element = document.getElementById(`${id}`);
+    if (element) {
+      // 👇 Will scroll smoothly to the top of the next section
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   let routes;
 
-  if (isLoggedIn) {
+  if (user?.token) {
     routes = (
       <Routes>
         <Route
@@ -78,17 +85,6 @@ function App() {
   } else {
     routes = (
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Stocks
-              setter={setStocks}
-              clickHandler={categoryClickHandler}
-              displayArray={displayArray}
-            />
-          }
-        />
-        <Route path="/users" element={<Users />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
@@ -96,22 +92,35 @@ function App() {
   }
 
   return (
-    <Router>
-      <RTL>
-        <ResponsiveAppBar stocks={stocks} clickHandler={categoryClickHandler} />
-        <main>
-          <Suspense
-            fallback={
-              <div className="center">
-                <LoadingSpinner asOverlay />
-              </div>
-            }
-          >
-            {routes}
-          </Suspense>
-        </main>
-      </RTL>
-    </Router>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: !!user?.token,
+        user: user,
+        updateUser: updateUser,
+        login: login,
+        logout: logout,
+      }}
+    >
+      <Router>
+        <RTL>
+          <ResponsiveAppBar
+            stocks={stocks}
+            clickHandler={categoryClickHandler}
+          />
+          <main>
+            <Suspense
+              fallback={
+                <div className="center">
+                  <LoadingSpinner asOverlay />
+                </div>
+              }
+            >
+              {routes}
+            </Suspense>
+          </main>
+        </RTL>
+      </Router>
+    </AuthContext.Provider>
   );
 }
 
