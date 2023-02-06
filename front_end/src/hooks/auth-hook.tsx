@@ -43,7 +43,6 @@ export const useAuth = () => {
       logoutTimer = setTimeout(logout, remainingTime);
     } else {
       clearTimeout(logoutTimer);
-      logout();
     }
   }, [user, logout, tokenExpirationDate]);
 
