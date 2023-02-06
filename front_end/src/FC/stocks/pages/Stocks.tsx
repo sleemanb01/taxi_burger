@@ -21,7 +21,8 @@ function Stocks({
   displayArray: string[];
 }) {
   const nav = useNavigate();
-  const isAdmin = useContext(AuthContext).user?.isAdmin;
+  const auth = useContext(AuthContext).user;
+  const isAdmin = auth?.isAdmin;
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);

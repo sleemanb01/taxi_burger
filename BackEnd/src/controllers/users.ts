@@ -13,7 +13,6 @@ import {
   ERROR_INVALID_CREDENTIALS,
   ERROR_INVALID_INPUTS,
   ERROR_LOGIN,
-  ERROR_SIGNUP,
   ERROR_UNAUTHORIZED,
 } from "../util/messages";
 import { responseWToken } from "../types/types";
@@ -21,6 +20,7 @@ import { responseWToken } from "../types/types";
 /* ************************************************************** */
 
 const SECRET_KEY = process.env.JWT_KEY as string;
+const TOKEN_EXPIRATION = "12h";
 
 const internalError = new HttpError(
   ERROR_INTERNAL_SERVER,
@@ -107,7 +107,7 @@ export const login = async (
     token = jwt.sign(
       { userId: targetUser.id, email: targetUser.email },
       SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: TOKEN_EXPIRATION }
     );
   } catch {
     return next(internalError);
@@ -203,7 +203,7 @@ export const signup = async (
     token = jwt.sign(
       { userId: createdUser.id, code: createdUser.email },
       SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: TOKEN_EXPIRATION }
     );
   } catch {
     return next(internalError);
