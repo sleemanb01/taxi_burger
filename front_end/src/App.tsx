@@ -92,16 +92,12 @@ function App() {
     );
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const toRef = setTimeout(() => {
-      setShowLandingPage(!isLoading);
+      setShowLandingPage(false);
       clearTimeout(toRef);
     }, 2000);
-  }, [isLoading]);
-
-  if (showLandingPage) {
-    return <LandingPage />;
-  }
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -120,6 +116,7 @@ function App() {
             clickHandler={categoryClickHandler}
           />
           <main>
+            {(isLoading || showLandingPage) && <LandingPage />}
             <Suspense
               fallback={
                 <div className="center">

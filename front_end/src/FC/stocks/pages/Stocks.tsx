@@ -45,9 +45,7 @@ function Stocks({
     fetchStocks();
   }, [sendRequest, setter]);
 
-  if (isLoading) {
-    setIsLoading(false);
-  }
+  setIsLoading(isLoading);
 
   const stockDeletedHandler = (deletedstockId: string) => {
     setStocks((prevstocks) =>
@@ -62,11 +60,6 @@ function Stocks({
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {/* {isLoading && (
-        <div className="center">
-          <LoadingSpinner asOverlay />
-        </div>
-      )} */}
       {categories.map((category) => (
         <CategoryItem
           key={category._id}
