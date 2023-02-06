@@ -59,10 +59,6 @@ function App() {
 
   let routes;
 
-  const remainingTime = user
-    ? user.tokenExpiration?.getTime() - new Date().getTime()
-    : 0;
-
   if (user?.token) {
     routes = (
       <Routes>
