@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useLayoutEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
