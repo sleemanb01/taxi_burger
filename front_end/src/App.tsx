@@ -97,7 +97,7 @@ function App() {
       setShowLandingPage(!isLoading);
       clearTimeout(toRef);
     }, 2000);
-  }, []);
+  }, [isLoading]);
 
   if (showLandingPage) {
     return <LandingPage />;
