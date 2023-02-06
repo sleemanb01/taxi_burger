@@ -36,9 +36,9 @@ function App() {
 
     if (storedUser) {
       const user: userWToken = JSON.parse(storedUser);
-      if (user.token) {
-        login(user);
-      }
+      // if (user.token) {
+      login(user);
+      // }
     }
   }, [login]);
 
