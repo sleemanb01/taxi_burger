@@ -22,8 +22,7 @@ function Stocks({
   setIsLoading: Function;
 }) {
   const nav = useNavigate();
-  const auth = useContext(AuthContext).user;
-  const isAdmin = auth?.isAdmin;
+  const isAdmin = useContext(AuthContext).user?.isAdmin;
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
@@ -39,13 +38,12 @@ function Stocks({
         setCategories(fetchedCategoris);
         setter(res.stocks);
         setStocks(res.stocks);
+        setIsLoading(false);
       } catch (err) {}
     };
 
     fetchStocks();
   }, [sendRequest, setter]);
-
-  setIsLoading(isLoading);
 
   const stockDeletedHandler = (deletedstockId: string) => {
     setStocks((prevstocks) =>
