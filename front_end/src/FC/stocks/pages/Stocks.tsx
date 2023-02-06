@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
@@ -9,16 +9,17 @@ import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import CategoryItem from "../components/CategoryItem";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import LandingPage from "../../assest/LandingPage";
 
 function Stocks({
   setter,
   clickHandler,
   displayArray,
+  setIsLoading,
 }: {
   setter: Function;
   clickHandler: Function;
   displayArray: string[];
+  setIsLoading: Function;
 }) {
   const nav = useNavigate();
   const auth = useContext(AuthContext).user;
@@ -27,14 +28,6 @@ function Stocks({
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [showLandingPage, setShowLandingPage] = useState(true);
-
-  useLayoutEffect(() => {
-    const toRef = setTimeout(() => {
-      setShowLandingPage(false);
-      clearTimeout(toRef);
-    }, 2000);
-  }, []);
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -52,6 +45,10 @@ function Stocks({
     fetchStocks();
   }, [sendRequest, setter]);
 
+  if (isLoading) {
+    setIsLoading(false);
+  }
+
   const stockDeletedHandler = (deletedstockId: string) => {
     setStocks((prevstocks) =>
       prevstocks.filter((p) => p._id !== deletedstockId)
@@ -61,10 +58,6 @@ function Stocks({
   const addClickHandler = () => {
     nav("/stocks/new/undefined");
   };
-
-  if (showLandingPage || isLoading) {
-    return <LandingPage />;
-  }
 
   return (
     <React.Fragment>

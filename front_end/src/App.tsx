@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useLayoutEffect, useState } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -7,13 +7,13 @@ import {
   Routes,
 } from "react-router-dom";
 import { AuthContext } from "./hooks/auth-context";
-import { userWToken } from "./typing/types";
 import React from "react";
 import LoadingSpinner from "./FC/shared/components/UIElements/LoadingSpinner";
 import { IStock } from "./typing/interfaces";
 import { RTL } from "./FC/assest/RTL";
 import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
 import { useAuth } from "./hooks/auth-hook";
+import LandingPage from "./FC/assest/LandingPage";
 
 const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));
@@ -28,6 +28,8 @@ const UpdateCategory = React.lazy(
 function App() {
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [displayArray, setDisplayArray] = useState<string[]>([]);
+  const [showLandingPage, setShowLandingPage] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { user, updateUser, login, logout } = useAuth();
 
@@ -35,7 +37,7 @@ function App() {
     const storedUser = localStorage.getItem("userData");
 
     if (storedUser) {
-      const user: userWToken = JSON.parse(storedUser);
+      const user = JSON.parse(storedUser);
       // if (user.token) {
       login(user);
       // }
@@ -69,6 +71,7 @@ function App() {
               setter={setStocks}
               clickHandler={categoryClickHandler}
               displayArray={displayArray}
+              setIsLoading={setIsLoading}
             />
           }
         />
@@ -87,6 +90,17 @@ function App() {
         <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
     );
+  }
+
+  useLayoutEffect(() => {
+    const toRef = setTimeout(() => {
+      setShowLandingPage(!isLoading);
+      clearTimeout(toRef);
+    }, 2000);
+  }, []);
+
+  if (showLandingPage) {
+    return <LandingPage />;
   }
 
   return (
