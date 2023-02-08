@@ -4,11 +4,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import { getCurrDay } from "../../util/time";
 import TextField from "@mui/material/TextField";
+import dayjs, { Dayjs } from "dayjs";
 
 export function DatePicker() {
-  const [value, setValue] = useState<Date | null>(new Date(getCurrDay()));
+  const [value, setValue] = useState<Dayjs | null>(dayjs(getCurrDay()));
 
-  const handleChange = (newValue: Date | null) => {
+  const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
   };
 
