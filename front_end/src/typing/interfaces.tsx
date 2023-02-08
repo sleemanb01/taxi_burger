@@ -18,13 +18,6 @@ export interface IStock {
   minQuantity: number;
 }
 
-export interface ILack {
-  _id?: string;
-  name: string;
-  quantity: number;
-  image: string;
-}
-
 export interface ICategory {
   _id?: string;
   name: string;

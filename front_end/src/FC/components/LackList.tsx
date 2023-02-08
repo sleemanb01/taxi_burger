@@ -6,16 +6,32 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { ILack } from "../../typing/interfaces";
+import { IStock } from "../../typing/interfaces";
 
-export default function AlignItemsList({ lacks }: { lacks: ILack[] }) {
+export default function AlignItemsList({
+  lacks,
+  clickHandler,
+  closeHandler,
+}: {
+  lacks: IStock[];
+  clickHandler: Function;
+  closeHandler: Function;
+}) {
   const TXT_EVERYTHING_IS_GOOD = "הכל בסדר";
   const TXT_LEFT = "נשאר רק";
 
-  const singleElement = (lack: ILack) => {
+  const itemClickHandler = (lack: IStock) => {
+    clickHandler(lack.categoryId);
+    closeHandler();
+  };
+
+  const singleElement = (lack: IStock) => {
     return (
       <React.Fragment key={lack._id}>
-        <ListItem alignItems="flex-start">
+        <ListItem
+          alignItems="flex-start"
+          onClick={() => itemClickHandler(lack)}
+        >
           <ListItemAvatar>
             <Avatar alt={lack.name + "img"} src={lack.image} />
           </ListItemAvatar>

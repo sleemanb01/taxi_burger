@@ -69,13 +69,22 @@ export function StockItem({
       } catch (err) {}
     };
     if (
-      stock.quantity !== currStock.quantity ||
-      stock.inUse !== currStock.inUse ||
-      stock.minQuantity !== currStock.minQuantity
+      (stock.quantity !== currStock.quantity ||
+        stock.inUse !== currStock.inUse ||
+        stock.minQuantity !== currStock.minQuantity) &&
+      shift
     ) {
       updateStockHandler();
     }
-  }, [sendRequest, currStock, stock._id, stock, user?.token, shift?._id]);
+  }, [
+    sendRequest,
+    currStock,
+    stock._id,
+    stock,
+    user?.token,
+    shift,
+    shift?._id,
+  ]);
 
   /* ************************************************************************************************** */
 
