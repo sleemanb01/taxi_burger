@@ -20,6 +20,7 @@ export function DatePicker() {
         value={value}
         onChange={(val) => handleChange(val)}
         renderInput={(params) => <TextField {...params} />}
+        disabled={true}
       />
     </LocalizationProvider>
   );

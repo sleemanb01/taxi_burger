@@ -94,7 +94,7 @@ export default function AlertDialogSlide({
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{"פתיחת משמרת חדשה"}</DialogTitle>
-        <Box sx={{ width: "80vw", m: "1rem" }}>
+        <Box sx={{ width: "70vw", m: "1rem" }}>
           <Stepper activeStep={activeStep}>
             {steps.map((label) => {
               const stepProps: { completed?: boolean } = {};
@@ -105,7 +105,11 @@ export default function AlertDialogSlide({
               );
             })}
           </Stepper>
-          <Stack spacing={2} direction="column" sx={{ mt: "2rem" }}>
+          <Stack
+            spacing={2}
+            direction="column"
+            sx={{ mt: "2rem", alignItems: "center" }}
+          >
             {activeStep === 0 && <ShiftOptions pickHandler={pickHandler} />}
             {activeStep === 1 && (
               <TextField
