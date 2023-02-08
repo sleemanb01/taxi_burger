@@ -86,10 +86,18 @@ function Stocks({
     nav("/stocks/new/undefined");
   };
 
+  const closeStepperHandler = () => {
+    setOpenShiftPicker(false);
+  };
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <StepperDialog open={openShiftPicker} setShift={setShift} />
+      <StepperDialog
+        open={openShiftPicker}
+        closeStepperHandler={closeStepperHandler}
+        setShift={setShift}
+      />
       {categories.map((category) => (
         <CategoryItem
           key={category._id}

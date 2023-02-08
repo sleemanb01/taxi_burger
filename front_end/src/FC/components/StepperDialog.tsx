@@ -10,6 +10,7 @@ import { IShift } from "../../typing/interfaces";
 import { getCurrDay } from "../../util/time";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import { HandlerFuncType } from "../../typing/types";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -23,9 +24,11 @@ const Transition = React.forwardRef(function Transition(
 export default function AlertDialogSlide({
   open,
   setShift,
+  closeStepperHandler,
 }: {
   open: boolean;
   setShift: Function;
+  closeStepperHandler: HandlerFuncType;
 }) {
   const steps = ["תאריך", "כמות בשר", "כמות לחם"];
   const MIN = 0;
@@ -48,10 +51,10 @@ export default function AlertDialogSlide({
     }
   }, [picked, activeStep, setShift, bread, meat, steps.length]);
 
-  const pickHandler = (shift: IShift | null) => {
-    setShift(shift);
-    setPicked(true);
-  };
+  // const pickHandler = (shift: IShift | null) => {
+  //   setShift(shift);
+  //   setPicked(true);
+  // };
 
   const validateNumber = (val: string) => {
     if (!isNaN(parseInt(val))) {
@@ -110,7 +113,9 @@ export default function AlertDialogSlide({
             direction="column"
             sx={{ mt: "2rem", alignItems: "center" }}
           >
-            {activeStep === 0 && <ShiftOptions pickHandler={pickHandler} />}
+            {activeStep === 0 && (
+              <ShiftOptions closeStepperHandler={closeStepperHandler} />
+            )}
             {activeStep === 1 && (
               <TextField
                 id="outlined-number"

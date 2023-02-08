@@ -7,7 +7,8 @@ import TextField from "@mui/material/TextField";
 import dayjs, { Dayjs } from "dayjs";
 
 export function DatePicker() {
-  const [value, setValue] = useState<Dayjs | null>(dayjs(getCurrDay()));
+  const date = getCurrDay().replace(/-/g, "/");
+  const [value, setValue] = useState<Dayjs | null>(dayjs(date));
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);

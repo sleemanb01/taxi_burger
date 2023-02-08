@@ -1,4 +1,4 @@
-export const getCurrDay = () => {
+export const getCurrDay = (): string => {
   const today = new Date();
   const yyyy = today.getFullYear();
   let mm = today.getMonth() + 1; // Months start at 0!
@@ -10,7 +10,7 @@ export const getCurrDay = () => {
     dd--;
   }
 
-  const formattedToday = dd + "-" + mm + "-" + yyyy;
+  const formattedToday = yyyy + "-" + mm + "-" + dd;
   return formattedToday;
 };
 

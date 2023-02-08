@@ -58,3 +58,5 @@ export type partialStock = {
   inUse: IStock["inUse"];
   minQuantity: IStock["minQuantity"];
 };
+
+export type HandlerFuncType = () => void;

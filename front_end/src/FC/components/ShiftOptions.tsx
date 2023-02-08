@@ -1,15 +1,14 @@
 import React from "react";
 import { DatePicker } from "./DatePicker";
 import Button from "@mui/material/Button";
-import { IShift } from "../../typing/interfaces";
-type PickFuncType = (shift: IShift | null) => void;
+import { HandlerFuncType } from "../../typing/types";
 
-export function ShiftOptions({ pickHandler }: { pickHandler: PickFuncType }) {
+export function ShiftOptions({
+  closeStepperHandler,
+}: {
+  closeStepperHandler: HandlerFuncType;
+}) {
   const TXT_VIEW = "צפייה בנתונים";
-
-  const clickHandler = () => {
-    pickHandler(null);
-  };
 
   return (
     <React.Fragment>
@@ -17,7 +16,7 @@ export function ShiftOptions({ pickHandler }: { pickHandler: PickFuncType }) {
       {/* <Button variant="text" color="error" onClick={() => clickHandler(false)}>
         {TXT_YESTERDAY_SHIFT}
       </Button> */}
-      <Button variant="text" color="info" onClick={clickHandler}>
+      <Button variant="text" color="info" onClick={closeStepperHandler}>
         {TXT_VIEW}
       </Button>
       {/* </Stack> */}
