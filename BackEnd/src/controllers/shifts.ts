@@ -2,9 +2,6 @@ import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 import { HttpError } from "../models/http-error";
-import Category, { ICategory } from "../models/category.model";
-import User from "../models/user.model";
-import { IUser } from "../models/user.model";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
 import { RequestWUser, AuthorizationRequest } from "../types/types";
 import {
@@ -12,9 +9,11 @@ import {
   ERROR_INVALID_INPUTS,
   ERROR_INVALID_DATA,
   ERROR_UNAUTHORIZED,
-  DELETED,
   ERROR_EXISTS,
 } from "../util/messages";
+
+import Shift, { IShift } from "../models/shift.model";
+import User, { IUser } from "../models/user.model";
 
 /* ************************************************************** */
 
@@ -25,27 +24,52 @@ const internalError = new HttpError(
 
 /* ************************************************************** */
 
-export const getCategories = async (
+export const getShift = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const date = req.params.shiftDate;
+  let shift: IShift | null;
+
+  try {
+    shift = await Shift.findOne({ date: date });
+  } catch {
+    return next(internalError);
+  }
+
+  if (!shift) {
+    return next(
+      new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
+    );
+  }
+
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ shift: shift });
+};
+
+/* ************************************************************** */
+
+export const getShifts = async (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  let categories = [];
+  let shifts = [];
 
   try {
-    categories = await Category.find();
+    shifts = await Shift.find();
   } catch {
     return next(internalError);
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    categories: categories.map((i) => i.toObject({ getters: true })),
+    categories: shifts.map((i) => i.toObject({ getters: true })),
   });
 };
 
 /* ************************************************************** */
 
-export const addCategory = async (
+export const addShift = async (
   req: RequestWUser,
   res: Response,
   next: NextFunction
@@ -61,7 +85,7 @@ export const addCategory = async (
     );
   }
 
-  const { name } = req.body;
+  const { date, bread, meat } = req.body;
   const creatorId = req.userData.userId;
   let targetUser: IUser | null;
 
@@ -71,7 +95,7 @@ export const addCategory = async (
     return next(internalError);
   }
 
-  if (!targetUser || !targetUser.isAdmin) {
+  if (!targetUser) {
     const error = new HttpError(
       ERROR_UNAUTHORIZED,
       HTTP_RESPONSE_STATUS.Unauthorized
@@ -79,34 +103,37 @@ export const addCategory = async (
     return next(error);
   }
 
-  const newCategory = new Category({
-    name,
-  });
-
-  let alreadySigned;
+  let alreadyOpened: IShift | null;
 
   try {
-    alreadySigned = await Category.findOne({ name: name });
+    alreadyOpened = await Shift.findOne({ date: date });
   } catch {
     return next(internalError);
   }
 
-  if (alreadySigned) {
+  if (alreadyOpened) {
     return next(new HttpError(ERROR_EXISTS, HTTP_RESPONSE_STATUS.Bad_Request));
   }
 
+  const newShift = new Shift({
+    date,
+    bread,
+    meat,
+    usages: [],
+  });
+
   try {
-    await newCategory.save();
+    await newShift.save();
   } catch {
     return next(internalError);
   }
 
-  res.status(HTTP_RESPONSE_STATUS.Created).json({ category: newCategory });
+  res.status(HTTP_RESPONSE_STATUS.Created).json({ shift: newShift });
 };
 
 /* ************************************************************** */
 
-export const updateCategory = async (
+export const updateShift = async (
   req: AuthorizationRequest,
   res: Response,
   next: NextFunction
@@ -122,83 +149,34 @@ export const updateCategory = async (
     );
   }
 
-  const { name } = req.body;
-  const CategoryId = req.params.CategoryId;
-  let category: ICategory | null;
+  const { meat, bread } = req.body;
+  const shiftId = req.params.CategoryId;
+  let shift: IShift | null;
 
   try {
-    category = await Category.findById(CategoryId);
+    shift = await Shift.findById(shiftId);
   } catch {
     return next(internalError);
   }
 
-  if (!Category) {
+  if (!shift) {
     return next(
       new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
     );
   }
 
-  category = category as ICategory;
+  shift = shift as IShift;
 
-  category.name = name;
+  shift.bread = bread;
+  shift.meat = meat;
 
   try {
-    await category.save();
+    await shift.save();
   } catch {
     return next(internalError);
   }
 
   res
     .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ category: category.toObject({ getters: true }) });
-};
-
-/* ************************************************************** */
-
-export const deleteCategory = async (
-  req: AuthorizationRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const CategoryId = req.params.placeId;
-  let targetCategory;
-
-  try {
-    targetCategory = await Category.findById(CategoryId);
-  } catch {
-    return next(internalError);
-  }
-
-  if (!targetCategory) {
-    const error = new HttpError(
-      ERROR_UNAUTHORIZED,
-      HTTP_RESPONSE_STATUS.Not_Found
-    );
-    return next(error);
-  }
-
-  const creatorId = req.userData.userId;
-  let targetUser: IUser | null;
-
-  try {
-    targetUser = await User.findById(creatorId);
-  } catch {
-    return next(internalError);
-  }
-
-  if (!targetUser || !targetUser.isAdmin) {
-    const error = new HttpError(
-      ERROR_INVALID_DATA,
-      HTTP_RESPONSE_STATUS.Unauthorized
-    );
-    return next(error);
-  }
-
-  try {
-    await targetCategory.remove();
-  } catch {
-    return next(internalError);
-  }
-
-  res.status(HTTP_RESPONSE_STATUS.OK).json({ message: DELETED });
+    .json({ shift: shift.toObject({ getters: true }) });
 };

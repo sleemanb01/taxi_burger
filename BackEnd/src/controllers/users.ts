@@ -71,9 +71,7 @@ export const login = async (
   try {
     targetUser = await User.findOne({ code: code });
   } catch {
-    return next(
-      new HttpError(ERROR_LOGIN, HTTP_RESPONSE_STATUS.Internal_Server_Error)
-    );
+    return next(internalError);
   }
 
   if (!targetUser) {

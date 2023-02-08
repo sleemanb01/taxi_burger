@@ -21,12 +21,13 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { SimpleDialog } from "../../components/Dialog";
+import { SimpleDialog } from "../../components/SliderDialog";
 import { partialStock } from "../../../typing/types";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { ShiftContext } from "../../../hooks/shift-context";
 
 /* ************************************************************************************************** */
 
@@ -38,7 +39,8 @@ export function StockItem({
   onDelete: Function;
 }) {
   const nav = useNavigate();
-  const user = useContext(AuthContext).user;
+  const { user } = useContext(AuthContext);
+  const { shift } = useContext(ShiftContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [currStock, setCurrStock] = useState<IStock>(stock);
@@ -51,13 +53,12 @@ export function StockItem({
       const partial: partialStock = {
         quantity: currStock.quantity,
         minQuantity: currStock.minQuantity,
-        maxQuantity: currStock.maxQuantity,
         inUse: currStock.inUse,
       };
 
       try {
         await sendRequest(
-          ENDPOINT_STOCKS_PARTIAL + "/" + stock._id,
+          ENDPOINT_STOCKS_PARTIAL + "/" + stock._id + "/" + shift?._id,
           "PATCH",
           JSON.stringify(partial),
           {
@@ -70,12 +71,11 @@ export function StockItem({
     if (
       stock.quantity !== currStock.quantity ||
       stock.inUse !== currStock.inUse ||
-      stock.minQuantity !== currStock.minQuantity ||
-      stock.maxQuantity !== currStock.maxQuantity
+      stock.minQuantity !== currStock.minQuantity
     ) {
       updateStockHandler();
     }
-  }, [sendRequest, currStock, stock._id, stock, user?.token]);
+  }, [sendRequest, currStock, stock._id, stock, user?.token, shift?._id]);
 
   /* ************************************************************************************************** */
 

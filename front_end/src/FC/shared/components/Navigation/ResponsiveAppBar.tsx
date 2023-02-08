@@ -7,16 +7,19 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
-import { IStock } from "../../../../typing/interfaces";
+import { ILack, IStock } from "../../../../typing/interfaces";
 import AutoComplete from "../../../components/AutoComplete";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import Popover from "@mui/material/Popover";
 
 import "../../../../styles/styles.css";
 import { AuthContext } from "../../../../hooks/auth-context";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import LackList from "../../../components/LackList";
+import { calcLacks } from "../../../../util/lacks";
 
 function ResponsiveAppBar({
   stocks,
@@ -31,7 +34,12 @@ function ResponsiveAppBar({
     null
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openLackList, setOpenLackList] = React.useState<null | HTMLElement>(
+    null
+  );
   const isMenuOpen = Boolean(anchorEl);
+  const isListOpen = Boolean(openLackList);
+  const id = isListOpen ? "simple-popover" : undefined;
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -49,6 +57,14 @@ function ResponsiveAppBar({
     setAnchorElNav(null);
   };
 
+  const handleLacksListOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setOpenLackList(event.currentTarget);
+  };
+
+  const handleLackListClose = () => {
+    setOpenLackList(null);
+  };
+
   const stocksHandler = () => {
     nav("/");
   };
@@ -62,6 +78,8 @@ function ResponsiveAppBar({
   const TXT_LOGOUT = "התנתק";
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
+
+  const lacks: ILack[] = calcLacks(stocks);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -128,15 +146,28 @@ function ResponsiveAppBar({
             </Box>
             <Box className={"align-end"} sx={{ flex: 1 }}>
               <IconButton
+                onClick={handleLacksListOpen}
                 sx={{ p: 1 }}
                 size="large"
-                aria-label="show 17 new notifications"
+                aria-label="show notifications"
                 color="inherit"
               >
-                <Badge badgeContent={17} color="error">
+                <Badge badgeContent={lacks.length} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+              <Popover
+                id={id}
+                open={!!openLackList}
+                anchorEl={openLackList}
+                onClose={handleLackListClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                <LackList lacks={lacks} />
+              </Popover>
               <IconButton
                 onClick={handleProfileMenuOpen}
                 size="large"

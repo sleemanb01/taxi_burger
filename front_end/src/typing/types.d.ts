@@ -1,5 +1,5 @@
 import { EReducerActionType, EValidatorType } from "./enums";
-import { ICategory, IStock, IUser } from "./interfaces";
+import { ICategory, IShift, IStock, IUser } from "./interfaces";
 
 export type AuthCtx = {
   isLoggedIn: boolean;
@@ -7,6 +7,11 @@ export type AuthCtx = {
   updateUser: (user: userWToken) => void;
   login: (user: userWToken) => void;
   logout: () => void;
+};
+
+export type ShiftCtx = {
+  shift: IShift | null;
+  setShift: (shift: IShift | null) => void;
 };
 
 export type reducerInputState = {
@@ -52,5 +57,4 @@ export type partialStock = {
   quantity: IStock["quantity"];
   inUse: IStock["inUse"];
   minQuantity: IStock["minQuantity"];
-  maxQuantity: IStock["maxQuantity"];
 };

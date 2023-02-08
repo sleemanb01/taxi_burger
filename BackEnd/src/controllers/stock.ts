@@ -5,6 +5,7 @@ import fs from "fs";
 import { HttpError } from "../models/http-error";
 import Stock, { IStock } from "../models/stock.model";
 import User from "../models/user.model";
+import Shift, { IShift, IUsage } from "../models/shift.model";
 import Category from "../models/category.model";
 import { IUser } from "../models/user.model";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
@@ -12,25 +13,20 @@ import { RequestWUser, AuthorizationRequest } from "../types/types";
 import {
   ERROR_INTERNAL_SERVER,
   ERROR_INVALID_INPUTS,
-  ERROR_LOGIN,
   ERROR_INVALID_DATA,
-  ERROR_DELETE,
   ERROR_UNAUTHORIZED,
   DELETED,
   ERROR_DELETE_FILE,
-  ERROR_UPLOAD_FILE,
 } from "../util/messages";
 import { deleteFileS3, getFileS3, uploadToS3 } from "../middleware/s3";
 import mongoose from "mongoose";
 
 /* ************************************************************** */
 
-const internalError = () => {
-  return new HttpError(
-    ERROR_INTERNAL_SERVER,
-    HTTP_RESPONSE_STATUS.Internal_Server_Error
-  );
-};
+const internalError = new HttpError(
+  ERROR_INTERNAL_SERVER,
+  HTTP_RESPONSE_STATUS.Internal_Server_Error
+);
 
 /* ************************************************************** */
 
@@ -51,12 +47,7 @@ export const getStock = async (
   }
 
   if (!stock) {
-    return next(
-      new HttpError(
-        ERROR_INTERNAL_SERVER,
-        HTTP_RESPONSE_STATUS.Internal_Server_Error
-      )
-    );
+    return next(internalError);
   }
 
   stock.image = await getFileS3(stock.image);
@@ -73,15 +64,19 @@ export const getStocks = async (
 ) => {
   let stocks: IStock[] = [];
   let categories;
+  let shift;
+
+  const date = req.params.date;
 
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
     stocks = await Stock.find();
     categories = await Category.find();
+    shift = await Shift.findOne({ date: date });
     sess.commitTransaction();
   } catch {
-    return next(internalError());
+    return next(internalError);
   }
 
   for (let i = 0; i < stocks.length; i++) {
@@ -93,6 +88,7 @@ export const getStocks = async (
     categories: categories.map((category) =>
       category.toObject({ getters: true })
     ),
+    shift: shift,
   });
 };
 
@@ -114,17 +110,14 @@ export const addStock = async (
     );
   }
 
-  const { name, quantity, categoryId, inUse, minQuantity, maxQuantity } =
-    req.body;
+  const { name, quantity, categoryId, inUse, minQuantity } = req.body;
   const creatorId = req.userData.userId;
   let targetUser: IUser | null;
 
   try {
     targetUser = await User.findById(creatorId);
   } catch {
-    return next(
-      new HttpError(ERROR_LOGIN, HTTP_RESPONSE_STATUS.Internal_Server_Error)
-    );
+    return next(internalError);
   }
 
   if (!targetUser || !targetUser.isAdmin) {
@@ -137,12 +130,7 @@ export const addStock = async (
 
   const upload = await uploadToS3(req.file);
   if (!upload.success) {
-    return next(
-      new HttpError(
-        ERROR_UPLOAD_FILE,
-        HTTP_RESPONSE_STATUS.Internal_Server_Error
-      )
-    );
+    return next(internalError);
   }
 
   const newStock = new Stock({
@@ -152,13 +140,12 @@ export const addStock = async (
     inUse,
     image: upload.data || req.body.image,
     minQuantity,
-    maxQuantity,
   });
 
   try {
     await newStock.save();
   } catch {
-    return next(internalError());
+    return next(internalError);
   }
 
   res
@@ -191,11 +178,7 @@ export const updateStockWImage = async (
   try {
     stock = await Stock.findById(stockId);
   } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   if (!stock) {
@@ -210,34 +193,20 @@ export const updateStockWImage = async (
   if (req.file) {
     const resError = await deleteFileS3(stock.image);
     if (resError) {
-      return next(
-        new HttpError(
-          ERROR_DELETE_FILE,
-          HTTP_RESPONSE_STATUS.Internal_Server_Error
-        )
-      );
+      return next(internalError);
     }
   }
 
   const upload = await uploadToS3(req.file);
   if (!upload.success && upload.data) {
-    return next(
-      new HttpError(
-        ERROR_UPLOAD_FILE,
-        HTTP_RESPONSE_STATUS.Internal_Server_Error
-      )
-    );
+    return next(internalError);
   }
   stock.image = upload.data!;
 
   try {
     await stock.save();
   } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   res
@@ -263,18 +232,17 @@ export const updateStockPartial = async (
     );
   }
 
-  const { quantity, minQuantity, maxQuantity, inUse } = req.body;
+  const { quantity, minQuantity, inUse } = req.body;
   const stockId = req.params.stockId;
+  const shiftId = req.params.shiftId;
   let stock: IStock | null;
+  let calcUsage = 0;
+  let isAdd = false;
 
   try {
     stock = await Stock.findById(stockId);
   } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   if (!stock) {
@@ -283,19 +251,55 @@ export const updateStockPartial = async (
     );
   }
 
-  stock.quantity = quantity || stock.quantity;
-  stock.minQuantity = minQuantity || stock.minQuantity;
-  stock.maxQuantity = maxQuantity || stock.maxQuantity;
-  stock.inUse = inUse || stock.inUse;
+  isAdd = quantity > stock?.quantity;
 
-  try {
-    await stock.save();
-  } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
+  calcUsage = stock.quantity - quantity;
+
+  stock.quantity = quantity;
+  stock.minQuantity = minQuantity;
+  stock.inUse = inUse;
+
+  if (isAdd) {
+    try {
+      await stock.save();
+    } catch {
+      return next(internalError);
+    }
+  } else {
+    let shift: IShift | null;
+
+    try {
+      shift = await Shift.findById(shiftId);
+    } catch {
+      return next(internalError);
+    }
+
+    if (!shift) {
+      return next(
+        new HttpError(ERROR_INVALID_DATA, HTTP_RESPONSE_STATUS.Not_Found)
+      );
+    }
+
+    const dataArr = shift.usages;
+    const found: IUsage | undefined = dataArr.find((el) =>
+      el.stockId?.equals(stock!._id!)
     );
-    return next(error);
+    if (found) {
+      found.quantity += calcUsage;
+    } else {
+      const usage: IUsage = { stockId: stockId, quantity: calcUsage };
+      dataArr.push(usage);
+    }
+
+    try {
+      const sess = await mongoose.startSession();
+      sess.startTransaction();
+      await stock.save({ session: sess });
+      await shift.save({ session: sess });
+      sess.commitTransaction();
+    } catch {
+      return next(internalError);
+    }
   }
 
   res
@@ -328,11 +332,7 @@ export const updateStock = async (
   try {
     stock = await Stock.findById(stockId);
   } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   if (!stock) {
@@ -347,11 +347,7 @@ export const updateStock = async (
   try {
     await stock.save();
   } catch {
-    const error = new HttpError(
-      ERROR_INTERNAL_SERVER,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   res
@@ -372,11 +368,7 @@ export const deleteStock = async (
   try {
     targetStock = await Stock.findById(stockId);
   } catch {
-    const error = new HttpError(
-      ERROR_DELETE,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   if (!targetStock) {
@@ -393,9 +385,7 @@ export const deleteStock = async (
   try {
     targetUser = await User.findById(creatorId);
   } catch {
-    return next(
-      new HttpError(ERROR_LOGIN, HTTP_RESPONSE_STATUS.Internal_Server_Error)
-    );
+    return next(internalError);
   }
 
   if (!targetUser || !targetUser.isAdmin) {
@@ -409,11 +399,7 @@ export const deleteStock = async (
   try {
     await targetStock.remove();
   } catch {
-    const error = new HttpError(
-      ERROR_DELETE,
-      HTTP_RESPONSE_STATUS.Internal_Server_Error
-    );
-    return next(error);
+    return next(internalError);
   }
 
   if (req.file) {

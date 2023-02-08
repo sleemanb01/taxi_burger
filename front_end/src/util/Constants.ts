@@ -27,3 +27,4 @@ export const ENDPOINT_STOCKS = "stocks";
 export const ENDPOINT_STOCKS_PARTIAL = "stocks/partial";
 export const ENDPOINT_STOCKS_WIMAGE = "stocks/WImage";
 export const ENDPOINT_CATEGORIES = "categories";
+export const ENDPOINT_SHIFTS = "shifts";

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import { IStock } from "../../typing/interfaces";
 import Fab from "@mui/material/Fab";
-import { Box, DialogTitle, Slider, Stack } from "@mui/material";
+import { Box, DialogTitle, Slider, Stack, Typography } from "@mui/material";
 import { partialStock } from "../../typing/types";
 import Input from "@mui/material/Input";
+import AddIcon from "@mui/icons-material/Add";
 
 import "../../styles/styles.css";
 
@@ -21,12 +22,12 @@ export function SimpleDialog({
   onChange,
   stock,
 }: SimpleDialogProps) {
+  const [isAdd, setIsAdd] = useState(false);
   const [editedQuantity, setEditedQuantity] = useState(stock.quantity);
   const [editMinQuantity, setEditMinQuantity] = useState(stock.minQuantity);
-  const [editMaxQuantity, setEditMaxQuantity] = useState(stock.maxQuantity);
   const [isEdit, setIsEdit] = useState(false);
 
-  const halfQuantity = editMaxQuantity / 2;
+  const halfQuantity = Math.round(stock.quantity / 2);
 
   const marks = [
     {
@@ -38,8 +39,8 @@ export function SimpleDialog({
       label: halfQuantity.toString(),
     },
     {
-      value: editMaxQuantity,
-      label: editMaxQuantity.toString(),
+      value: stock.quantity,
+      label: stock.quantity.toString(),
     },
   ];
 
@@ -49,22 +50,35 @@ export function SimpleDialog({
     }
   };
 
-  const minMaxChangeHandler = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-    isLow: boolean
+  const openAddHandler = () => {
+    setIsAdd(true);
+  };
+
+  const closeAddHandler = () => {
+    setIsAdd(false);
+  };
+
+  const addInputHandler = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const rawValue = e.currentTarget.value;
     if (!isNaN(parseInt(rawValue))) {
       const value = parseInt(e.currentTarget.value);
-      if (isLow) {
-        if (value !== stock.minQuantity) {
-          setEditMinQuantity(value);
-        }
-      } else {
-        if (value !== stock.maxQuantity) {
-          setEditMaxQuantity(value);
-        }
+      setEditedQuantity(value + editedQuantity);
+    }
+    closeAddHandler();
+  };
+
+  const minMaxChangeHandler = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const rawValue = e.currentTarget.value;
+    if (!isNaN(parseInt(rawValue))) {
+      const value = parseInt(e.currentTarget.value);
+      if (value !== stock.minQuantity) {
+        setEditMinQuantity(value);
       }
+
       setIsEdit(false);
     }
   };
@@ -72,13 +86,11 @@ export function SimpleDialog({
   const closeHanler = () => {
     if (
       stock.quantity !== editedQuantity ||
-      stock.minQuantity !== editMinQuantity ||
-      stock.maxQuantity !== editMaxQuantity
+      stock.minQuantity !== editMinQuantity
     ) {
       const editedStock: partialStock = {
         quantity: editedQuantity,
         minQuantity: editMinQuantity,
-        maxQuantity: editMaxQuantity,
         inUse: stock.inUse,
       };
       onChange(editedStock);
@@ -93,6 +105,8 @@ export function SimpleDialog({
   };
 
   const TXT_QUANTITY = "כמות";
+  const TXT_LOW_QUANTITY = "כמות מינימלית";
+  const TXT_ADD_QUANTITY = "הוסף כמות";
   let timer: ReturnType<typeof setTimeout>;
   let firing = false;
 
@@ -130,28 +144,31 @@ export function SimpleDialog({
             key={`slider-${stock.quantity}`}
             defaultValue={stock.quantity}
             onChangeCommitted={(_, val) => quantityChangeHandler(val as number)}
-            max={editMaxQuantity}
+            max={stock.quantity}
             step={1}
             valueLabelDisplay="auto"
             marks={marks}
           />
         </Stack>
-        <Stack spacing={4}>
-          <Fab color="primary" aria-label="add" onClick={clickHandler}>
-            <Input
-              type="number"
-              className="align-center"
-              onBlur={(event) => minMaxChangeHandler(event, false)}
-              disabled={!isEdit}
-              defaultValue={editMaxQuantity}
-            />
+        <Stack spacing={4} sx={{ alignItems: "center" }}>
+          <Typography fontSize={"0.7rem"}>{TXT_ADD_QUANTITY}</Typography>
+          <Fab color="primary" aria-label="add" onClick={openAddHandler}>
+            {isAdd ? (
+              <Input
+                className="align-center"
+                type="number"
+                onBlur={(event) => addInputHandler(event)}
+              />
+            ) : (
+              <AddIcon />
+            )}
           </Fab>
-
+          <Typography fontSize={"0.7rem"}>{TXT_LOW_QUANTITY}</Typography>
           <Fab color="error" aria-label="add" onClick={clickHandler}>
             <Input
               className="align-center"
               type="number"
-              onBlur={(event) => minMaxChangeHandler(event, true)}
+              onBlur={(event) => minMaxChangeHandler(event)}
               disabled={!isEdit}
               defaultValue={editMinQuantity}
             />

@@ -4,52 +4,83 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
 import { ICategory, IStock } from "../../../typing/interfaces";
-import { ENDPOINT_STOCKS } from "../../../util/Constants";
+import {
+  DEFAULT_HEADERS,
+  ENDPOINT_SHIFTS,
+  ENDPOINT_STOCKS,
+} from "../../../util/Constants";
 import { ErrorModal } from "../../shared/components/UIElements/ErrorModal";
 import CategoryItem from "../components/CategoryItem";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { getCurrDay } from "../../../util/time";
+import StepperDialog from "../../components/StepperDialog";
+import { ShiftContext } from "../../../hooks/shift-context";
 
 function Stocks({
-  setter,
+  stocks,
+  setStocks,
   clickHandler,
   displayArray,
-  setIsLoading,
+  stockDeletedHandler,
 }: {
-  setter: Function;
+  stocks: IStock[];
+  setStocks: Function;
   clickHandler: Function;
   displayArray: string[];
-  setIsLoading: Function;
+  stockDeletedHandler: Function;
 }) {
   const nav = useNavigate();
-  const isAdmin = useContext(AuthContext).user?.isAdmin;
+  const { shift, setShift } = useContext(ShiftContext);
+  const { user } = useContext(AuthContext);
 
   const { error, sendRequest, clearError } = useHttpClient();
-  const [stocks, setStocks] = useState<IStock[]>([]);
+  const [openShiftPicker, setOpenShiftPicker] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   useEffect(() => {
-    const fetchStocks = async () => {
+    const fetchData = async () => {
       try {
-        const res = await sendRequest(ENDPOINT_STOCKS);
+        const res = await sendRequest(ENDPOINT_STOCKS + "/" + getCurrDay());
         const fetchedCategoris = res.categories;
 
         localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
         setCategories(fetchedCategoris);
-        setter(res.stocks);
         setStocks(res.stocks);
-        setIsLoading(false);
+        const fetchedShift = res.shift;
+        if (fetchedShift) {
+          setShift(res.shift);
+        } else {
+          setOpenShiftPicker(true);
+        }
       } catch (err) {}
     };
 
-    fetchStocks();
-  }, [sendRequest, setter, setIsLoading]);
+    fetchData();
+  }, [sendRequest, setStocks, setShift, setCategories, setOpenShiftPicker]);
 
-  const stockDeletedHandler = (deletedstockId: string) => {
-    setStocks((prevstocks) =>
-      prevstocks.filter((p) => p._id !== deletedstockId)
-    );
-  };
+  useEffect(() => {
+    const uploadShift = async () => {
+      try {
+        const res = await sendRequest(
+          ENDPOINT_SHIFTS,
+          "POST",
+          JSON.stringify(shift),
+          {
+            ...DEFAULT_HEADERS,
+            Authorization: "Barer " + user?.token,
+          }
+        );
+        const fetchedShift = res.shift;
+        setShift(fetchedShift);
+        setOpenShiftPicker(false);
+      } catch (err) {}
+    };
+
+    if (shift && !shift._id) {
+      uploadShift();
+    }
+  }, [shift, shift?._id, sendRequest, user?.token, setShift]);
 
   const addClickHandler = () => {
     nav("/stocks/new/undefined");
@@ -58,6 +89,7 @@ function Stocks({
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
+      <StepperDialog open={openShiftPicker} setShift={setShift} />
       {categories.map((category) => (
         <CategoryItem
           key={category._id}
@@ -68,7 +100,7 @@ function Stocks({
           deleteHandler={stockDeletedHandler}
         />
       ))}
-      {isAdmin && (
+      {user?.isAdmin && (
         <Fab
           color="primary"
           aria-label="add"

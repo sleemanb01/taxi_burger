@@ -16,6 +16,7 @@ export function ErrorModal({
       onCancel={onClear}
       header="An Error Occurred!"
       show={!!error}
+      style={{ zIndex: "100" }}
       footer={<Button onClick={onClear}>{TXT_OK}</Button>}
     >
       <p>{error}</p>

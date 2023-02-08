@@ -11,7 +11,6 @@ export interface IStock extends Document {
   inUse: boolean;
   image: string;
   minQuantity: number;
-  maxQuantity: number;
 }
 
 const stockSchema = new Schema<IStock>({
@@ -21,7 +20,6 @@ const stockSchema = new Schema<IStock>({
   inUse: { type: Boolean, required: true },
   image: { type: String, required: true },
   minQuantity: { type: Number, required: true },
-  maxQuantity: { type: Number, required: true },
 });
 
 export default mongoose.model<IStock>("Stock", stockSchema);

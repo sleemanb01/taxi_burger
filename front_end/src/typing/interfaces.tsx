@@ -16,12 +16,31 @@ export interface IStock {
   inUse: boolean;
   image: string;
   minQuantity: number;
-  maxQuantity: number;
+}
+
+export interface ILack {
+  _id?: string;
+  name: string;
+  quantity: number;
+  image: string;
 }
 
 export interface ICategory {
   _id?: string;
   name: string;
+}
+
+export interface IUsage {
+  stockId: IStock["_id"];
+  quantity: number;
+}
+
+export interface IShift {
+  _id?: string;
+  date: Date;
+  meat: number;
+  bread: number;
+  usages: IUsage[];
 }
 
 export interface IClickOutsideProps {

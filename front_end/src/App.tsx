@@ -14,6 +14,7 @@ import { RTL } from "./FC/assest/RTL";
 import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
 import { useAuth } from "./hooks/auth-hook";
 import LandingPage from "./FC/assest/LandingPage";
+import { ShiftContextProvider } from "./hooks/shift-context";
 
 const Users = React.lazy(() => import("./FC/user/pages/Users"));
 const NewStock = React.lazy(() => import("./FC/stocks/pages/NewStock"));
@@ -29,7 +30,6 @@ function App() {
   const [stocks, setStocks] = useState<IStock[]>([]);
   const [displayArray, setDisplayArray] = useState<string[]>([]);
   const [showLandingPage, setShowLandingPage] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
 
   const { user, updateUser, login, logout } = useAuth();
 
@@ -59,6 +59,12 @@ function App() {
     }
   };
 
+  const stockDeletedHandler = (deletedstockId: string) => {
+    setStocks((prevstocks) =>
+      prevstocks.filter((p) => p._id !== deletedstockId)
+    );
+  };
+
   let routes;
 
   if (user?.token) {
@@ -67,12 +73,15 @@ function App() {
         <Route
           path="/"
           element={
-            <Stocks
-              setter={setStocks}
-              clickHandler={categoryClickHandler}
-              displayArray={displayArray}
-              setIsLoading={setIsLoading}
-            />
+            <ShiftContextProvider>
+              <Stocks
+                setStocks={setStocks}
+                stocks={stocks}
+                clickHandler={categoryClickHandler}
+                displayArray={displayArray}
+                stockDeletedHandler={stockDeletedHandler}
+              />
+            </ShiftContextProvider>
           }
         />
         <Route path="/stocks/new/:categoryId" element={<NewStock />} />
@@ -99,14 +108,18 @@ function App() {
     }, 2000);
   }, []);
 
+  if (showLandingPage) {
+    return <LandingPage />;
+  }
+
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!user?.token,
-        user: user,
-        updateUser: updateUser,
-        login: login,
-        logout: logout,
+        user,
+        updateUser,
+        login,
+        logout,
       }}
     >
       <Router>
@@ -116,7 +129,6 @@ function App() {
             clickHandler={categoryClickHandler}
           />
           <main>
-            {(isLoading || showLandingPage) && <LandingPage />}
             <Suspense
               fallback={
                 <div className="center">
