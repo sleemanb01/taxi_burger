@@ -35,7 +35,6 @@ export default function AlertDialogSlide({
   const MAX = 120;
 
   const [activeStep, setActiveStep] = useState(0);
-  const [picked, setPicked] = useState(false);
   const [bread, setBread] = useState(0);
   const [meat, setMeat] = useState(0);
 
@@ -49,7 +48,7 @@ export default function AlertDialogSlide({
       };
       setShift(newShift);
     }
-  }, [picked, activeStep, setShift, bread, meat, steps.length]);
+  }, [activeStep, setShift, bread, meat, steps.length]);
 
   // const pickHandler = (shift: IShift | null) => {
   //   setShift(shift);
