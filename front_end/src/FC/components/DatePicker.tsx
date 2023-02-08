@@ -1,4 +1,4 @@
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
@@ -14,13 +14,12 @@ export function DatePicker() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DesktopDatePicker
+      <MobileDatePicker
         label="תאריך"
         inputFormat="MM/DD/YYYY"
         value={value}
         onChange={(val) => handleChange(val)}
         renderInput={(params) => <TextField {...params} />}
-        disabled={true}
       />
     </LocalizationProvider>
   );

@@ -12,7 +12,6 @@ import {
   ERROR_INTERNAL_SERVER,
   ERROR_INVALID_CREDENTIALS,
   ERROR_INVALID_INPUTS,
-  ERROR_LOGIN,
   ERROR_UNAUTHORIZED,
 } from "../util/messages";
 import { responseWToken } from "../types/types";
