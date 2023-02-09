@@ -6,45 +6,46 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { IStock } from "../../typing/interfaces";
+import { ILack, IStock } from "../../typing/interfaces";
 
 export default function AlignItemsList({
   lacks,
   clickHandler,
   closeHandler,
 }: {
-  lacks: IStock[];
+  lacks: ILack[];
   clickHandler: Function;
   closeHandler: Function;
 }) {
   const TXT_EVERYTHING_IS_GOOD = "הכל בסדר";
   const TXT_LEFT = "נשאר רק";
 
-  const itemClickHandler = (lack: IStock) => {
-    clickHandler(lack.categoryId);
+  const itemClickHandler = (stock: IStock) => {
+    clickHandler(stock.categoryId);
     closeHandler();
   };
 
-  const singleElement = (lack: IStock) => {
+  const singleElement = (lack: ILack) => {
+    const stock = lack.stock;
     return (
-      <React.Fragment key={lack._id}>
+      <React.Fragment key={stock._id}>
         <ListItem
           alignItems="flex-start"
-          onClick={() => itemClickHandler(lack)}
+          onClick={() => itemClickHandler(stock)}
         >
           <ListItemAvatar>
-            <Avatar alt={lack.name + "img"} src={lack.image} />
+            <Avatar alt={stock.name + "img"} src={stock.image} />
           </ListItemAvatar>
           <ListItemText
-            primary={lack.name}
+            primary={stock.name}
             secondary={
               <Typography
                 sx={{ display: "inline" }}
                 component="span"
                 variant="body2"
-                color="error"
+                color={lack.isCritical ? "error" : "warning.main"}
               >
-                {TXT_LEFT + " " + lack.quantity}
+                {TXT_LEFT + " " + stock.quantity}
               </Typography>
             }
           />

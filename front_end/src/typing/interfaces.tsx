@@ -18,6 +18,11 @@ export interface IStock {
   minQuantity: number;
 }
 
+export interface ILack {
+  stock: IStock;
+  isCritical: boolean;
+}
+
 export interface ICategory {
   _id?: string;
   name: string;

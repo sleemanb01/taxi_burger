@@ -1,13 +1,19 @@
-import { IStock } from "../typing/interfaces";
+import { ILack, IStock } from "../typing/interfaces";
 
 export const calcLacks = (stocks: IStock[]) => {
-  let lacks: IStock[] = [];
+  let lacks: ILack[] = [];
 
   stocks.forEach((el) => {
-    if (el.quantity < el.minQuantity) {
-      lacks = [...lacks, el];
+    if (el.quantity <= el.minQuantity) {
+      const lack: ILack = {
+        stock: el,
+        isCritical: el.quantity < el.minQuantity,
+      };
+      lacks = [...lacks, lack];
     }
   });
 
-  return lacks;
+  let ret: ILack[] = lacks.sort((a, b) => (a.isCritical ? -1 : 1));
+
+  return ret;
 };

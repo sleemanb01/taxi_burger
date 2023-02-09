@@ -7,7 +7,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
-import { IStock } from "../../typing/interfaces";
+import { ILack, IStock } from "../../typing/interfaces";
 import AutoComplete from "./AutoComplete";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -79,7 +79,7 @@ function ResponsiveAppBar({
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
 
-  const lacks: IStock[] = calcLacks(stocks);
+  const lacks: ILack[] = calcLacks(stocks);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
