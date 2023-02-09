@@ -13,7 +13,6 @@ export interface IStock {
   categoryId: ICategory["_id"];
   name: string;
   quantity: number;
-  inUse: boolean;
   image: string;
   minQuantity: number;
 }

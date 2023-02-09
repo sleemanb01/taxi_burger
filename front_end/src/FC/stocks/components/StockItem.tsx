@@ -53,7 +53,6 @@ export function StockItem({
       const partial: partialStock = {
         quantity: currStock.quantity,
         minQuantity: currStock.minQuantity,
-        inUse: currStock.inUse,
       };
 
       try {
@@ -70,7 +69,6 @@ export function StockItem({
     };
     if (
       (stock.quantity !== currStock.quantity ||
-        stock.inUse !== currStock.inUse ||
         stock.minQuantity !== currStock.minQuantity) &&
       shift
     ) {
@@ -139,36 +137,13 @@ export function StockItem({
     nav(`/stocks/${stock._id}`);
   };
 
-  const singleClickHandler = (event: React.MouseEvent<HTMLElement>) => {
+  const clickHandler = (event: React.MouseEvent<HTMLElement>) => {
     if (editStock) {
       closeEditHandler();
     } else {
       openQuantityEditHandler();
     }
   };
-
-  const doubleClickHandler = () => {
-    setCurrStock((prev) => ({ ...prev, inUse: !prev.inUse }));
-  };
-
-  let firingFunc = singleClickHandler;
-
-  const clickHandler = (event: React.MouseEvent<HTMLElement>) => {
-    if (firing) {
-      firingFunc = doubleClickHandler;
-      return;
-    }
-
-    firing = true;
-    timer = setTimeout(function () {
-      firingFunc(event);
-
-      firingFunc = () => singleClickHandler(event);
-      firing = false;
-    }, 250);
-    console.log(timer);
-  };
-
   const touchStartHandler = (event: React.TouchEvent) => {
     touchEndX = event.touches[0].clientX;
   };

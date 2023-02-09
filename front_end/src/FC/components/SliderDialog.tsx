@@ -91,7 +91,6 @@ export function SimpleDialog({
       const editedStock: partialStock = {
         quantity: editedQuantity,
         minQuantity: editMinQuantity,
-        inUse: stock.inUse,
       };
       onChange(editedStock);
     }

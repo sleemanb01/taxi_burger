@@ -12,6 +12,7 @@ import {
   ENDPOINT_STOCKS,
   ERROR_IMAGE,
   ENDPOINT_STOCKS_WIMAGE,
+  ENDPOINT_GET_STOCK,
 } from "../../../util/Constants";
 import {
   stockPatchInfo,
@@ -45,7 +46,7 @@ function UpdateStock() {
     const fetchStock = async () => {
       try {
         const resData = await sendRequest(
-          ENDPOINT_STOCKS + "/" + stockId,
+          ENDPOINT_GET_STOCK + "/" + stockId,
           "GET",
           null,
           {

@@ -54,7 +54,6 @@ export type StocksWCategories = {
 
 export type partialStock = {
   quantity: IStock["quantity"];
-  inUse: IStock["inUse"];
   minQuantity: IStock["minQuantity"];
 };
 

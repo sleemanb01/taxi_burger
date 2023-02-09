@@ -110,7 +110,7 @@ export const addStock = async (
     );
   }
 
-  const { name, quantity, categoryId, inUse, minQuantity } = req.body;
+  const { name, quantity, categoryId, minQuantity } = req.body;
   const creatorId = req.userData.userId;
   let targetUser: IUser | null;
 
@@ -137,7 +137,6 @@ export const addStock = async (
     name,
     quantity,
     categoryId,
-    inUse,
     image: upload.data || req.body.image,
     minQuantity,
   });
@@ -232,7 +231,7 @@ export const updateStockPartial = async (
     );
   }
 
-  const { quantity, minQuantity, inUse } = req.body;
+  const { quantity, minQuantity } = req.body;
   const stockId = req.params.stockId;
   const shiftId = req.params.shiftId;
   let stock: IStock | null;
@@ -257,7 +256,6 @@ export const updateStockPartial = async (
 
   stock.quantity = quantity;
   stock.minQuantity = minQuantity;
-  stock.inUse = inUse;
 
   if (isAdd) {
     try {

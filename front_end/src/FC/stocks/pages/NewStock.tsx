@@ -35,7 +35,6 @@ function NewStock() {
   const [selected, setSelected] = useState<string | undefined>(
     useParams().categoryId
   );
-  const [inUse, setInUse] = useState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -53,7 +52,6 @@ function NewStock() {
     formData.append("name", formState.inputs.name!.value);
     formData.append("quantity", formState.inputs.quantity!.value);
     formData.append("categoryId", selected!);
-    formData.append("inUse", inUse.toString());
     formData.append("image", formState.inputs.image!.value);
     formData.append("minQuantity", DEFAULT_MIN_QUANTITY.toString());
     formData.append("maxQuantity", DEFAULT_MAX_QUANTITY.toString());
@@ -71,14 +69,9 @@ function NewStock() {
     nav("/");
   }
 
-  const checkHandler = () => {
-    setInUse((prev) => !prev);
-  };
-
   const TXT_ADD = "הוסף מלאי";
   const TXT_NAME = "שם";
   const TXT_QUANTITY = "כמות";
-  const TXT_INUSE = "בשימוש";
 
   return (
     <React.Fragment>
@@ -109,16 +102,6 @@ function NewStock() {
           onInput={inputHandler}
           errorText={ERROR_IMAGE}
         />
-        <label htmlFor="inUse">
-          <input
-            className="checkBox"
-            type="checkbox"
-            id="inUse"
-            checked={inUse}
-            onChange={checkHandler}
-          />
-          {TXT_INUSE}
-        </label>
 
         <Button type="submit" disabled={!!!selected || !formState.isValid}>
           {TXT_ADD}
