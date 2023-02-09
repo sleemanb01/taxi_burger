@@ -29,8 +29,8 @@ const UsageSchema = new Schema(
 
 const ShiftSchema: Schema = new Schema({
   date: { type: Date, required: true, unique: true },
-  meat: { type: Number, required: true, unique: true },
-  bread: { type: Number, required: true, unique: true },
+  meat: { type: Number, required: true },
+  bread: { type: Number, required: true },
   usages: [UsageSchema],
 });
 

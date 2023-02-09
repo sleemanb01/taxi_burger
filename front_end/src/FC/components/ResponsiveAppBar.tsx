@@ -7,19 +7,19 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
-import { IStock } from "../../../../typing/interfaces";
-import AutoComplete from "../../../components/AutoComplete";
+import { IStock } from "../../typing/interfaces";
+import AutoComplete from "./AutoComplete";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Popover from "@mui/material/Popover";
 
-import "../../../../styles/styles.css";
-import { AuthContext } from "../../../../hooks/auth-context";
+import "../../styles/styles.css";
+import { AuthContext } from "../../hooks/auth-context";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import LackList from "../../../components/LackList";
-import { calcLacks } from "../../../../util/lacks";
+import LackList from "./LackList";
+import { calcLacks } from "../../util/lacks";
 
 function ResponsiveAppBar({
   stocks,

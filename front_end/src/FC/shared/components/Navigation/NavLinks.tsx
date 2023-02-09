@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../hooks/auth-context";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -25,7 +25,7 @@ export function NavLinks() {
           nav("/");
         }}
       >
-        {/* <NavLink to="/">{TXT_STOCK}</NavLink> */}
+        <NavLink to="/">{TXT_STOCK}</NavLink>
         <WarehouseIcon />
         <h3>{TXT_STOCK}</h3>
       </li>
@@ -34,7 +34,7 @@ export function NavLinks() {
         <GroupIcon />
         <h3>{TXT_USERS}</h3>
       </li>
-      {auth.isLoggedIn && auth.user?.isAdmin && (
+      {true && auth.user?.isAdmin && (
         <li
           onClick={() => {
             nav("/stocks/new/undefined");
@@ -45,7 +45,7 @@ export function NavLinks() {
           <h3>{TXT_ADD_STOCK}</h3>
         </li>
       )}
-      {!auth.isLoggedIn && (
+      {true && (
         <li
           onClick={() => {
             nav("/auth");
@@ -56,7 +56,7 @@ export function NavLinks() {
           <h3>{TXT_AUTH}</h3>
         </li>
       )}
-      {auth.isLoggedIn && (
+      {true && (
         <li onClick={auth.logout}>
           <LogoutIcon />
           <h3>{TXT_LOGOUT}</h3>

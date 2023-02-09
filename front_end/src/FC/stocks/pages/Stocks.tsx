@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
-import { ICategory, IStock } from "../../../typing/interfaces";
+import { ICategory, IShift, IStock } from "../../../typing/interfaces";
 import {
   DEFAULT_HEADERS,
   ENDPOINT_SHIFTS,
@@ -41,7 +41,9 @@ function Stocks({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await sendRequest(ENDPOINT_STOCKS + "/" + getCurrDay());
+        const res = await sendRequest(
+          ENDPOINT_STOCKS + "/" + new Date(getCurrDay())
+        );
         const fetchedCategoris = res.categories;
 
         localStorage.setItem("categories", JSON.stringify(fetchedCategoris));

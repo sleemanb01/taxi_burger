@@ -11,7 +11,7 @@ import React from "react";
 import LoadingSpinner from "./FC/shared/components/UIElements/LoadingSpinner";
 import { IStock } from "./typing/interfaces";
 import { RTL } from "./FC/assest/RTL";
-import ResponsiveAppBar from "./FC/shared/components/Navigation/ResponsiveAppBar";
+import ResponsiveAppBar from "./FC/components/ResponsiveAppBar";
 import { useAuth } from "./hooks/auth-hook";
 import LandingPage from "./FC/assest/LandingPage";
 import { ShiftContextProvider } from "./hooks/shift-context";
@@ -38,9 +38,7 @@ function App() {
 
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      // if (user.token) {
       login(user);
-      // }
     }
   }, [login]);
 
@@ -115,7 +113,6 @@ function App() {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: !!user?.token,
         user,
         updateUser,
         login,

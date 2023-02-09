@@ -2,7 +2,6 @@ import { EReducerActionType, EValidatorType } from "./enums";
 import { ICategory, IShift, IStock, IUser } from "./interfaces";
 
 export type AuthCtx = {
-  isLoggedIn: boolean;
   user: userWToken | undefined;
   updateUser: (user: userWToken) => void;
   login: (user: userWToken) => void;
