@@ -160,6 +160,8 @@ function ResponsiveAppBar({
                 <MenuItem>{TXT_USERS}</MenuItem>
                 <MenuItem onClick={stocksHandler}>{TXT_STOCKS}</MenuItem>
               </Menu>
+            </Box>
+            <Box sx={{ flex: 1 }}>
               <ClickAwayListener onClickAway={handleTooltipClose}>
                 <Tooltip
                   PopperProps={{
@@ -183,10 +185,10 @@ function ResponsiveAppBar({
                 </Tooltip>
               </ClickAwayListener>
             </Box>
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 2 }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />
             </Box>
-            <Box className={"align-end"} sx={{ flex: 1 }}>
+            <Box className={"align-end"} sx={{ flex: 2 }}>
               <IconButton
                 onClick={handleLacksListOpen}
                 sx={{ p: 1 }}
