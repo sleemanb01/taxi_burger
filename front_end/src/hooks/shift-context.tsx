@@ -14,10 +14,6 @@ export const ShiftContextProvider = ({
 }) => {
   const [shift, setTheShift] = useState<IShift | null>(null);
 
-  //   const setShift = (shift: IShift | undefined) => {
-  //     setTheShift(shift);
-  //   };
-
   const setShift = useCallback((shift: IShift | null) => {
     setTheShift(shift);
   }, []);

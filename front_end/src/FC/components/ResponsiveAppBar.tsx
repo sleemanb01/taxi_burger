@@ -37,6 +37,7 @@ function ResponsiveAppBar({
   const auth = useContext(AuthContext);
 
   const { shift } = useContext(ShiftContext);
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -95,9 +96,12 @@ function ResponsiveAppBar({
   const TXT_LOGOUT = "התנתק";
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
-  const TXT_SHIFT = shift
-    ? shift.date.getMonth() + "/" + shift.date.getMonth()
-    : "אין משמרת פעילה";
+  let TXT_SHIFT = "אין משמרת פעילה";
+  if (shift) {
+    const date = new Date(shift.date);
+    console.log(date);
+    TXT_SHIFT = "משמרת " + date.getDate() + "/" + (date.getMonth() + 1);
+  }
 
   const lacks: ILack[] = calcLacks(stocks);
 

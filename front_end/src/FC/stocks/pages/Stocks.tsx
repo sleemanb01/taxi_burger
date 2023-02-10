@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
-import { ICategory, IStock } from "../../../typing/interfaces";
+import { ICategory, IShift, IStock } from "../../../typing/interfaces";
 import {
   DEFAULT_HEADERS,
   ENDPOINT_SHIFTS,
@@ -51,7 +51,7 @@ function Stocks({
         setStocks(res.stocks);
         const fetchedShift = res.shift;
         if (fetchedShift) {
-          setShift(res.shift);
+          setShift(fetchedShift);
         } else {
           setOpenShiftPicker(true);
         }

@@ -71,15 +71,13 @@ function App() {
         <Route
           path="/"
           element={
-            <ShiftContextProvider>
-              <Stocks
-                setStocks={setStocks}
-                stocks={stocks}
-                clickHandler={categoryClickHandler}
-                displayArray={displayArray}
-                stockDeletedHandler={stockDeletedHandler}
-              />
-            </ShiftContextProvider>
+            <Stocks
+              setStocks={setStocks}
+              stocks={stocks}
+              clickHandler={categoryClickHandler}
+              displayArray={displayArray}
+              stockDeletedHandler={stockDeletedHandler}
+            />
           }
         />
         <Route path="/stocks/new/:categoryId" element={<NewStock />} />
@@ -119,25 +117,27 @@ function App() {
         logout,
       }}
     >
-      <Router>
-        <RTL>
-          <ResponsiveAppBar
-            stocks={stocks}
-            clickHandler={categoryClickHandler}
-          />
-          <main>
-            <Suspense
-              fallback={
-                <div className="center">
-                  <LoadingSpinner asOverlay />
-                </div>
-              }
-            >
-              {routes}
-            </Suspense>
-          </main>
-        </RTL>
-      </Router>
+      <ShiftContextProvider>
+        <Router>
+          <RTL>
+            <ResponsiveAppBar
+              stocks={stocks}
+              clickHandler={categoryClickHandler}
+            />
+            <main>
+              <Suspense
+                fallback={
+                  <div className="center">
+                    <LoadingSpinner asOverlay />
+                  </div>
+                }
+              >
+                {routes}
+              </Suspense>
+            </main>
+          </RTL>
+        </Router>
+      </ShiftContextProvider>
     </AuthContext.Provider>
   );
 }
