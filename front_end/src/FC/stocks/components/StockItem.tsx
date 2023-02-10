@@ -86,8 +86,6 @@ export function StockItem({
 
   /* ************************************************************************************************** */
 
-  let timer: ReturnType<typeof setTimeout>;
-  let firing = false;
   let touchStartX = 0;
   let touchEndX = 0;
   const swipeDist = 100;
