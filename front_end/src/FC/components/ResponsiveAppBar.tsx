@@ -126,7 +126,7 @@ function ResponsiveAppBar({
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ flex: 1 }} display="flex" alignItems="center">
               <IconButton
@@ -178,7 +178,7 @@ function ResponsiveAppBar({
                     />
                   ) : (
                     <AssignmentLateIcon
-                      sx={{ color: "warning.main" }}
+                      sx={{ color: "warning.light" }}
                       onClick={handleTooltipOpen}
                     />
                   )}
@@ -188,7 +188,7 @@ function ResponsiveAppBar({
             <Box sx={{ flex: 2 }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />
             </Box>
-            <Box className={"align-end"} sx={{ flex: 2 }}>
+            <Box sx={{ flex: 2 }}>
               <IconButton
                 onClick={handleLacksListOpen}
                 sx={{ p: 1 }}
