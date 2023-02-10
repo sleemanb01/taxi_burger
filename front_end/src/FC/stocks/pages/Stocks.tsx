@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useHttpClient } from "../../../hooks/http-hook";
-import { ICategory, IShift, IStock } from "../../../typing/interfaces";
+import { ICategory, IStock } from "../../../typing/interfaces";
 import {
   DEFAULT_HEADERS,
   ENDPOINT_SHIFTS,
