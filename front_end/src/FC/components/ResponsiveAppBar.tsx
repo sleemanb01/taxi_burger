@@ -13,6 +13,9 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Popover from "@mui/material/Popover";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
+import Tooltip from "@mui/material/Tooltip";
 
 import "../../styles/styles.css";
 import { AuthContext } from "../../hooks/auth-context";
@@ -20,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import LackList from "./LackList";
 import { calcLacks } from "../../util/lacks";
+import { ShiftContext } from "../../hooks/shift-context";
 
 function ResponsiveAppBar({
   stocks,
@@ -30,6 +34,7 @@ function ResponsiveAppBar({
 }) {
   const nav = useNavigate();
   const auth = useContext(AuthContext);
+  const { shift } = useContext(ShiftContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -78,6 +83,9 @@ function ResponsiveAppBar({
   const TXT_LOGOUT = "התנתק";
   const TXT_USERS = "משתמשים";
   const TXT_STOCKS = "מלאי";
+  const TXT_SHIFT = shift
+    ? shift.date.getMonth() + "/" + shift.date.getMonth()
+    : "אין משמרת פעילה";
 
   const lacks: ILack[] = calcLacks(stocks);
 
@@ -108,7 +116,12 @@ function ResponsiveAppBar({
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ flex: 1 }}>
+            <Box
+              sx={{ flex: 1 }}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -140,6 +153,13 @@ function ResponsiveAppBar({
                 <MenuItem>{TXT_USERS}</MenuItem>
                 <MenuItem onClick={stocksHandler}>{TXT_STOCKS}</MenuItem>
               </Menu>
+              <Tooltip title={TXT_SHIFT}>
+                {shift ? (
+                  <AssignmentTurnedInIcon sx={{ color: "success.light" }} />
+                ) : (
+                  <AssignmentLateIcon sx={{ color: "warning.main" }} />
+                )}
+              </Tooltip>
             </Box>
             <Box sx={{ flex: 1, color: "primary.main" }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />

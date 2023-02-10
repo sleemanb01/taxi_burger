@@ -9,10 +9,12 @@ export const useAuth = () => {
 
   const login = useCallback((user: userWToken) => {
     localStorage.setItem("userData", JSON.stringify(user));
-    setUser(user);
     const EXPIRATION_TIME = 1000 * 60 * 60 * 12;
-    const tokenExpirationDate =
-      user.tokenExpiration || new Date(new Date().getTime() + EXPIRATION_TIME);
+    const tokenExpirationDate = user.tokenExpiration
+      ? new Date(user.tokenExpiration)
+      : new Date(new Date().getTime() + EXPIRATION_TIME);
+    user.tokenExpiration = tokenExpirationDate;
+    setUser(user);
     setTokenExpirationDate(tokenExpirationDate);
     localStorage.setItem(
       "userData",
@@ -20,7 +22,7 @@ export const useAuth = () => {
         id: user.id,
         token: user.token,
         name: user.name,
-        expiration: tokenExpirationDate.toISOString(),
+        tokenExpiration: tokenExpirationDate.toISOString(),
         isAdmin: user.isAdmin,
       })
     );

@@ -45,14 +45,7 @@ function UpdateStock() {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const resData = await sendRequest(
-          ENDPOINT_GET_STOCK + "/" + stockId,
-          "GET",
-          null,
-          {
-            Authorization: "Barer " + user?.token,
-          }
-        );
+        const resData = await sendRequest(ENDPOINT_GET_STOCK + "/" + stockId);
         const stock: IStock = resData.stock;
 
         setSelected(stock.categoryId);

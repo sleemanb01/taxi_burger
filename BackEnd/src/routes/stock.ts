@@ -18,7 +18,8 @@ export const stockRoutes = express.Router();
 
 const MAX = 50;
 
-stockRoutes.get("stock/:stockId", getStock);
+stockRoutes.get("/stock/:stockId", getStock);
+
 stockRoutes.get("/:date", getStocks);
 
 stockRoutes.use(authenticate);

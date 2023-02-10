@@ -18,7 +18,8 @@ export default function AlignItemsList({
   closeHandler: Function;
 }) {
   const TXT_EVERYTHING_IS_GOOD = "הכל בסדר";
-  const TXT_LEFT = "נשאר רק";
+  const TXT_LEFT_ONLY = "נשאר רק";
+  const TXT_LEFT = "נשאר";
 
   const itemClickHandler = (stock: IStock) => {
     clickHandler(stock.categoryId);
@@ -45,7 +46,9 @@ export default function AlignItemsList({
                 variant="body2"
                 color={lack.isCritical ? "error" : "warning.main"}
               >
-                {TXT_LEFT + " " + stock.quantity}
+                {(lack.isCritical ? TXT_LEFT_ONLY : TXT_LEFT) +
+                  " " +
+                  stock.quantity}
               </Typography>
             }
           />
