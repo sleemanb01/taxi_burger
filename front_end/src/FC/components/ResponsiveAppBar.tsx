@@ -124,7 +124,7 @@ function ResponsiveAppBar({
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, width: "100vw" }}>
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -188,7 +188,7 @@ function ResponsiveAppBar({
             <Box sx={{ flex: 2 }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />
             </Box>
-            <Box sx={{ flex: 2 }}>
+            <Box sx={{ flex: 1 }}>
               <IconButton
                 onClick={handleLacksListOpen}
                 sx={{ p: 1 }}
@@ -216,6 +216,8 @@ function ResponsiveAppBar({
                   closeHandler={handleLackListClose}
                 />
               </Popover>
+            </Box>
+            <Box sx={{ flex: 1 }}>
               <IconButton
                 onClick={handleProfileMenuOpen}
                 size="large"
