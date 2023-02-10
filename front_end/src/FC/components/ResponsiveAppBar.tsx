@@ -128,7 +128,7 @@ function ResponsiveAppBar({
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ flex: 1 }} display="flex" alignItems="center">
+            <Box sx={{ flex: 1 }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
