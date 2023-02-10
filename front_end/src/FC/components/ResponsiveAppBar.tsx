@@ -16,6 +16,7 @@ import Popover from "@mui/material/Popover";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 import Tooltip from "@mui/material/Tooltip";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 import "../../styles/styles.css";
 import { AuthContext } from "../../hooks/auth-context";
@@ -34,6 +35,7 @@ function ResponsiveAppBar({
 }) {
   const nav = useNavigate();
   const auth = useContext(AuthContext);
+
   const { shift } = useContext(ShiftContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -42,9 +44,19 @@ function ResponsiveAppBar({
   const [openLackList, setOpenLackList] = React.useState<null | HTMLElement>(
     null
   );
+  const [openToolTip, setOpenToolTip] = React.useState(false);
+
   const isMenuOpen = Boolean(anchorEl);
   const isListOpen = Boolean(openLackList);
   const id = isListOpen ? "simple-popover" : undefined;
+
+  const handleTooltipClose = () => {
+    setOpenToolTip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenToolTip(true);
+  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -116,12 +128,7 @@ function ResponsiveAppBar({
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box
-              sx={{ flex: 1 }}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box sx={{ flex: 1 }} display="flex" alignItems="center">
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -153,15 +160,33 @@ function ResponsiveAppBar({
                 <MenuItem>{TXT_USERS}</MenuItem>
                 <MenuItem onClick={stocksHandler}>{TXT_STOCKS}</MenuItem>
               </Menu>
-              <Tooltip title={TXT_SHIFT}>
-                {shift ? (
-                  <AssignmentTurnedInIcon sx={{ color: "success.light" }} />
-                ) : (
-                  <AssignmentLateIcon sx={{ color: "warning.main" }} />
-                )}
-              </Tooltip>
+              <ClickAwayListener onClickAway={handleTooltipClose}>
+                <Tooltip
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                  onClose={handleTooltipClose}
+                  open={openToolTip}
+                  disableFocusListener
+                  disableHoverListener
+                  disableTouchListener
+                  title={TXT_SHIFT}
+                >
+                  {shift ? (
+                    <AssignmentTurnedInIcon
+                      sx={{ color: "success.light" }}
+                      onClick={handleTooltipOpen}
+                    />
+                  ) : (
+                    <AssignmentLateIcon
+                      sx={{ color: "warning.main" }}
+                      onClick={handleTooltipOpen}
+                    />
+                  )}
+                </Tooltip>
+              </ClickAwayListener>
             </Box>
-            <Box sx={{ flex: 1, color: "primary.main" }}>
+            <Box sx={{ flex: 1 }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />
             </Box>
             <Box className={"align-end"} sx={{ flex: 1 }}>
