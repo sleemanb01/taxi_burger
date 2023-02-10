@@ -124,9 +124,9 @@ function ResponsiveAppBar({
   );
 
   return (
-    <Box sx={{ flexGrow: 1, width: "100vw" }}>
+    <Box>
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{ width: "95vw" }}>
           <Toolbar disableGutters>
             <Box sx={{ flex: 1 }}>
               <IconButton
