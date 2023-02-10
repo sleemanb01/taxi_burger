@@ -126,7 +126,7 @@ function ResponsiveAppBar({
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Toolbar disableGutters>
             <Box sx={{ flex: 1 }} display="flex" alignItems="center">
               <IconButton
@@ -167,9 +167,6 @@ function ResponsiveAppBar({
                   }}
                   onClose={handleTooltipClose}
                   open={openToolTip}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
                   title={TXT_SHIFT}
                 >
                   {shift ? (
