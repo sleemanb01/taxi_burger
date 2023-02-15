@@ -120,7 +120,7 @@ export const addStock = async (
     return next(internalError);
   }
 
-  if (!targetUser || !targetUser.isAdmin) {
+  if (!targetUser) {
     const error = new HttpError(
       ERROR_UNAUTHORIZED,
       HTTP_RESPONSE_STATUS.Unauthorized
@@ -257,7 +257,7 @@ export const updateStockPartial = async (
   stock.quantity = quantity;
   stock.minQuantity = minQuantity;
 
-  if (isAdd) {
+  if (isAdd || shiftId === "undefined") {
     try {
       await stock.save();
     } catch {
@@ -386,7 +386,7 @@ export const deleteStock = async (
     return next(internalError);
   }
 
-  if (!targetUser || !targetUser.isAdmin) {
+  if (!targetUser || !(targetUser.email === process.env.MANAGER)) {
     const error = new HttpError(
       ERROR_INVALID_DATA,
       HTTP_RESPONSE_STATUS.Unauthorized

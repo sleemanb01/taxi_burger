@@ -16,5 +16,4 @@ export const ERROR_UPLOAD_FILE = "שגיאה בהעלאת הקובץ!";
 
 /****************************************************************/
 
-export const DELETED = "Deleted successfully";
-export const LOGGEDIN = "Logged in successfully";
+export const DELETED = "נמחק בהצלחה";

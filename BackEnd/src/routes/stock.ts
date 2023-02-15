@@ -39,7 +39,6 @@ stockRoutes.patch(
   [
     check("quantity").isInt({ min: 0, max: MAX }),
     check("minQuantity").isInt({ min: 0, max: MAX }),
-    check("inUse").isBoolean(),
   ],
   updateStockPartial
 );

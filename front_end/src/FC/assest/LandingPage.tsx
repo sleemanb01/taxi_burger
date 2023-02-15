@@ -1,11 +1,11 @@
 import logo from "../../logo.svg";
 
-import "../../styles/styles.css";
+import "../../styles/css/global.css";
 
 function LandingPage() {
   return (
     <div className={"landing-page__overlay"}>
-      <img style={{ width: "100%" }} src={logo} alt="app logo" />
+      <img style={{ width: "60%" }} src={logo} alt="app logo" />
     </div>
   );
 }

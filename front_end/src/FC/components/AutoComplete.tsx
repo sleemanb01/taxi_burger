@@ -1,8 +1,9 @@
 import TextField from "@mui/material/TextField";
-import { IStock } from "../../typing/interfaces";
+import { IStock } from "../../types/interfaces";
 import { StyledAutocomplete } from "../../styles/styledAutoComplete";
 
-import "../../styles/styles.css";
+import "../../styles/css/global.css";
+import { TXT_SEARCH } from "../../util/txt";
 
 export default function AutoComplete({
   options,
@@ -18,8 +19,6 @@ export default function AutoComplete({
     const stock = value as IStock;
     clickHandler(stock.categoryId);
   };
-
-  const TXT_SEARCH = "חיפוש";
 
   return (
     <StyledAutocomplete

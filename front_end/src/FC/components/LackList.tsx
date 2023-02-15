@@ -6,7 +6,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { ILack, IStock } from "../../typing/interfaces";
+import { ILack, IStock } from "../../types/interfaces";
+import {
+  TXT_EVERYTHING_IS_GOOD,
+  TXT_LEFT,
+  TXT_LEFT_ONLY,
+} from "../../util/txt";
 
 export default function AlignItemsList({
   lacks,
@@ -17,10 +22,6 @@ export default function AlignItemsList({
   clickHandler: Function;
   closeHandler: Function;
 }) {
-  const TXT_EVERYTHING_IS_GOOD = "הכל בסדר";
-  const TXT_LEFT_ONLY = "נשאר רק";
-  const TXT_LEFT = "נשאר";
-
   const itemClickHandler = (stock: IStock) => {
     clickHandler(stock.categoryId);
     closeHandler();

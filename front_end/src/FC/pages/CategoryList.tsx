@@ -1,65 +1,59 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-import { useHttpClient } from "../../hooks/http-hook";
-import { IStock, ICategory } from "../../typing/interfaces";
-import { ENDPOINT_STOCKS } from "../../util/Constants";
+import React, { useLayoutEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ICategory } from "../../types/interfaces";
+import { TXT_CATEGORY, TXT_SELECT, TXT_NEW_CATEGORY } from "../../util/txt";
 
-export default function CategoryList() {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const [stocks, setStocks] = React.useState<IStock[]>([]);
-  const [categories, setCategories] = React.useState<ICategory[]>([]);
-  const [displayArray, setDisplayArray] = React.useState<string[]>([]);
+function CategoryList({
+  setSelected,
+  selected,
+}: {
+  setSelected: Function;
+  selected?: string;
+}) {
+  const nav = useNavigate();
 
-  React.useEffect(() => {
-    const fetchStocks = async () => {
-      try {
-        const res = await sendRequest(ENDPOINT_STOCKS);
-        const fetchedCategoris = res.categories;
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  useLayoutEffect(() => {
+    const categories = localStorage.getItem("categories");
 
-        localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
-        setCategories(fetchedCategoris);
-        console.log(res);
+    if (categories) {
+      setCategories(JSON.parse(categories));
+    }
+  }, []);
 
-        setStocks(res.stocks);
-      } catch (err) {}
-    };
+  const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
 
-    fetchStocks();
-  }, [sendRequest]);
-
-  const categoryClickHandler = (id: string) => {
-    const alreadyExists = displayArray.includes(id);
-
-    if (alreadyExists) {
-      setDisplayArray((prev) => prev.filter((e) => e !== id));
-      return;
+    if (e.target.value === "newCategory") {
+      nav("/category/new");
     }
 
-    setDisplayArray((prev) => [...prev, id]);
+    setSelected(e.target.value);
   };
 
-  if (categories.length === 0) {
-    return <React.Fragment></React.Fragment>;
-  }
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
-
   return (
-    <Box sx={{ width: "100%" }}>
-      <Stack spacing={2}>
-        <Item>Item 1</Item>
-        <Item>Item 2</Item>
-        <Item>Item 3</Item>
-      </Stack>
-    </Box>
+    <React.Fragment>
+      <label htmlFor="categories">{TXT_CATEGORY}</label>
+      <select
+        value={selected ? selected : "undefined"}
+        name="categories"
+        id="categories"
+        onChange={selectChangeHandler}
+      >
+        <option disabled value="undefined" key="undefined">
+          {`-- ${TXT_SELECT} --`}
+        </option>
+        {categories.map((category) => (
+          <option key={category._id} value={category._id}>
+            {category.name}
+          </option>
+        ))}
+        <option key="newCategory" value="newCategory">
+          {TXT_NEW_CATEGORY}
+        </option>
+      </select>
+    </React.Fragment>
   );
 }
+
+export default CategoryList;

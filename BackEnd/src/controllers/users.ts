@@ -115,7 +115,6 @@ export const login = async (
     name: targetUser.name,
     email: targetUser.email,
     token,
-    isAdmin: targetUser.isAdmin,
   };
 
   res.status(HTTP_RESPONSE_STATUS.OK).json(ret);
@@ -185,7 +184,6 @@ export const signup = async (
     email,
     password: hashedPassword,
     image: req.file?.path,
-    isAdmin: false,
   });
 
   try {
@@ -211,7 +209,6 @@ export const signup = async (
     name: createdUser.name,
     email: createdUser.email,
     token,
-    isAdmin: false,
   };
 
   res.status(HTTP_RESPONSE_STATUS.Created).json(ret);

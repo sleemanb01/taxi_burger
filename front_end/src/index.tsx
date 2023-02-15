@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { _default_theme } from "./styles/defaultTheme";
 import { ThemeProvider } from "@mui/material";
+import { AuthContextProvider } from "./hooks/auth-context";
+import { ShiftContextProvider } from "./hooks/shift-context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -12,7 +14,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={_default_theme}>
-      <App />
+      <AuthContextProvider>
+        <ShiftContextProvider>
+          <App />
+        </ShiftContextProvider>
+      </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

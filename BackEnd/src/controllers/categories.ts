@@ -71,7 +71,7 @@ export const addCategory = async (
     return next(internalError);
   }
 
-  if (!targetUser || !targetUser.isAdmin) {
+  if (!targetUser) {
     const error = new HttpError(
       ERROR_UNAUTHORIZED,
       HTTP_RESPONSE_STATUS.Unauthorized
@@ -186,7 +186,7 @@ export const deleteCategory = async (
     return next(internalError);
   }
 
-  if (!targetUser || !targetUser.isAdmin) {
+  if (!targetUser || !(targetUser.email === process.env.MANAGER)) {
     const error = new HttpError(
       ERROR_INVALID_DATA,
       HTTP_RESPONSE_STATUS.Unauthorized

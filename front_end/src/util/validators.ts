@@ -1,5 +1,5 @@
-import { EValidatorType } from "../typing/enums";
-import { MINLENGTH, MAXLENGTH, MIN, MAX } from "./Constants";
+import { EValidatorType } from "../types/enums";
+import { MINLENGTH, MAXLENGTH, MIN, MAX } from "./constants";
 
 export const VALIDATE = (
   value: string | number | File,

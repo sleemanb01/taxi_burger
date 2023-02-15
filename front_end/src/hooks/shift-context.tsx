@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState } from "react";
-import { IShift } from "../typing/interfaces";
-import { ShiftCtx } from "../typing/types";
+import { IShift } from "../types/interfaces";
+import { ShiftCtx } from "../types/types";
 
 export const ShiftContext = createContext<ShiftCtx>({
   shift: null,

@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
-import { IStock } from "../../typing/interfaces";
+import { IStock } from "../../types/interfaces";
 import Fab from "@mui/material/Fab";
 import { Box, DialogTitle, Slider, Stack, Typography } from "@mui/material";
-import { partialStock } from "../../typing/types";
+import { partialStock } from "../../types/types";
 import Input from "@mui/material/Input";
 import AddIcon from "@mui/icons-material/Add";
 
-import "../../styles/styles.css";
+import "../../styles/css/global.css";
+import {
+  TXT_ADD_QUANTITY,
+  TXT_LOW_QUANTITY,
+  TXT_QUANTITY,
+} from "../../util/txt";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -103,9 +108,6 @@ export function SimpleDialog({
     setIsEdit((prev) => !prev);
   };
 
-  const TXT_QUANTITY = "כמות";
-  const TXT_LOW_QUANTITY = "כמות מינימלית";
-  const TXT_ADD_QUANTITY = "הוסף כמות";
   let timer: ReturnType<typeof setTimeout>;
   let firing = false;
 

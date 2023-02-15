@@ -1,4 +1,4 @@
-import { ILack, IStock } from "../typing/interfaces";
+import { ILack, IStock } from "../types/interfaces";
 
 export const calcLacks = (stocks: IStock[]) => {
   let lacks: ILack[] = [];

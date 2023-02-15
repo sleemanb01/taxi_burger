@@ -6,11 +6,21 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box, Stepper, Step, StepLabel } from "@mui/material";
 import { ShiftOptions } from "./ShiftOptions";
-import { IShift } from "../../typing/interfaces";
+import { IShift } from "../../types/interfaces";
 import { getCurrDay } from "../../util/time";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import { HandlerFuncType } from "../../typing/types";
+import { HandlerFuncType } from "../../types/types";
+import { MAX_MEAT, MIN } from "../../util/constants";
+import {
+  TXT_BACK,
+  TXT_BREAD_QUANTITY,
+  TXT_DATE,
+  TXT_FINISH,
+  TXT_MEAT_QUANTITY,
+  TXT_NEW_SHIFT,
+  TXT_NEXT,
+} from "../../util/txt";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,9 +40,7 @@ export default function AlertDialogSlide({
   setShift: Function;
   closeStepperHandler: HandlerFuncType;
 }) {
-  const steps = ["תאריך", "כמות בשר", "כמות לחם"];
-  const MIN = 0;
-  const MAX = 120;
+  const steps = [TXT_DATE, TXT_MEAT_QUANTITY, TXT_BREAD_QUANTITY];
 
   const [activeStep, setActiveStep] = useState(0);
   const [bread, setBread] = useState(0);
@@ -50,15 +58,10 @@ export default function AlertDialogSlide({
     }
   }, [activeStep, setShift, bread, meat, steps.length]);
 
-  // const pickHandler = (shift: IShift | null) => {
-  //   setShift(shift);
-  //   setPicked(true);
-  // };
-
   const validateNumber = (val: string) => {
     if (!isNaN(parseInt(val))) {
       const value = parseInt(val);
-      if (value > MIN && value < MAX) {
+      if (value > MIN && value < MAX_MEAT) {
         return value;
       }
     }
@@ -95,7 +98,7 @@ export default function AlertDialogSlide({
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"פתיחת משמרת חדשה"}</DialogTitle>
+        <DialogTitle>{TXT_NEW_SHIFT}</DialogTitle>
         <Box sx={{ width: "70vw", m: "1rem" }}>
           <Stepper activeStep={activeStep}>
             {steps.map((label) => {
@@ -118,7 +121,7 @@ export default function AlertDialogSlide({
             {activeStep === 1 && (
               <TextField
                 id="outlined-number"
-                label="כמות בשר"
+                label={TXT_MEAT_QUANTITY}
                 placeholder={meat.toString()}
                 type="number"
                 onChange={(e) => meatQuantityHandler(e.currentTarget.value)}
@@ -130,7 +133,7 @@ export default function AlertDialogSlide({
             {activeStep === 2 && (
               <TextField
                 id="outlined-number"
-                label="כמות לחם"
+                label={TXT_BREAD_QUANTITY}
                 placeholder={bread.toString()}
                 type="number"
                 onChange={(e) => breadQuantityHandler(e.currentTarget.value)}
@@ -147,11 +150,11 @@ export default function AlertDialogSlide({
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
-              חזור
+              {TXT_BACK}
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "סיים" : "הבא"}
+              {activeStep === steps.length - 1 ? TXT_FINISH : TXT_NEXT}
             </Button>
           </Box>
         </Box>

@@ -1,15 +1,14 @@
 import React from "react";
-import { DatePicker } from "./DatePicker";
+import { DatePicker } from "../assest/UIElements/DatePicker";
 import Button from "@mui/material/Button";
-import { HandlerFuncType } from "../../typing/types";
+import { HandlerFuncType } from "../../types/types";
+import { TXT_VIEW } from "../../util/txt";
 
 export function ShiftOptions({
   closeStepperHandler,
 }: {
   closeStepperHandler: HandlerFuncType;
 }) {
-  const TXT_VIEW = "צפייה בנתונים";
-
   return (
     <React.Fragment>
       <DatePicker />
