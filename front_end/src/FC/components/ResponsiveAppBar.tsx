@@ -14,7 +14,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Popover from "@mui/material/Popover";
 
 import { AuthContext } from "../../hooks/auth-context";
-import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import LackList from "./LackList";
 import { calcLacks } from "../../util/lacks";
@@ -30,7 +29,6 @@ function ResponsiveAppBar({
   stocks: IStock[];
   clickHandler: Function;
 }) {
-  const nav = useNavigate();
   const { logout, user } = useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
