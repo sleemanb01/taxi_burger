@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { categoriesRoutes } from "./routes/categories";
 import { shiftRoutes } from "./routes/shift";
+import { assignmentsRoutes } from "./routes/assignments";
 
 const PORT = 5000;
 const ENV = process.env;
@@ -34,6 +35,7 @@ app.use((_req, res, next) => {
 app.use("/api/stocks", stockRoutes);
 app.use("/api/shifts", shiftRoutes);
 app.use("/api/categories", categoriesRoutes);
+app.use("/api/assignments", assignmentsRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((_req, _res, _next) => {

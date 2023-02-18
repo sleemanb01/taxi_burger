@@ -1,6 +1,5 @@
 import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
-import fs from "fs";
 
 import { HttpError } from "../models/http-error";
 import Stock, { IStock } from "../models/stock.model";
@@ -8,6 +7,7 @@ import User from "../models/user.model";
 import Shift, { IShift, IUsage } from "../models/shift.model";
 import Category from "../models/category.model";
 import { IUser } from "../models/user.model";
+import Assignment, { IAssignment } from "../models/assignment.model";
 import { HTTP_RESPONSE_STATUS } from "../types/enums";
 import { RequestWUser, AuthorizationRequest } from "../types/types";
 import {
@@ -65,6 +65,7 @@ export const getStocks = async (
   let stocks: IStock[] = [];
   let categories;
   let shift;
+  let assignments;
 
   const date = req.params.date;
 
@@ -74,6 +75,7 @@ export const getStocks = async (
     stocks = await Stock.find();
     categories = await Category.find();
     shift = await Shift.findOne({ date: date });
+    assignments = await Assignment.find();
     sess.commitTransaction();
   } catch {
     return next(internalError);
@@ -88,6 +90,7 @@ export const getStocks = async (
     categories: categories.map((category) =>
       category.toObject({ getters: true })
     ),
+    assignments: assignments.map((e) => e.toObject({ getters: true })),
     shift: shift,
   });
 };
@@ -401,9 +404,10 @@ export const deleteStock = async (
   }
 
   if (req.file) {
-    fs.unlink(req.file.path, () => {
-      console.log(ERROR_DELETE_FILE);
-    });
+    const resError = await deleteFileS3(targetStock.image);
+    if (resError) {
+      return next(internalError);
+    }
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({ message: DELETED });

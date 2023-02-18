@@ -1,6 +1,10 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { StocksWActions, userWToken } from "../../types/types";
+import {
+  AssignmentsWActions,
+  StocksWActions,
+  userWToken,
+} from "../../types/types";
 
 const Auth = React.lazy(() => import("../pages/Auth"));
 const Stocks = React.lazy(() => import("../pages/Stocks"));
@@ -15,9 +19,11 @@ const UpdateCategory = React.lazy(() => import("../pages/UpdateCategory"));
 export function GetRoutes({
   stocksWActions,
   user,
+  assignmentsWActions,
 }: {
   stocksWActions: StocksWActions;
   user: userWToken | undefined;
+  assignmentsWActions: AssignmentsWActions;
 }) {
   let routes;
 
@@ -26,7 +32,10 @@ export function GetRoutes({
       <Routes>
         <Route path="/" element={<Stocks stocksWActions={stocksWActions} />} />
         <Route path="/dashboard" element={<DashBoard />} />
-        <Route path="/assignements" element={<Assignments />} />
+        <Route
+          path="/assignements"
+          element={<Assignments assignmentsWActions={assignmentsWActions} />}
+        />
         <Route path="/stocks/new/:categoryId" element={<NewStock />} />
         <Route path="/stocks/:stockId" element={<UpdateStock />} />
         <Route path="/category/new" element={<NewCategory />} />

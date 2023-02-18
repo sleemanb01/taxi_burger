@@ -1,5 +1,5 @@
 import { EReducerActionType, EValidatorType } from "./enums";
-import { ICategory, IShift, IStock, IUser } from "./interfaces";
+import { IAssignements, ICategory, IShift, IStock, IUser } from "./interfaces";
 
 export type AuthCtx = {
   user: userWToken | undefined;
@@ -60,7 +60,13 @@ export type HandlerFuncType = () => void;
 
 export type StocksWActions = {
   values: IStock[];
-  setValues: Dispatch<SetStateAction<IStock[]>>;
   displayArray: string[];
+  categories: ICategory[];
+  setValues: Dispatch<SetStateAction<IStock[]>>;
   clickHandler: (id: string) => void;
+};
+
+export type AssignmentsWActions = {
+  values: IAssignements[];
+  setValues: Dispatch<SetStateAction<IAssignements[]>>;
 };

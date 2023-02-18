@@ -16,6 +16,13 @@ export interface IStock {
   minQuantity: number;
 }
 
+export interface IAssignement {
+  _id?: string;
+  name: string;
+  image?: string;
+  description: string;
+}
+
 export interface ILack {
   stock: IStock;
   isCritical: boolean;

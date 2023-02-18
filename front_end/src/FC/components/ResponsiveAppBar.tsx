@@ -98,7 +98,7 @@ function ResponsiveAppBar({
             <Box sx={{ flex: 2 }}>
               <AutoComplete options={stocks} clickHandler={clickHandler} />
             </Box>
-            <Box sx={{ flex: 1, justifyContent: "flex-end" }}>
+            <Box sx={{ flex: 1 }}>
               <IconButton
                 onClick={handleLacksListOpen}
                 sx={{ p: 1 }}

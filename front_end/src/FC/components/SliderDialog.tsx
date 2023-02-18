@@ -6,12 +6,14 @@ import { Box, DialogTitle, Slider, Stack, Typography } from "@mui/material";
 import { partialStock } from "../../types/types";
 import Input from "@mui/material/Input";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import "../../styles/css/global.css";
 import {
   TXT_ADD_QUANTITY,
   TXT_LOW_QUANTITY,
   TXT_QUANTITY,
+  TXT_REMOVE_QUANTITY,
 } from "../../util/txt";
 
 export interface SimpleDialogProps {
@@ -28,6 +30,7 @@ export function SimpleDialog({
   stock,
 }: SimpleDialogProps) {
   const [isAdd, setIsAdd] = useState(false);
+  const [isRemove, setIsRemove] = useState(false);
   const [editedQuantity, setEditedQuantity] = useState(stock.quantity);
   const [editMinQuantity, setEditMinQuantity] = useState(stock.minQuantity);
   const [isEdit, setIsEdit] = useState(false);
@@ -63,6 +66,14 @@ export function SimpleDialog({
     setIsAdd(false);
   };
 
+  const openRemoveHandler = () => {
+    setIsRemove(true);
+  };
+
+  const closeRemoveHandler = () => {
+    setIsRemove(false);
+  };
+
   const addInputHandler = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -72,6 +83,17 @@ export function SimpleDialog({
       setEditedQuantity(value + editedQuantity);
     }
     closeAddHandler();
+  };
+
+  const removeInputHandler = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const rawValue = e.currentTarget.value;
+    if (!isNaN(parseInt(rawValue))) {
+      const value = parseInt(e.currentTarget.value);
+      setEditedQuantity(value - editedQuantity);
+    }
+    closeRemoveHandler();
   };
 
   const minMaxChangeHandler = (
@@ -151,17 +173,31 @@ export function SimpleDialog({
             marks={marks}
           />
         </Stack>
-        <Stack spacing={4} sx={{ alignItems: "center" }}>
+        <Stack spacing={1} sx={{ alignItems: "center" }}>
           <Typography fontSize={"0.7rem"}>{TXT_ADD_QUANTITY}</Typography>
           <Fab color="primary" aria-label="add" onClick={openAddHandler}>
             {isAdd ? (
               <Input
                 className="align-center"
                 type="number"
+                placeholder="0"
                 onBlur={(event) => addInputHandler(event)}
               />
             ) : (
               <AddIcon />
+            )}
+          </Fab>
+          <Typography fontSize={"0.7rem"}>{TXT_REMOVE_QUANTITY}</Typography>
+          <Fab color="primary" aria-label="add" onClick={openRemoveHandler}>
+            {isRemove ? (
+              <Input
+                className="align-center"
+                type="number"
+                placeholder="0"
+                onBlur={(event) => removeInputHandler(event)}
+              />
+            ) : (
+              <RemoveIcon />
             )}
           </Fab>
           <Typography fontSize={"0.7rem"}>{TXT_LOW_QUANTITY}</Typography>

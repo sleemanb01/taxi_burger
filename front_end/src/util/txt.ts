@@ -18,6 +18,7 @@ export const TXT_NAME = "שם";
 export const TXT_UPDATE_CATEGORY = "עדכן קטגוריה";
 
 export const TXT_ADD = "הוסף מלאי";
+export const TXT_REMOVE_QUANTITY = "הסר כמות";
 export const TXT_QUANTITY = "כמות";
 
 export const TXT_SELECT = "בחר קטגוריה";

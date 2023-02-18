@@ -6,15 +6,18 @@ import ResponsiveAppBar from "./FC/components/ResponsiveAppBar";
 import LandingPage from "./FC/assest/LandingPage";
 import NavTabs from "./FC/components/NavTabs";
 import LoadingSpinner from "./FC/assest/LoadingSpinner";
-import { useStocks } from "./hooks/useStock";
+import { useStocks } from "./hooks/useStocks";
 import { AuthContext } from "./hooks/auth-context";
 import { GetRoutes } from "./FC/assest/GetRoutes";
+import { IAssignement } from "./types/interfaces";
+import { useAssignments } from "./hooks/useAssignments";
 
 function App() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const { user, login } = useContext(AuthContext);
 
   const stocksWActions = useStocks();
+  const assignmentsWActions = useAssignments();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
@@ -52,7 +55,11 @@ function App() {
               </div>
             }
           >
-            <GetRoutes stocksWActions={stocksWActions} user={user} />
+            <GetRoutes
+              stocksWActions={stocksWActions}
+              user={user}
+              assignmentsWActions={assignmentsWActions}
+            />
           </Suspense>
         </main>
       </RTL>

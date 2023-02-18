@@ -3,15 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../hooks/auth-context";
 import { useHttpClient } from "../../hooks/http-hook";
-import { ICategory } from "../../types/interfaces";
-import {
-  DEFAULT_HEADERS,
-  ENDPOINT_SHIFTS,
-  ENDPOINT_STOCKS,
-} from "../../util/constants";
+import { DEFAULT_HEADERS, ENDPOINT_SHIFTS } from "../../util/constants";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { getCurrDay } from "../../util/time";
 import StepperDialog from "../components/StepperDialog";
 import { ShiftContext } from "../../hooks/shift-context";
 import { StocksWActions } from "../../types/types";
@@ -19,7 +13,7 @@ import CategoryItem from "../components/CategoryItem";
 import { ErrorModal } from "../assest/UIElements/ErrorModal";
 
 function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
-  const { setValues, displayArray } = stocksWActions;
+  const { displayArray, categories } = stocksWActions;
 
   const nav = useNavigate();
   const { shift, setShift } = useContext(ShiftContext);
@@ -27,29 +21,6 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
 
   const { error, sendRequest, clearError } = useHttpClient();
   const [openShiftPicker, setOpenShiftPicker] = useState(false);
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await sendRequest(
-          ENDPOINT_STOCKS + "/" + new Date(getCurrDay())
-        );
-        const fetchedCategoris = res.categories;
-
-        localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
-        setCategories(fetchedCategoris);
-        setValues(res.stocks);
-        const fetchedShift = res.shift;
-        if (fetchedShift) {
-          setShift(fetchedShift);
-        } else {
-          setOpenShiftPicker(true);
-        }
-      } catch (err) {}
-    };
-    fetchData();
-  }, [sendRequest, setValues, setShift, setCategories, setOpenShiftPicker]);
 
   useEffect(() => {
     const uploadShift = async () => {
@@ -71,8 +42,17 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
 
     if (shift && !shift._id) {
       uploadShift();
+    } else {
+      setOpenShiftPicker(true);
     }
-  }, [shift, shift?._id, sendRequest, user?.token, setShift]);
+  }, [
+    shift,
+    shift?._id,
+    sendRequest,
+    user?.token,
+    setShift,
+    setOpenShiftPicker,
+  ]);
 
   const addClickHandler = () => {
     nav("/stocks/new/undefined");
