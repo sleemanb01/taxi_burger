@@ -9,7 +9,6 @@ import LoadingSpinner from "./FC/assest/LoadingSpinner";
 import { useStocks } from "./hooks/useStocks";
 import { AuthContext } from "./hooks/auth-context";
 import { GetRoutes } from "./FC/assest/GetRoutes";
-import { IAssignement } from "./types/interfaces";
 import { useAssignments } from "./hooks/useAssignments";
 
 function App() {
