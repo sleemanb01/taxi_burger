@@ -6,7 +6,7 @@ export const getCurrDay = () => {
 
   let hour = today.getHours();
 
-  if (hour < 15) {
+  if (hour < 1) {
     dd--;
   }
 
