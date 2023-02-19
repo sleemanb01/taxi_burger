@@ -17,10 +17,11 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
 
   const nav = useNavigate();
   const { shift, setShift } = useContext(ShiftContext);
+
   const { user } = useContext(AuthContext);
 
   const { error, sendRequest, clearError } = useHttpClient();
-  const [openShiftPicker, setOpenShiftPicker] = useState(false);
+  const [openShiftPicker, setOpenShiftPicker] = useState(!!!shift);
 
   useEffect(() => {
     const uploadShift = async () => {
@@ -42,8 +43,6 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
 
     if (shift && !shift._id) {
       uploadShift();
-    } else {
-      setOpenShiftPicker(true);
     }
   }, [
     shift,

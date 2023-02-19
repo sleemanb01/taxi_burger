@@ -80,7 +80,7 @@ export function SimpleDialog({
     const rawValue = e.currentTarget.value;
     if (!isNaN(parseInt(rawValue))) {
       const value = parseInt(e.currentTarget.value);
-      setEditedQuantity(value + editedQuantity);
+      setEditedQuantity((prev) => prev + value);
     }
     closeAddHandler();
   };
@@ -91,7 +91,7 @@ export function SimpleDialog({
     const rawValue = e.currentTarget.value;
     if (!isNaN(parseInt(rawValue))) {
       const value = parseInt(e.currentTarget.value);
-      setEditedQuantity(value - editedQuantity);
+      setEditedQuantity((prev) => prev - value);
     }
     closeRemoveHandler();
   };
