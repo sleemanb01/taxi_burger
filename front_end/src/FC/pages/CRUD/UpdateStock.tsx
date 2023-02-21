@@ -1,35 +1,32 @@
 import { Card, Button } from "@mui/material";
-import { Input } from "../assest/UIElements/Input";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../../hooks/auth-context";
-import { useForm } from "../../hooks/form-hook";
-import { useHttpClient } from "../../hooks/http-hook";
-import { reducerFormStateInitVal } from "../../hooks/useReducer";
-import { EValidatorType } from "../../types/enums";
-import { IStock } from "../../types/interfaces";
-import { reducerInputState } from "../../types/types";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../hooks/auth-context";
+import { useForm } from "../../../hooks/form-hook";
+import { useHttpClient } from "../../../hooks/http-hook";
+import { reducerFormStateInitVal } from "../../../hooks/useReducer";
+import { EValidatorType } from "../../../types/enums";
+import { IStock } from "../../../types/interfaces";
+import { reducerInputState } from "../../../types/types";
 import {
   ENDPOINT_GET_STOCK,
   ENDPOINT_STOCKS,
   ENDPOINT_STOCKS_WIMAGE,
-} from "../../util/constants";
+} from "../../../util/constants";
+import { upload, uploadWImage } from "../../../util/stock-update";
 import {
-  stockPatchInfoWithoutImage,
-  stockPatchInfo,
-} from "../../util/stock-update";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { ImageUpload } from "../assest/UIElements/ImageUpload";
-import CategoryList from "./CategoryList";
-
-import "../../styles/css/StockForm.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
-import {
-  ERROR_IMAGE,
-  ERROR_TEXT_REQUIRED,
   TXT_NAME,
+  ERROR_TEXT_REQUIRED,
+  ERROR_IMAGE,
   TXT_UPDATE_CATEGORY,
-} from "../../util/txt";
+} from "../../../util/txt";
+import CategoryList from "../../components/util/CategorySelect";
+import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
+import { ImageUpload } from "../../components/util/UIElements/ImageUpload";
+import { Input } from "../../components/util/UIElements/Input";
+import LoadingSpinner from "../../components/util/UIElements/LoadingSpinner";
+
+import "../../../styles/css/Form.css";
 
 function UpdateStock() {
   const user = useContext(AuthContext).user;
@@ -73,16 +70,6 @@ function UpdateStock() {
     fetchStock();
   }, [sendRequest, stockId, user?.token, setFormData]);
 
-  if (!loadedStock && !error) {
-    return (
-      <div className="center">
-        <Card>
-          <h2>Could not find the stock!</h2>
-        </Card>
-      </div>
-    );
-  }
-
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -90,7 +77,7 @@ function UpdateStock() {
 
     const currImage = formState.inputs.image!.value;
     if (currImage === loadedStock?.image) {
-      let { body, headers } = stockPatchInfoWithoutImage(
+      let { body, headers } = upload(
         { name: formState.inputs.name!.value, categoryId: selected! },
         user!.token
       );
@@ -103,7 +90,7 @@ function UpdateStock() {
       formData.append("categoryId", selected!);
       formData.append("image", formState.inputs.image!.value);
 
-      let { body, headers } = stockPatchInfo(formData, user!.token);
+      let { body, headers } = uploadWImage(formData, user!.token);
       reqBody = body;
       reqHeaders = headers;
       endPoint = ENDPOINT_STOCKS_WIMAGE + "/" + stockId;
@@ -114,6 +101,16 @@ function UpdateStock() {
       nav("/" + user!.id + "/stocks");
     } catch (err) {}
   };
+
+  if (!loadedStock && !error) {
+    return (
+      <div className="center">
+        <Card>
+          <h2>Could not find the stock!</h2>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -134,12 +131,8 @@ function UpdateStock() {
             validators={[EValidatorType.REQUIRE]}
             errorText={ERROR_TEXT_REQUIRED}
             onInput={inputHandler}
-            initValue={
-              (formState.inputs.name as reducerInputState).value as string
-            }
-            initialIsValid={
-              (formState.inputs.name as reducerInputState).isValid
-            }
+            initValue={formState.inputs.name!.value}
+            initialIsValid={formState.inputs.name!.isValid}
           />
           <ImageUpload
             center
@@ -148,7 +141,11 @@ function UpdateStock() {
             onInput={inputHandler}
             errorText={ERROR_IMAGE}
           />
-          <Button type="submit" disabled={!!!selected || !formState.isValid}>
+          <Button
+            type="submit"
+            disabled={!!!selected || !formState.isValid}
+            variant="contained"
+          >
             {TXT_UPDATE_CATEGORY}
           </Button>
         </form>

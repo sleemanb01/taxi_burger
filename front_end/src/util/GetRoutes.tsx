@@ -1,20 +1,24 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import NewAssignment from "../FC/pages/CRUD/NewAssignment";
+import UpdateAssignment from "../FC/pages/CRUD/UpdateAssignment";
 import {
-  AssignmentsWActions,
   StocksWActions,
   userWToken,
-} from "../../types/types";
+  AssignmentsWActions,
+} from "../types/types";
 
-const Auth = React.lazy(() => import("../pages/Auth"));
-const Stocks = React.lazy(() => import("../pages/Stocks"));
-const DashBoard = React.lazy(() => import("../pages/DashBoard"));
-const Assignments = React.lazy(() => import("../pages/Assignments"));
-const Users = React.lazy(() => import("../pages/Users"));
-const NewStock = React.lazy(() => import("../pages/NewStock"));
-const NewCategory = React.lazy(() => import("../pages/NewCategory"));
-const UpdateStock = React.lazy(() => import("../pages/UpdateStock"));
-const UpdateCategory = React.lazy(() => import("../pages/UpdateCategory"));
+const Auth = React.lazy(() => import("../FC/pages/Auth"));
+const Stocks = React.lazy(() => import("../FC/pages/Stocks"));
+const DashBoard = React.lazy(() => import("../FC/pages/DashBoard"));
+const Assignments = React.lazy(() => import("../FC/pages/Assignments"));
+const Users = React.lazy(() => import("../FC/pages/Users"));
+const NewStock = React.lazy(() => import("../FC/pages/CRUD/NewStock"));
+const NewCategory = React.lazy(() => import("../FC/pages/CRUD/NewCategory"));
+const UpdateStock = React.lazy(() => import("../FC/pages/CRUD/UpdateStock"));
+const UpdateCategory = React.lazy(
+  () => import("../FC/pages/CRUD/UpdateCategory")
+);
 
 export function GetRoutes({
   stocksWActions,
@@ -35,6 +39,11 @@ export function GetRoutes({
         <Route
           path="/assignements"
           element={<Assignments assignmentsWActions={assignmentsWActions} />}
+        />
+        <Route path="/assignments/new" element={<NewAssignment />} />
+        <Route
+          path="/assignments/:assignmentId"
+          element={<UpdateAssignment />}
         />
         <Route path="/stocks/new/:categoryId" element={<NewStock />} />
         <Route path="/stocks/:stockId" element={<UpdateStock />} />

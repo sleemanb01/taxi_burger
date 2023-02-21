@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import imageCompression from "browser-image-compression";
 import React, { useEffect, useRef, useState } from "react";
 
-import "../../../styles/css/ImageUpload.css";
+import "../../../../styles/css/ImageUpload.css";
 
 export const ImageUpload = ({
   id,
@@ -88,7 +88,7 @@ export const ImageUpload = ({
           {previewUrl && <img src={previewUrl as string} alt="Preview" />}
           {!previewUrl && <p>{TXT_ASSEST}</p>}
         </div>
-        <Button type="button" onClick={pickImageHandler}>
+        <Button type="button" onClick={pickImageHandler} variant="contained">
           {TXT_PICK_IMAGE}
         </Button>
       </div>

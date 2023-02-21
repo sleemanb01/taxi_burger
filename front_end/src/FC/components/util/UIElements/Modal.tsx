@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { modal_style } from "../../../styles/modal-style";
+import { modal_style } from "../../../../styles/modal-style";
 
 type ModalProps = {
   show: boolean;

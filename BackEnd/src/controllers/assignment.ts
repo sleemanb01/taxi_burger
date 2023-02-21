@@ -2,7 +2,6 @@ import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 import { HttpError } from "../models/http-error";
-import Stock from "../models/stock.model";
 import User from "../models/user.model";
 import Assignment, { IAssignment } from "../models/assignment.model";
 import { IUser } from "../models/user.model";
@@ -63,7 +62,7 @@ export const getAssignments = async (
   let assignments: IAssignment[] = [];
 
   try {
-    assignments = await Stock.find();
+    assignments = await Assignment.find();
   } catch {
     return next(internalError);
   }
@@ -115,15 +114,21 @@ export const addAssignment = async (
     return next(error);
   }
 
-  const upload = await uploadToS3(req.file);
-  if (!upload.success) {
-    return next(internalError);
+  const image = req.file;
+  let upload = undefined;
+
+  if (image) {
+    upload = await uploadToS3(req.file);
+    if (!upload.success) {
+      upload = undefined;
+      return next(internalError);
+    }
   }
 
   const newAssignment = new Assignment({
     name,
     description,
-    image: upload.data || req.body.image,
+    image: upload?.data,
   });
 
   try {
@@ -134,7 +139,7 @@ export const addAssignment = async (
 
   res
     .status(HTTP_RESPONSE_STATUS.Created)
-    .json({ stock: newAssignment.toObject({ getters: true }) });
+    .json({ assignment: newAssignment.toObject({ getters: true }) });
 };
 
 /* ************************************************************** */
@@ -160,7 +165,7 @@ export const updateAssignment = async (
   let assignment: IAssignment | null;
 
   try {
-    assignment = await Stock.findById(assignmentId);
+    assignment = await Assignment.findById(assignmentId);
   } catch {
     return next(internalError);
   }
@@ -196,7 +201,7 @@ export const deleteAssignment = async (
   let targetAssignment;
 
   try {
-    targetAssignment = await Stock.findById(assignemntId);
+    targetAssignment = await Assignment.findById(assignemntId);
   } catch {
     return next(internalError);
   }
@@ -226,17 +231,17 @@ export const deleteAssignment = async (
     return next(error);
   }
 
-  try {
-    await targetAssignment.remove();
-  } catch {
-    return next(internalError);
-  }
-
-  if (req.file) {
+  if (targetAssignment.image) {
     const resError = await deleteFileS3(targetAssignment.image);
     if (resError) {
       return next(internalError);
     }
+  }
+
+  try {
+    await targetAssignment.remove();
+  } catch {
+    return next(internalError);
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({ message: DELETED });

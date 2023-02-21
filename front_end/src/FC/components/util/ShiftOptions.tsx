@@ -1,8 +1,8 @@
 import React from "react";
-import { DatePicker } from "../assest/UIElements/DatePicker";
 import Button from "@mui/material/Button";
-import { HandlerFuncType } from "../../types/types";
-import { TXT_VIEW } from "../../util/txt";
+import { HandlerFuncType } from "../../../types/types";
+import { TXT_VIEW } from "../../../util/txt";
+import { DatePicker } from "./UIElements/DatePicker";
 
 export function ShiftOptions({
   closeStepperHandler,

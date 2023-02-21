@@ -2,9 +2,11 @@
     margin: 1rem;
     padding: 0.1rem 1rem;
     border-radius: 1rem;
-    background-color: #fff;
+    background-color: #333;
+    color: #fff;
 }
 
 .visible{
+    width: 70vw;
     box-shadow: 0.5rem 0.5rem 0.25rem grey;
 }

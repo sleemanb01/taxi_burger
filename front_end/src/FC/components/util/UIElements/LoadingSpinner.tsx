@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../../styles/css/LoadingSpinner.css";
+import "../../../../styles/css/LoadingSpinner.css";
 
 export function LoadingSpinner({ asOverlay }: { asOverlay: boolean }) {
   return (

@@ -1,15 +1,15 @@
 import { Suspense, useContext, useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router } from "react-router-dom";
-import { RTL } from "./FC/assest/RTL";
-import ResponsiveAppBar from "./FC/components/ResponsiveAppBar";
-import LandingPage from "./FC/assest/LandingPage";
-import NavTabs from "./FC/components/NavTabs";
-import LoadingSpinner from "./FC/assest/LoadingSpinner";
+import LandingPage from "./FC/pages/util/LandingPage";
 import { useStocks } from "./hooks/useStocks";
 import { AuthContext } from "./hooks/auth-context";
-import { GetRoutes } from "./FC/assest/GetRoutes";
 import { useAssignments } from "./hooks/useAssignments";
+import { GetRoutes } from "./util/GetRoutes";
+import NavTabs from "./FC/components/util/Navigation/NavTabs";
+import ResponsiveAppBar from "./FC/components/util/Navigation/ResponsiveAppBar";
+import LoadingSpinner from "./FC/components/util/UIElements/LoadingSpinner";
+import { RTL } from "./FC/pages/util/RTL";
 
 function App() {
   const [showLandingPage, setShowLandingPage] = useState(true);

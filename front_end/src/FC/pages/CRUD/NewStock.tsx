@@ -1,19 +1,15 @@
 import React, { useContext, useState } from "react";
-import { AuthContext } from "../../hooks/auth-context";
-import { useForm } from "../../hooks/form-hook";
-import { useHttpClient } from "../../hooks/http-hook";
-import { reducerInputStateInitVal } from "../../hooks/useReducer";
+import { AuthContext } from "../../../hooks/auth-context";
+import { useForm } from "../../../hooks/form-hook";
+import { useHttpClient } from "../../../hooks/http-hook";
+import { reducerInputStateInitVal } from "../../../hooks/useReducer";
 import { useNavigate, useParams } from "react-router-dom";
-import { EValidatorType } from "../../types/enums";
-import { ENDPOINT_STOCKS } from "../../util/constants";
-import { Input } from "../assest/UIElements/Input";
+import { EValidatorType } from "../../../types/enums";
+import { ENDPOINT_STOCKS } from "../../../util/constants";
 import Button from "@mui/material/Button";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { ImageUpload } from "../assest/UIElements/ImageUpload";
-import CategoryList from "./CategoryList";
+import CategoryList from "../../components/util/CategorySelect";
 
-import "../../styles/css/StockForm.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
+import "../../../styles/css/Form.css";
 import {
   TXT_NAME,
   TXT_QUANTITY,
@@ -21,7 +17,11 @@ import {
   ERROR_IMAGE,
   ERROR_NUMBER,
   ERROR_TEXT_REQUIRED,
-} from "../../util/txt";
+} from "../../../util/txt";
+import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
+import { ImageUpload } from "../../components/util/UIElements/ImageUpload";
+import LoadingSpinner from "../../components/util/UIElements/LoadingSpinner";
+import { Input } from "../../components/util/UIElements/Input";
 
 function NewStock() {
   const [formState, inputHandler] = useForm(

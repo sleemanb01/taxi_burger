@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { IUser } from "../../types/interfaces";
 import { ENDPOINT_GETUSERS } from "../../util/constants";
-import List from "../assest/List";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
 import { UserItem } from "../components/UserItem";
+import { ErrorModal } from "../components/util/UIElements/ErrorModal";
+import List from "../components/util/UIElements/List";
+import LoadingSpinner from "../components/util/UIElements/LoadingSpinner";
 
 /* ************************************************************************************************** */
 

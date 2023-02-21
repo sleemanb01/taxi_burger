@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
-import { IStock } from "../../types/interfaces";
 import Fab from "@mui/material/Fab";
 import { Box, DialogTitle, Slider, Stack, Typography } from "@mui/material";
-import { partialStock } from "../../types/types";
 import Input from "@mui/material/Input";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-import "../../styles/css/global.css";
+import "../../../styles/css/global.css";
+import { IStock } from "../../../types/interfaces";
+import { partialStock } from "../../../types/types";
 import {
-  TXT_ADD_QUANTITY,
-  TXT_LOW_QUANTITY,
   TXT_QUANTITY,
+  TXT_ADD_QUANTITY,
   TXT_REMOVE_QUANTITY,
-} from "../../util/txt";
+  TXT_LOW_QUANTITY,
+} from "../../../util/txt";
 
 export interface SimpleDialogProps {
   open: boolean;

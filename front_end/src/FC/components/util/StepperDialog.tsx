@@ -6,21 +6,21 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box, Stepper, Step, StepLabel } from "@mui/material";
 import { ShiftOptions } from "./ShiftOptions";
-import { IShift } from "../../types/interfaces";
-import { getCurrDay } from "../../util/time";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import { HandlerFuncType } from "../../types/types";
-import { MAX_MEAT, MIN } from "../../util/constants";
+import { IShift } from "../../../types/interfaces";
+import { HandlerFuncType } from "../../../types/types";
+import { MIN, MAX_MEAT } from "../../../util/constants";
+import { getCurrDay } from "../../../util/time";
 import {
-  TXT_BACK,
-  TXT_BREAD_QUANTITY,
   TXT_DATE,
-  TXT_FINISH,
   TXT_MEAT_QUANTITY,
+  TXT_BREAD_QUANTITY,
   TXT_NEW_SHIFT,
+  TXT_BACK,
+  TXT_FINISH,
   TXT_NEXT,
-} from "../../util/txt";
+} from "../../../util/txt";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

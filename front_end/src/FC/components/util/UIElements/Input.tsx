@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useReducer } from "react";
-import { inputReducer } from "../../../hooks/useReducer";
-import { EValidatorType, EReducerActionType } from "../../../types/enums";
-import { reducerInputState } from "../../../types/types";
+import { inputReducer } from "../../../../hooks/useReducer";
+import { EValidatorType, EReducerActionType } from "../../../../types/enums";
+import { reducerInputState } from "../../../../types/types";
 
-import "../../../styles/css/Input.css";
+import "../../../../styles/css/Input.css";
 
 export function Input({
   id,

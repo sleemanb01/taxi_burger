@@ -1,6 +1,6 @@
-import logo from "../../logo.svg";
+import logo from "../../../logo.svg";
 
-import "../../styles/css/global.css";
+import "../../../styles/css/global.css";
 
 function LandingPage() {
   return (

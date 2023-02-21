@@ -2,20 +2,21 @@ import { Card, Button } from "@mui/material";
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../../hooks/auth-context";
-import { useForm } from "../../hooks/form-hook";
-import { useHttpClient } from "../../hooks/http-hook";
-import { reducerFormStateCategoriesInitVal } from "../../hooks/useReducer";
-import { EValidatorType } from "../../types/enums";
-import { ICategory } from "../../types/interfaces";
-import { reducerInputState } from "../../types/types";
-import { ENDPOINT_CATEGORIES } from "../../util/constants";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { Input } from "../assest/UIElements/Input";
+import { AuthContext } from "../../../hooks/auth-context";
+import { useForm } from "../../../hooks/form-hook";
+import { useHttpClient } from "../../../hooks/http-hook";
+import { reducerFormStateCategoriesInitVal } from "../../../hooks/useReducer";
 
-import "../../styles/css/StockForm.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
-import { ERROR_TEXT_REQUIRED, TXT_UPDATE_STOCK } from "../../util/txt";
+import { EValidatorType } from "../../../types/enums";
+import { ICategory } from "../../../types/interfaces";
+import { reducerInputState } from "../../../types/types";
+import { ENDPOINT_CATEGORIES } from "../../../util/constants";
+import { ERROR_TEXT_REQUIRED, TXT_UPDATE_STOCK } from "../../../util/txt";
+import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
+import { Input } from "../../components/util/UIElements/Input";
+import LoadingSpinner from "../../components/util/UIElements/LoadingSpinner";
+
+import "../../../styles/css/Form.css";
 
 function UpdateCategory() {
   const user = useContext(AuthContext).user;

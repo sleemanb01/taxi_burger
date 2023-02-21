@@ -2,19 +2,19 @@ import { Button } from "@mui/material";
 import React, { useLayoutEffect, useState } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../hooks/auth-context";
-import { useForm } from "../../hooks/form-hook";
-import { useHttpClient } from "../../hooks/http-hook";
-import { reducerFormStateCategoriesInitVal } from "../../hooks/useReducer";
-import { EValidatorType } from "../../types/enums";
-import { ICategory } from "../../types/interfaces";
-import { DEFAULT_HEADERS, ENDPOINT_CATEGORIES } from "../../util/constants";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { Input } from "../assest/UIElements/Input";
+import { AuthContext } from "../../../hooks/auth-context";
+import { useForm } from "../../../hooks/form-hook";
+import { useHttpClient } from "../../../hooks/http-hook";
+import { reducerFormStateCategoriesInitVal } from "../../../hooks/useReducer";
+import { EValidatorType } from "../../../types/enums";
+import { ICategory } from "../../../types/interfaces";
+import { DEFAULT_HEADERS, ENDPOINT_CATEGORIES } from "../../../util/constants";
+import { ERROR_TEXT_REQUIRED, TXT_ADD } from "../../../util/txt";
+import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
+import { Input } from "../../components/util/UIElements/Input";
+import LoadingSpinner from "../../components/util/UIElements/LoadingSpinner";
 
-import "../../styles/css/StockForm.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
-import { ERROR_TEXT_REQUIRED, TXT_ADD } from "../../util/txt";
+import "../../../styles/css/Form.css";
 
 function NewCategory() {
   const [formState, inputHandler] = useForm(

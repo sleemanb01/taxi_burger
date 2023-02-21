@@ -3,9 +3,13 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
-import { TXT_STOCKS, TXT_ASSIGNMENTS, TXT_DASHBOARD } from "../../util/txt";
-import { userWToken } from "../../types/types";
 import { useState } from "react";
+import { userWToken } from "../../../../types/types";
+import {
+  TXT_STOCKS,
+  TXT_ASSIGNMENTS,
+  TXT_DASHBOARD,
+} from "../../../../util/txt";
 
 export default function BasicTabs({ user }: { user: userWToken | undefined }) {
   const [tab, setTab] = useState(0);

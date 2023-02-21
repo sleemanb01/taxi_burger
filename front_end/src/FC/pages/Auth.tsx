@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { Input } from "../assest/UIElements/Input";
 
 import Button from "@mui/material/Button";
 import { Card } from "@mui/material";
@@ -15,11 +14,8 @@ import {
   DEFAULT_HEADERS,
   ENDPOINT_SIGNUP,
 } from "../../util/constants";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { ImageUpload } from "../assest/UIElements/ImageUpload";
 
 import "../../styles/css/Auth.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
 import {
   TXT_LOGIN_REQUIRED,
   TXT_NAME,
@@ -34,6 +30,10 @@ import {
   ERROR_TEXT_REQUIRED,
   ERROR_VALID_EMAIL,
 } from "../../util/txt";
+import { ErrorModal } from "../components/util/UIElements/ErrorModal";
+import { ImageUpload } from "../components/util/UIElements/ImageUpload";
+import LoadingSpinner from "../components/util/UIElements/LoadingSpinner";
+import { Input } from "../components/util/UIElements/Input";
 
 /* ************************************************************************************************** */
 
@@ -176,11 +176,15 @@ function Auth() {
             errorText={ERROR_DESCRIPTION_LENGTH}
             onInput={inputHandler}
           />
-          <Button type="submit" disabled={!formState.isValid}>
+          <Button
+            type="submit"
+            disabled={!formState.isValid}
+            variant="contained"
+          >
             {isLoginMode ? TXT_LOGIN : TXT_SIGNUP}
           </Button>
         </form>
-        <Button onClick={switchModeHandler}>
+        <Button onClick={switchModeHandler} variant="outlined">
           {`${TXT_SWITCH_TO} ${isLoginMode ? TXT_SIGNUP : TXT_LOGIN}`}
         </Button>
       </Card>

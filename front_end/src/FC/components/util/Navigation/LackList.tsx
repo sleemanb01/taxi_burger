@@ -6,12 +6,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { ILack, IStock } from "../../types/interfaces";
+import { ILack, IStock } from "../../../../types/interfaces";
 import {
-  TXT_EVERYTHING_IS_GOOD,
-  TXT_LEFT,
   TXT_LEFT_ONLY,
-} from "../../util/txt";
+  TXT_LEFT,
+  TXT_EVERYTHING_IS_GOOD,
+} from "../../../../util/txt";
 
 export default function AlignItemsList({
   lacks,

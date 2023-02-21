@@ -1,35 +1,40 @@
 import React from "react";
-import { StocksList } from "./StocksList";
 import { ICategory } from "../../types/interfaces";
 import { StocksWActions } from "../../types/types";
+import Button from "@mui/material/Button";
 
 import "../../styles/css/CategoryItem.css";
+import { StockItem } from "./StockItem";
+import List from "./util/UIElements/List";
 
 function CategoryItem({
-  isVisible,
-  category,
+  item,
   stocksWActions,
 }: {
-  isVisible: boolean;
-  category: ICategory;
+  item: ICategory;
   stocksWActions: StocksWActions;
 }) {
-  const { values, setValues, clickHandler } = stocksWActions;
+  const { displayArray, values, setValues, clickHandler } = stocksWActions;
+
+  const isVisible = displayArray.includes(item._id!);
   const clickedStyle = isVisible ? "visible" : "";
   const classes = `category-content__item ${clickedStyle}`;
   return (
     <React.Fragment>
       <div
         className={classes}
-        onClick={() => clickHandler(category._id!)}
-        id={category._id}
+        onClick={() => clickHandler(item._id!)}
+        id={item._id}
       >
-        <p>{category.name}</p>
+        <p>{item.name}</p>
+        {/* <Button variant="contained">{item.name}</Button> */}
       </div>
       {isVisible && (
-        <StocksList
-          stocks={values.filter((e) => e.categoryId === category._id)}
-          setStocks={setValues}
+        <List
+          renderItem={StockItem}
+          keyExtractor={({ _id }) => _id}
+          data={values.filter((e) => e.categoryId === item._id)}
+          props={{ setStocks: { setValues } }}
         />
       )}
     </React.Fragment>

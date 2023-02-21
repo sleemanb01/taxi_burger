@@ -9,7 +9,7 @@ export interface IAssignment extends Document {
 
 const AssignmentSchema: Schema = new Schema({
   name: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String, required: false },
   description: { type: String, required: true },
 });
 

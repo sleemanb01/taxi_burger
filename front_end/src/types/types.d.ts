@@ -69,4 +69,6 @@ export type StocksWActions = {
 export type AssignmentsWActions = {
   values: IAssignements[];
   setValues: Dispatch<SetStateAction<IAssignements[]>>;
+  editHandler: (editedAssignment: IAssignements) => void;
+  deleteHandler: (deletedId: string) => void;
 };

@@ -1,15 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { BasicModal } from "../assest/UIElements/Modal";
 import { AuthContext } from "../../hooks/auth-context";
 import { useHttpClient } from "../../hooks/http-hook";
 import { ShiftContext } from "../../hooks/shift-context";
@@ -20,33 +25,33 @@ import {
   DEFAULT_HEADERS,
   ENDPOINT_STOCKS,
 } from "../../util/constants";
-import LoadingSpinner from "../assest/LoadingSpinner";
-import { SimpleDialog } from "./SliderDialog";
 
-import "../../styles/css/StockItem.css";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
 import {
   TXT_CONFIRM,
   TXT_CONFIRM_DELETE,
   TXT_CANCEL,
   TXT_DELETE,
 } from "../../util/txt";
+import { SimpleDialog } from "./util/SliderDialog";
+import { ErrorModal } from "./util/UIElements/ErrorModal";
+import LoadingSpinner from "./util/UIElements/LoadingSpinner";
+import { BasicModal } from "./util/UIElements/Modal";
 
 /* ************************************************************************************************** */
 
 export function StockItem({
-  stock,
-  onDelete,
+  item,
+  setStocks,
 }: {
-  stock: IStock;
-  onDelete: Function;
+  item: IStock;
+  setStocks: Dispatch<SetStateAction<IStock[]>>;
 }) {
   const nav = useNavigate();
   const { user } = useContext(AuthContext);
   const { shift } = useContext(ShiftContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const [currStock, setCurrStock] = useState<IStock>(stock);
+  const [currStock, setCurrStock] = useState<IStock>(item);
   const [quantityEdit, setQuantityEdit] = useState(false);
   const [editStock, setEditStock] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
@@ -60,7 +65,7 @@ export function StockItem({
 
       try {
         await sendRequest(
-          ENDPOINT_STOCKS_PARTIAL + "/" + stock._id + "/" + shift?._id,
+          ENDPOINT_STOCKS_PARTIAL + "/" + item._id + "/" + shift?._id,
           "PATCH",
           JSON.stringify(partial),
           {
@@ -71,21 +76,13 @@ export function StockItem({
       } catch (err) {}
     };
     if (
-      (stock.quantity !== currStock.quantity ||
-        stock.minQuantity !== currStock.minQuantity) &&
+      (item.quantity !== currStock.quantity ||
+        item.minQuantity !== currStock.minQuantity) &&
       shift
     ) {
       updateStockHandler();
     }
-  }, [
-    sendRequest,
-    currStock,
-    stock._id,
-    stock,
-    user?.token,
-    shift,
-    shift?._id,
-  ]);
+  }, [sendRequest, currStock, item._id, item, user?.token, shift, shift?._id]);
 
   /* ************************************************************************************************** */
 
@@ -94,6 +91,12 @@ export function StockItem({
   const swipeDist = 100;
 
   /* ************************************************************************************************** */
+
+  const stockDeletedHandler = (deletedstockId: string) => {
+    setStocks((prevstocks) =>
+      prevstocks.filter((p) => p._id !== deletedstockId)
+    );
+  };
 
   const openConfirmHandler = () => {
     setIsConfirmVisible(true);
@@ -107,10 +110,10 @@ export function StockItem({
     closeConfirmHandler();
 
     try {
-      await sendRequest(ENDPOINT_STOCKS + "/" + stock._id, "DELETE", null, {
+      await sendRequest(ENDPOINT_STOCKS + "/" + item._id, "DELETE", null, {
         Authorization: "Barer " + user?.token,
       });
-      onDelete(stock._id);
+      stockDeletedHandler(item._id!);
     } catch (err) {}
   };
 
@@ -135,7 +138,7 @@ export function StockItem({
   };
 
   const stockEditHandler = () => {
-    nav(`/stocks/${stock._id}`);
+    nav(`/stocks/${item._id}`);
   };
 
   const clickHandler = (_: React.MouseEvent<HTMLElement>) => {
@@ -158,7 +161,7 @@ export function StockItem({
 
   const errorHandler = () => {
     clearError();
-    setCurrStock(stock);
+    setCurrStock(item);
   };
 
   /* ************************************************************************************************** */
@@ -194,42 +197,40 @@ export function StockItem({
         onChange={quantityChangeHandler}
         stock={currStock}
       />
-      <li
-        className="list-item"
+      <Card
+        sx={{ m: 3, width: 100 }}
         onClick={clickHandler}
         onTouchStart={touchStartHandler}
         onTouchMove={touchMoveHandler}
       >
-        <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            sx={{ height: 140 }}
-            image={stock.image}
-            title="stock preview"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {stock.name}
-            </Typography>
-            <Typography variant="h5" component="div" align="center">
-              {currStock.quantity}
-            </Typography>
-          </CardContent>
-          {editStock && (
-            <CardActions>
-              <IconButton aria-label="edit" onClick={stockEditHandler}>
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                aria-label="delete"
-                color="error"
-                onClick={openConfirmHandler}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          )}
-        </Card>
-      </li>
+        <CardMedia
+          sx={{ height: 100 }}
+          image={item.image}
+          title="stock preview"
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary" align="center">
+            {item.name}
+          </Typography>
+          <Typography variant="h5" component="div" align="center">
+            {currStock.quantity}
+          </Typography>
+        </CardContent>
+        {editStock && (
+          <CardActions>
+            <IconButton aria-label="edit" onClick={stockEditHandler}>
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              color="error"
+              onClick={openConfirmHandler}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </CardActions>
+        )}
+      </Card>
     </React.Fragment>
   );
 }

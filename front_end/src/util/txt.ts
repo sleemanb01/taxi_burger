@@ -13,9 +13,13 @@ export const TXT_DASHBOARD = "דשבורד";
 export const TXT_STOCKS = "מלאי";
 export const TXT_ASSIGNMENTS = "משימות";
 
+export const TXT_DESCRIPTION = "תיאור";
+export const TXT_ADD_ASSIGNMENT = "הוסף משימה";
+
 export const TXT_UPDATE_STOCK = "עדכן מלאי";
 export const TXT_NAME = "שם";
 export const TXT_UPDATE_CATEGORY = "עדכן קטגוריה";
+export const TXT_UPDATE_ASSIGNMENT = "עדכן משימה";
 
 export const TXT_ADD = "הוסף מלאי";
 export const TXT_REMOVE_QUANTITY = "הסר כמות";

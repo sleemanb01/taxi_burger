@@ -18,7 +18,7 @@ assignmentsRoutes.get("/", getAssignments);
 
 assignmentsRoutes.use(authenticate);
 
-assignmentsRoutes.get("/:assignemntId", getAssignment);
+assignmentsRoutes.get("/:assignmentId", getAssignment);
 
 assignmentsRoutes.post(
   "/",
@@ -28,9 +28,9 @@ assignmentsRoutes.post(
 );
 
 assignmentsRoutes.patch(
-  "/:shiftId",
+  "/:assignmentId",
   [check("name").not().isEmpty(), check("description").not().isEmpty()],
   updateAssignment
 );
 
-assignmentsRoutes.delete("/:assignemntId", deleteAssignment);
+assignmentsRoutes.delete("/:assignmentId", deleteAssignment);

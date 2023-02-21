@@ -6,21 +6,22 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
-import { ILack, IStock } from "../../types/interfaces";
 import AutoComplete from "./AutoComplete";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Popover from "@mui/material/Popover";
+import SearchIcon from "@mui/icons-material/Search";
 
-import { AuthContext } from "../../hooks/auth-context";
 import { useContext } from "react";
 import LackList from "./LackList";
-import { calcLacks } from "../../util/lacks";
-import logo from "../../logo.svg";
+import logo from "../../../../logo.svg";
 
-import "../../styles/css/global.css";
-import { TXT_LOGOUT } from "../../util/txt";
+import "../../../../styles/css/global.css";
+import { AuthContext } from "../../../../hooks/auth-context";
+import { IStock, ILack } from "../../../../types/interfaces";
+import { calcLacks } from "../../../../util/lacks";
+import { TXT_LOGOUT } from "../../../../util/txt";
 
 function ResponsiveAppBar({
   stocks,
@@ -30,6 +31,7 @@ function ResponsiveAppBar({
   clickHandler: Function;
 }) {
   const { logout, user } = useContext(AuthContext);
+  const [isSearch, setIsSearch] = React.useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openLackList, setOpenLackList] = React.useState<null | HTMLElement>(
@@ -39,6 +41,10 @@ function ResponsiveAppBar({
   const isMenuOpen = Boolean(anchorEl);
   const isListOpen = Boolean(openLackList);
   const id = isListOpen ? "simple-popover" : undefined;
+
+  const searchClickHandler = () => {
+    setIsSearch((prev) => !prev);
+  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -96,7 +102,11 @@ function ResponsiveAppBar({
               <img style={{ maxHeight: "3rem" }} src={logo} alt="app logo" />
             </Box>
             <Box sx={{ flex: 2 }}>
-              <AutoComplete options={stocks} clickHandler={clickHandler} />
+              {isSearch ? (
+                <AutoComplete options={stocks} clickHandler={clickHandler} />
+              ) : (
+                <SearchIcon onClick={searchClickHandler} />
+              )}
             </Box>
             <Box sx={{ flex: 1 }}>
               <IconButton

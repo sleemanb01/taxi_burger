@@ -1,9 +1,9 @@
 import TextField from "@mui/material/TextField";
-import { IStock } from "../../types/interfaces";
-import { StyledAutocomplete } from "../../styles/styledAutoComplete";
+import { StyledAutocomplete } from "../../../../styles/styledAutoComplete";
+import { IStock } from "../../../../types/interfaces";
+import { TXT_SEARCH } from "../../../../util/txt";
 
-import "../../styles/css/global.css";
-import { TXT_SEARCH } from "../../util/txt";
+import "../../../../styles/css/global.css";
 
 export default function AutoComplete({
   options,

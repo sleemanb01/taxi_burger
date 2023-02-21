@@ -397,17 +397,15 @@ export const deleteStock = async (
     return next(error);
   }
 
+  const resError = await deleteFileS3(targetStock.image);
+  if (resError) {
+    return next(internalError);
+  }
+
   try {
     await targetStock.remove();
   } catch {
     return next(internalError);
-  }
-
-  if (req.file) {
-    const resError = await deleteFileS3(targetStock.image);
-    if (resError) {
-      return next(internalError);
-    }
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({ message: DELETED });

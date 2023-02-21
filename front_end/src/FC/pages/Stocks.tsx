@@ -6,14 +6,15 @@ import { useHttpClient } from "../../hooks/http-hook";
 import { DEFAULT_HEADERS, ENDPOINT_SHIFTS } from "../../util/constants";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import StepperDialog from "../components/StepperDialog";
 import { ShiftContext } from "../../hooks/shift-context";
 import { StocksWActions } from "../../types/types";
 import CategoryItem from "../components/CategoryItem";
-import { ErrorModal } from "../assest/UIElements/ErrorModal";
+import StepperDialog from "../components/util/StepperDialog";
+import { ErrorModal } from "../components/util/UIElements/ErrorModal";
+import List from "../components/util/UIElements/List";
 
 function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
-  const { displayArray, categories } = stocksWActions;
+  const { categories } = stocksWActions;
 
   const nav = useNavigate();
   const { shift, setShift } = useContext(ShiftContext);
@@ -69,15 +70,13 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
         closeStepperHandler={closeStepperHandler}
         setShift={setShift}
       />
-      {categories.map((category) => (
-        <CategoryItem
-          key={category._id}
-          isVisible={displayArray.includes(category._id!)}
-          category={category}
-          stocksWActions={stocksWActions}
-        />
-      ))}
-      {user?.email === process.env.MANAGER && (
+      <List
+        renderItem={CategoryItem}
+        data={categories}
+        keyExtractor={({ _id }) => _id}
+        props={{ stocksWActions }}
+      />
+      {user?.email === process.env.REACT_APP_MANAGER && (
         <Fab
           color="primary"
           aria-label="add"
