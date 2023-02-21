@@ -8,11 +8,9 @@ import { reducerInputStateInitVal } from "../../../hooks/useReducer";
 import { EValidatorType } from "../../../types/enums";
 import { IAssignement } from "../../../types/interfaces";
 import { DEFAULT_HEADERS, ENDPOINT_ASSIGNMENTS } from "../../../util/constants";
-import { upload, uploadWImage } from "../../../util/stock-update";
 import {
   TXT_NAME,
   ERROR_TEXT_REQUIRED,
-  ERROR_IMAGE,
   TXT_UPDATE_CATEGORY,
   TXT_DESCRIPTION,
 } from "../../../util/txt";

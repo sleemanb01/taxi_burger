@@ -7,7 +7,6 @@ import { useHttpClient } from "../../../hooks/http-hook";
 import { reducerFormStateInitVal } from "../../../hooks/useReducer";
 import { EValidatorType } from "../../../types/enums";
 import { IStock } from "../../../types/interfaces";
-import { reducerInputState } from "../../../types/types";
 import {
   ENDPOINT_GET_STOCK,
   ENDPOINT_STOCKS,

@@ -1,7 +1,6 @@
 import React from "react";
 import { ICategory } from "../../types/interfaces";
 import { StocksWActions } from "../../types/types";
-import Button from "@mui/material/Button";
 
 import "../../styles/css/CategoryItem.css";
 import { StockItem } from "./StockItem";
