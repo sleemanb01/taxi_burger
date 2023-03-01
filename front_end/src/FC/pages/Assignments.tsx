@@ -10,10 +10,7 @@ import { useHttpClient } from "../../hooks/http-hook";
 
 /* ************************************************************************************************** */
 
-function Assignments({}: // assignmentsWActions,
-{
-  // assignmentsWActions: AssignmentsWActions;
-}) {
+function Assignments() {
   const nav = useNavigate();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { values, deleteHandler } = useAssignments(sendRequest);
