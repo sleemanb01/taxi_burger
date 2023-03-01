@@ -17,11 +17,6 @@ import {
   TXT_MISSION_ACCOMPLISHED,
 } from "../../util/txt";
 import Button from "@mui/material/Button";
-import { ErrorModal } from "./util/UIElements/ErrorModal";
-import LoadingSpinner from "./util/UIElements/LoadingSpinner";
-import { useHttpClient } from "../../hooks/http-hook";
-import { ENDPOINT_ASSIGNMENTS } from "../../util/constants";
-import { AuthContext } from "../../hooks/auth-context";
 import { AssignmentsWActions } from "../../types/types";
 
 export default function AssignmentItem({

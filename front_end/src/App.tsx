@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import LandingPage from "./FC/pages/util/LandingPage";
 import { useStocks } from "./hooks/useStocks";
 import { AuthContext } from "./hooks/auth-context";
-import { useAssignments } from "./hooks/useAssignments";
 import { GetRoutes } from "./util/GetRoutes";
 import NavTabs from "./FC/components/util/Navigation/NavTabs";
 import ResponsiveAppBar from "./FC/components/util/Navigation/ResponsiveAppBar";

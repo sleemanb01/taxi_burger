@@ -2,11 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import NewAssignment from "../FC/pages/CRUD/NewAssignment";
 import UpdateAssignment from "../FC/pages/CRUD/UpdateAssignment";
-import {
-  StocksWActions,
-  userWToken,
-  AssignmentsWActions,
-} from "../types/types";
+import { StocksWActions } from "../types/types";
 
 const Auth = React.lazy(() => import("../FC/pages/Auth"));
 const Stocks = React.lazy(() => import("../FC/pages/Stocks"));

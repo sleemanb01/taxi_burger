@@ -1,11 +1,8 @@
 import React from "react";
-import List from "../components/util/UIElements/List";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-import { AssignmentsWActions } from "../../types/types";
 import AssignmentItem from "../components/AssignmentItem";
-import ListItem from "@mui/material/ListItem";
 import { useAssignments } from "../../hooks/useAssignments";
 import { ErrorModal } from "../components/util/UIElements/ErrorModal";
 import LoadingSpinner from "../components/util/UIElements/LoadingSpinner";
@@ -19,7 +16,7 @@ function Assignments({}: // assignmentsWActions,
 }) {
   const nav = useNavigate();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const { values, editHandler, deleteHandler } = useAssignments(sendRequest);
+  const { values, deleteHandler } = useAssignments(sendRequest);
 
   const addClickHandler = () => {
     nav("/assignments/new");
