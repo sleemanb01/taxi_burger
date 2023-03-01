@@ -86,11 +86,9 @@ export const getStocks = async (
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    stocks: stocks.map((stock) => stock.toObject({ getters: true })),
-    categories: categories.map((category) =>
-      category.toObject({ getters: true })
-    ),
-    assignments: assignments.map((e) => e.toObject({ getters: true })),
+    stocks: stocks,
+    categories: categories,
+    assignments: assignments,
     shift: shift,
   });
 };
@@ -150,9 +148,7 @@ export const addStock = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.Created)
-    .json({ stock: newStock.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.Created).json({ stock: newStock });
 };
 
 /* ************************************************************** */
@@ -211,9 +207,7 @@ export const updateStockWImage = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ stock: stock.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
 };
 
 /* ************************************************************** */
@@ -303,9 +297,7 @@ export const updateStockPartial = async (
     }
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ stock: stock.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
 };
 
 /* ************************************************************** */
@@ -351,9 +343,7 @@ export const updateStock = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ stock: stock.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ stock: stock });
 };
 
 /* ************************************************************** */

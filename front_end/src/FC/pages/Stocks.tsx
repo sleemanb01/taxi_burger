@@ -94,4 +94,4 @@ function Stocks({ stocksWActions }: { stocksWActions: StocksWActions }) {
   );
 }
 
-export default React.memo(Stocks);
+export default Stocks;

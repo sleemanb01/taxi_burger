@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { modal_style } from "../../../../styles/modal-style";
+import Divider from "@mui/material/Divider";
 
 type ModalProps = {
   show: boolean;
@@ -37,9 +38,11 @@ export function BasicModal({
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {header}
           </Typography>
+          <Divider />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {content}
           </Typography>
+          <Divider />
           {footer}
         </Box>
       </Modal>

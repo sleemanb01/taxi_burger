@@ -1,6 +1,6 @@
 import { Card, Button } from "@mui/material";
 import React, { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../hooks/auth-context";
 import { useForm } from "../../../hooks/form-hook";
 import { useHttpClient } from "../../../hooks/http-hook";
@@ -11,7 +11,7 @@ import { DEFAULT_HEADERS, ENDPOINT_ASSIGNMENTS } from "../../../util/constants";
 import {
   TXT_NAME,
   ERROR_TEXT_REQUIRED,
-  TXT_UPDATE_CATEGORY,
+  TXT_UPDATE_ASSIGNMENT,
   TXT_DESCRIPTION,
 } from "../../../util/txt";
 import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
@@ -21,6 +21,7 @@ import LoadingSpinner from "../../components/util/UIElements/LoadingSpinner";
 import "../../../styles/css/Form.css";
 
 function UpdateStock() {
+  const nav = useNavigate();
   const user = useContext(AuthContext).user;
   const assignmentId = useParams().assignmentId;
 
@@ -91,7 +92,7 @@ function UpdateStock() {
           Authorization: "Barer " + user?.token,
         }
       );
-      // nav("/assignments");
+      nav("/assignments");
     } catch (err) {}
   };
 
@@ -142,7 +143,7 @@ function UpdateStock() {
             disabled={!formState.isValid}
             variant="contained"
           >
-            {TXT_UPDATE_CATEGORY}
+            {TXT_UPDATE_ASSIGNMENT}
           </Button>
         </form>
       )}

@@ -174,23 +174,24 @@ export function StockItem({
           <LoadingSpinner asOverlay />
         </div>
       )}
-      <BasicModal
-        show={isConfirmVisible}
-        onCancel={closeConfirmHandler}
-        header={TXT_CONFIRM}
-        content={TXT_CONFIRM_DELETE}
-        footer={
-          <React.Fragment>
-            <Button color="secondary" onClick={closeConfirmHandler}>
-              {TXT_CANCEL}
-            </Button>
-            <Button color="error" onClick={confirmDeleteHandler}>
-              {TXT_DELETE}
-            </Button>
-          </React.Fragment>
-        }
-      />
-
+      {isConfirmVisible && (
+        <BasicModal
+          show={isConfirmVisible}
+          onCancel={closeConfirmHandler}
+          header={TXT_CONFIRM}
+          content={TXT_CONFIRM_DELETE}
+          footer={
+            <React.Fragment>
+              <Button color="secondary" onClick={closeConfirmHandler}>
+                {TXT_CANCEL}
+              </Button>
+              <Button color="error" onClick={confirmDeleteHandler}>
+                {TXT_DELETE}
+              </Button>
+            </React.Fragment>
+          }
+        />
+      )}
       <SimpleDialog
         open={quantityEdit}
         onClose={closeQuantityEditHandler}

@@ -8,42 +8,102 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import "../../styles/css/global.css";
 import { useNavigate } from "react-router-dom";
+import ImagePreview from "./util/UIElements/ImagePreview";
+import { BasicModal } from "./util/UIElements/Modal";
+import {
+  TXT_CANCEL,
+  TXT_CONFIRM,
+  TXT_CONFIRMED,
+  TXT_MISSION_ACCOMPLISHED,
+} from "../../util/txt";
+import Button from "@mui/material/Button";
+import { ErrorModal } from "./util/UIElements/ErrorModal";
+import LoadingSpinner from "./util/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../hooks/http-hook";
+import { ENDPOINT_ASSIGNMENTS } from "../../util/constants";
+import { AuthContext } from "../../hooks/auth-context";
+import { AssignmentsWActions } from "../../types/types";
 
-export default function AssignmentItem({ item }: { item: IAssignement }) {
+export default function AssignmentItem({
+  item,
+  deleteHandler,
+}: {
+  item: IAssignement;
+  deleteHandler: AssignmentsWActions["deleteHandler"];
+}) {
   const nav = useNavigate();
+  // const { user } = React.useContext(AuthContext);
   const [editAssignment, setEditAssignment] = React.useState(false);
+  const [isImagePreview, setIsImagePreview] = React.useState(false);
+  const [confirmDelete, setIsConfirm] = React.useState(false);
 
   const clickHandler = () => {
     setEditAssignment((prev) => !prev);
   };
 
   const assignmentEditHandler = () => {
-    // go to edit
     nav(`/assignments/${item._id}`);
   };
 
-  const assignmentCompleteHandler = () => {
-    // delete assignment
-    console.log("complete clicked");
+  const confirmDeleteHandler = async () => {
+    // closeConfirm();
+
+    deleteHandler(item._id!);
   };
 
-  const imageClickHandler = () => {
-    // show large image
-    console.log("image clicked");
+  const openConfirm = () => {
+    setIsConfirm(true);
+  };
+
+  const closeConfirm = () => {
+    setIsConfirm(false);
+  };
+
+  const imageCloseHandler = () => {
+    setIsImagePreview(false);
+  };
+
+  const imageOpenHandler = () => {
+    setIsImagePreview(true);
   };
 
   return (
     <Paper elevation={3} sx={{ m: 1, p: 1 }} onClick={clickHandler}>
       <div className="max-width__item">
-        {item.image && (
-          <img
-            onClick={imageClickHandler}
-            className="squareAvatar"
-            alt={item.name + "img"}
-            src={item.image}
+        {confirmDelete && (
+          <BasicModal
+            show={confirmDelete}
+            header={TXT_CONFIRM}
+            onCancel={closeConfirm}
+            content={TXT_MISSION_ACCOMPLISHED}
+            footer={
+              <React.Fragment>
+                <Button color="secondary" onClick={closeConfirm}>
+                  {TXT_CANCEL}
+                </Button>
+                <Button color="success" onClick={confirmDeleteHandler}>
+                  {TXT_CONFIRMED}
+                </Button>
+              </React.Fragment>
+            }
           />
         )}
-        <div>
+        {item.image && (
+          <React.Fragment>
+            <ImagePreview
+              open={isImagePreview}
+              closeHandler={imageCloseHandler}
+              img={item.image}
+            />
+            <img
+              onClick={imageOpenHandler}
+              className="squareAvatar"
+              alt={item.name + "img"}
+              src={item.image}
+            />
+          </React.Fragment>
+        )}
+        <div className="assignment-txt">
           <Typography variant="h5">{item.name}</Typography>
           <Typography variant="body2">{item.description}</Typography>
         </div>
@@ -55,7 +115,7 @@ export default function AssignmentItem({ item }: { item: IAssignement }) {
             <IconButton
               aria-label="success"
               color="success"
-              onClick={assignmentCompleteHandler}
+              onClick={openConfirm}
             >
               <CheckCircleOutlineIcon />
             </IconButton>

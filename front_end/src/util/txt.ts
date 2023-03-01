@@ -20,6 +20,8 @@ export const TXT_UPDATE_STOCK = "עדכן מלאי";
 export const TXT_NAME = "שם";
 export const TXT_UPDATE_CATEGORY = "עדכן קטגוריה";
 export const TXT_UPDATE_ASSIGNMENT = "עדכן משימה";
+export const TXT_MISSION_ACCOMPLISHED = "אתה בטוח שהמשימה הסתיימה";
+export const TXT_CONFIRMED = "בטוח";
 
 export const TXT_ADD = "הוסף מלאי";
 export const TXT_REMOVE_QUANTITY = "הסר כמות";

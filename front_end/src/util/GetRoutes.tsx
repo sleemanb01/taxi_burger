@@ -22,24 +22,25 @@ const UpdateCategory = React.lazy(
 
 export function GetRoutes({
   stocksWActions,
-  user,
-  assignmentsWActions,
-}: {
+  token,
+}: // assignmentsWActions,
+{
   stocksWActions: StocksWActions;
-  user: userWToken | undefined;
-  assignmentsWActions: AssignmentsWActions;
+  token: string | undefined;
+  // assignmentsWActions: AssignmentsWActions;
 }) {
   let routes;
 
-  if (user?.token) {
+  if (token) {
     routes = (
       <Routes>
         <Route path="/" element={<Stocks stocksWActions={stocksWActions} />} />
         <Route path="/dashboard" element={<DashBoard />} />
-        <Route
-          path="/assignements"
+        {/* <Route
+          path="/assignments"
           element={<Assignments assignmentsWActions={assignmentsWActions} />}
-        />
+        /> */}
+        <Route path="/assignments" element={<Assignments />} />
         <Route path="/assignments/new" element={<NewAssignment />} />
         <Route
           path="/assignments/:assignmentId"

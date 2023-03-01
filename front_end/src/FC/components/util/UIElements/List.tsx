@@ -1,15 +1,9 @@
 import React from "react";
 
 import "../../../../styles/css/global.css";
+import { ListProps } from "../../../../types/types";
 
-interface Props {
-  renderItem: (props: any) => React.ReactNode;
-  keyExtractor: (item: any) => string;
-  data: Array<any>;
-  props?: any;
-}
-
-function List({ renderItem, keyExtractor, data, props }: Props) {
+function List({ renderItem, keyExtractor, data, props }: ListProps) {
   if (data.length === 0) {
     return <React.Fragment></React.Fragment>;
   }

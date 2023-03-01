@@ -14,25 +14,6 @@ export const useStocks = (): StocksWActions => {
 
   const { sendRequest } = useHttpClient();
 
-  const clickHandler = useCallback(
-    (id: string) => {
-      const alreadyExists = displayArray.includes(id);
-
-      if (alreadyExists) {
-        setDisplayArray((prev) => prev.filter((e) => e !== id));
-        return;
-      }
-
-      setDisplayArray((prev) => [...prev, id]);
-
-      const element = document.getElementById(`${id}`);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    },
-    [setDisplayArray, displayArray]
-  );
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,6 +33,25 @@ export const useStocks = (): StocksWActions => {
     };
     fetchData();
   }, [sendRequest, setValues, setShift, setCategories]);
+
+  const clickHandler = useCallback(
+    (id: string) => {
+      const alreadyExists = displayArray.includes(id);
+
+      if (alreadyExists) {
+        setDisplayArray((prev) => prev.filter((e) => e !== id));
+        return;
+      }
+
+      setDisplayArray((prev) => [...prev, id]);
+
+      const element = document.getElementById(`${id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    },
+    [setDisplayArray, displayArray]
+  );
 
   return {
     values,

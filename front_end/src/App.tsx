@@ -16,7 +16,7 @@ function App() {
   const { user, login } = useContext(AuthContext);
 
   const stocksWActions = useStocks();
-  const assignmentsWActions = useAssignments();
+  // const assignmentsWActions = useAssignments();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
@@ -45,7 +45,7 @@ function App() {
           stocks={stocksWActions.values}
           clickHandler={stocksWActions.clickHandler}
         />
-        <NavTabs user={user} />
+        <NavTabs isManager={user?.email === process.env.REACT_APP_MANAGER} />
         <main>
           <Suspense
             fallback={
@@ -56,8 +56,8 @@ function App() {
           >
             <GetRoutes
               stocksWActions={stocksWActions}
-              user={user}
-              assignmentsWActions={assignmentsWActions}
+              token={user?.token}
+              // assignmentsWActions={assignmentsWActions}
             />
           </Suspense>
         </main>

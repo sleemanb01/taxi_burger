@@ -26,7 +26,6 @@ function CategoryItem({
         id={item._id}
       >
         <p>{item.name}</p>
-        {/* <Button variant="contained">{item.name}</Button> */}
       </div>
       {isVisible && (
         <List

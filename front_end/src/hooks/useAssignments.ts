@@ -1,13 +1,22 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { IAssignement } from "../types/interfaces";
 import { AssignmentsWActions } from "../types/types";
 import { ENDPOINT_ASSIGNMENTS } from "../util/constants";
-import { useHttpClient } from "./http-hook";
+import { AuthContext } from "./auth-context";
 
-export const useAssignments = (): AssignmentsWActions => {
+export const useAssignments = (
+  sendRequest: (
+    url: string,
+    method?: string,
+    body?: BodyInit | null,
+    headers?: {}
+  ) => Promise<any>
+): AssignmentsWActions => {
   const [values, setValues] = useState<IAssignement[]>([]);
+  const { user } = React.useContext(AuthContext);
 
-  const { sendRequest } = useHttpClient();
+  // const { sendRequest } = useHttpClient();
 
   useEffect(() => {
     const fetchAssingments = async () => {
@@ -26,8 +35,18 @@ export const useAssignments = (): AssignmentsWActions => {
     }
   };
 
-  const deleteHandler = (deletedId: string) => {
-    setValues((prev) => prev.filter(({ _id }) => _id !== deletedId));
+  const deleteHandler = async (deletedId: string) => {
+    try {
+      await sendRequest(
+        ENDPOINT_ASSIGNMENTS + "/" + deletedId,
+        "DELETE",
+        null,
+        {
+          Authorization: "Barer " + user?.token,
+        }
+      );
+    } catch (err) {}
+    setValues((prev) => prev.filter((e) => e._id !== deletedId));
   };
 
   return { values, setValues, editHandler, deleteHandler };

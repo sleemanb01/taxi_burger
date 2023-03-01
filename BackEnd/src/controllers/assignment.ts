@@ -74,7 +74,7 @@ export const getAssignments = async (
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    assignments: assignments.map((a) => a.toObject({ getters: true })),
+    assignments: assignments,
   });
 };
 
@@ -137,9 +137,7 @@ export const addAssignment = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.Created)
-    .json({ assignment: newAssignment.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.Created).json({ assignment: newAssignment });
 };
 
 /* ************************************************************** */
@@ -185,9 +183,7 @@ export const updateAssignment = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ assignment: assignment.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ assignment: assignment });
 };
 
 /* ************************************************************** */
@@ -197,7 +193,7 @@ export const deleteAssignment = async (
   res: Response,
   next: NextFunction
 ) => {
-  const assignemntId = req.params.assignemntId;
+  const assignemntId = req.params.assignmentId;
   let targetAssignment;
 
   try {
@@ -223,7 +219,7 @@ export const deleteAssignment = async (
     return next(internalError);
   }
 
-  if (!targetUser || !(targetUser.email === process.env.MANAGER)) {
+  if (!targetUser) {
     const error = new HttpError(
       ERROR_INVALID_DATA,
       HTTP_RESPONSE_STATUS.Unauthorized

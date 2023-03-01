@@ -17,7 +17,7 @@ import {
   TXT_NAME,
   ERROR_TEXT_REQUIRED,
   ERROR_IMAGE,
-  TXT_UPDATE_CATEGORY,
+  TXT_UPDATE_STOCK,
 } from "../../../util/txt";
 import CategoryList from "../../components/util/CategorySelect";
 import { ErrorModal } from "../../components/util/UIElements/ErrorModal";
@@ -145,7 +145,7 @@ function UpdateStock() {
             disabled={!!!selected || !formState.isValid}
             variant="contained"
           >
-            {TXT_UPDATE_CATEGORY}
+            {TXT_UPDATE_STOCK}
           </Button>
         </form>
       )}

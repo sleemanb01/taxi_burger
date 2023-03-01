@@ -39,7 +39,7 @@ export const getCategories = async (
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    categories: categories.map((i) => i.toObject({ getters: true })),
+    categories: categories,
   });
 };
 
@@ -148,9 +148,7 @@ export const updateCategory = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ category: category.toObject({ getters: true }) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ category: category });
 };
 
 /* ************************************************************** */

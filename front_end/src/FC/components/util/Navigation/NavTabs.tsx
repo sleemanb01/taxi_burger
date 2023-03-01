@@ -4,16 +4,14 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { userWToken } from "../../../../types/types";
 import {
   TXT_STOCKS,
   TXT_ASSIGNMENTS,
   TXT_DASHBOARD,
 } from "../../../../util/txt";
 
-export default function BasicTabs({ user }: { user: userWToken | undefined }) {
+export default function BasicTabs({ isManager }: { isManager: boolean }) {
   const [tab, setTab] = useState(0);
-  const isManager = user?.email === process.env.REACT_APP_MANAGER;
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
@@ -32,7 +30,7 @@ export default function BasicTabs({ user }: { user: userWToken | undefined }) {
           <Tab
             component={Link}
             label={TXT_ASSIGNMENTS}
-            to="/assignements"
+            to="/assignments"
             sx={{ color: "red" }}
           />
           {isManager && (

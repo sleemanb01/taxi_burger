@@ -40,9 +40,7 @@ export const getUsers = async (
     return next(internalError);
   }
 
-  res
-    .status(HTTP_RESPONSE_STATUS.OK)
-    .json({ users: users.map((user) => user.toObject({ getters: true })) });
+  res.status(HTTP_RESPONSE_STATUS.OK).json({ users: users });
 };
 
 /* ************************************************************** */

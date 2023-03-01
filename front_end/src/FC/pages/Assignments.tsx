@@ -5,16 +5,21 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { AssignmentsWActions } from "../../types/types";
 import AssignmentItem from "../components/AssignmentItem";
+import ListItem from "@mui/material/ListItem";
+import { useAssignments } from "../../hooks/useAssignments";
+import { ErrorModal } from "../components/util/UIElements/ErrorModal";
+import LoadingSpinner from "../components/util/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../hooks/http-hook";
 
 /* ************************************************************************************************** */
 
-function Assignments({
-  assignmentsWActions,
-}: {
-  assignmentsWActions: AssignmentsWActions;
+function Assignments({}: // assignmentsWActions,
+{
+  // assignmentsWActions: AssignmentsWActions;
 }) {
   const nav = useNavigate();
-  const { values } = assignmentsWActions;
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { values, editHandler, deleteHandler } = useAssignments(sendRequest);
 
   const addClickHandler = () => {
     nav("/assignments/new");
@@ -24,11 +29,21 @@ function Assignments({
 
   return (
     <React.Fragment>
-      <List
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (
+        <div className="center">
+          <LoadingSpinner asOverlay />
+        </div>
+      )}
+      {/* <List
         renderItem={AssignmentItem}
         data={values}
         keyExtractor={({ _id }) => _id}
-      />
+        props={{ editHandler, deleteHandler }}
+      /> */}
+      {values.map((i) => (
+        <AssignmentItem item={i} deleteHandler={deleteHandler} />
+      ))}
       <Fab
         color="primary"
         aria-label="add"

@@ -72,3 +72,10 @@ export type AssignmentsWActions = {
   editHandler: (editedAssignment: IAssignements) => void;
   deleteHandler: (deletedId: string) => void;
 };
+
+export type ListProps = {
+  renderItem: (props: any) => React.ReactNode;
+  keyExtractor: (item: any) => string;
+  data: Array<any>;
+  props?: any;
+};

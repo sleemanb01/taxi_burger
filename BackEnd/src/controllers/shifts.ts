@@ -63,7 +63,7 @@ export const getShifts = async (
   }
 
   res.status(HTTP_RESPONSE_STATUS.OK).json({
-    categories: shifts.map((i) => i.toObject({ getters: true })),
+    categories: shifts,
   });
 };
 
