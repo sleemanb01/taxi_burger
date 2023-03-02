@@ -4,7 +4,6 @@ import NewAssignment from "../FC/pages/CRUD/NewAssignment";
 import UpdateAssignment from "../FC/pages/CRUD/UpdateAssignment";
 import { StocksWActions } from "../types/types";
 
-const Auth = React.lazy(() => import("../FC/pages/Auth"));
 const Stocks = React.lazy(() => import("../FC/pages/Stocks"));
 const DashBoard = React.lazy(() => import("../FC/pages/DashBoard"));
 const Assignments = React.lazy(() => import("../FC/pages/Assignments"));
@@ -18,46 +17,24 @@ const UpdateCategory = React.lazy(
 
 export function GetRoutes({
   stocksWActions,
-  token,
-}: // assignmentsWActions,
-{
+}: {
   stocksWActions: StocksWActions;
-  token: string | undefined;
-  // assignmentsWActions: AssignmentsWActions;
 }) {
-  let routes;
-
-  if (token) {
-    routes = (
-      <Routes>
-        <Route path="/" element={<Stocks stocksWActions={stocksWActions} />} />
-        <Route path="/dashboard" element={<DashBoard />} />
-        {/* <Route
-          path="/assignments"
-          element={<Assignments assignmentsWActions={assignmentsWActions} />}
-        /> */}
-        <Route path="/assignments" element={<Assignments />} />
-        <Route path="/assignments/new" element={<NewAssignment />} />
-        <Route
-          path="/assignments/:assignmentId"
-          element={<UpdateAssignment />}
-        />
-        <Route path="/stocks/new/:categoryId" element={<NewStock />} />
-        <Route path="/stocks/:stockId" element={<UpdateStock />} />
-        <Route path="/category/new" element={<NewCategory />} />
-        <Route path="/category/:categoryId" element={<UpdateCategory />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    );
-  } else {
-    routes = (
-      <Routes>
-        <Route path="/auth" element={<Auth />} />
-        <Route path="*" element={<Navigate to="/auth" replace />} />
-      </Routes>
-    );
-  }
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Stocks stocksWActions={stocksWActions} />} />
+      <Route path="/dashboard" element={<DashBoard />} />
+      <Route path="/assignments" element={<Assignments />} />
+      <Route path="/assignments/new" element={<NewAssignment />} />
+      <Route path="/assignments/:assignmentId" element={<UpdateAssignment />} />
+      <Route path="/stocks/new/:categoryId" element={<NewStock />} />
+      <Route path="/stocks/:stockId" element={<UpdateStock />} />
+      <Route path="/category/new" element={<NewCategory />} />
+      <Route path="/category/:categoryId" element={<UpdateCategory />} />
+      <Route path="/users" element={<Users />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 
   return routes;
 }

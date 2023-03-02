@@ -9,7 +9,7 @@ export const ERROR_IMAGE = "Please provide an image!";
 
 /* ************************************************************** */
 
-export const TXT_DASHBOARD = "דשבורד";
+export const TXT_DASHBOARD = "נוכחות";
 export const TXT_STOCKS = "מלאי";
 export const TXT_ASSIGNMENTS = "משימות";
 
@@ -31,7 +31,7 @@ export const TXT_SELECT = "בחר קטגוריה";
 export const TXT_NEW_CATEGORY = "קטגוריה חדשה";
 export const TXT_CATEGORY = "קטגוריה";
 
-export const TXT_LOGIN_REQUIRED = "נדרשת כניסה!";
+export const TXT_LOGIN_REQUIRED = "כניסה";
 export const TXT_SWITCH_TO = "החלף ל ";
 export const TXT_LOGIN = "כניסה";
 export const TXT_SIGNUP = "הרשמה";

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
-import { Card } from "@mui/material";
+import { Box, Card } from "@mui/material";
 import { AuthContext } from "../../hooks/auth-context";
 import { useForm } from "../../hooks/form-hook";
 import { useHttpClient } from "../../hooks/http-hook";
@@ -34,6 +34,9 @@ import { ErrorModal } from "../components/util/UIElements/ErrorModal";
 import { ImageUpload } from "../components/util/UIElements/ImageUpload";
 import LoadingSpinner from "../components/util/UIElements/LoadingSpinner";
 import { Input } from "../components/util/UIElements/Input";
+import Avatar from "@mui/material/Avatar";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
 
 /* ************************************************************************************************** */
 
@@ -125,10 +128,22 @@ function Auth() {
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Card className="authentication">
+      <Box
+        sx={{
+          marginTop: 5,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <>{isLoading && <LoadingSpinner asOverlay />}</>
-        <h2>{TXT_LOGIN_REQUIRED}</h2>
         <hr />
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          {TXT_LOGIN_REQUIRED}
+        </Typography>
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
             <React.Fragment>
@@ -180,14 +195,15 @@ function Auth() {
             type="submit"
             disabled={!formState.isValid}
             variant="contained"
+            sx={{ width: 1 }}
           >
             {isLoginMode ? TXT_LOGIN : TXT_SIGNUP}
           </Button>
         </form>
-        <Button onClick={switchModeHandler} variant="outlined">
+        <Button onClick={switchModeHandler} variant="outlined" sx={{ mt: 2 }}>
           {`${TXT_SWITCH_TO} ${isLoginMode ? TXT_SIGNUP : TXT_LOGIN}`}
         </Button>
-      </Card>
+      </Box>
     </React.Fragment>
   );
 }

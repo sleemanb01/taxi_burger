@@ -29,12 +29,6 @@ function Assignments() {
           <LoadingSpinner asOverlay />
         </div>
       )}
-      {/* <List
-        renderItem={AssignmentItem}
-        data={values}
-        keyExtractor={({ _id }) => _id}
-        props={{ editHandler, deleteHandler }}
-      /> */}
       {values.map((i) => (
         <AssignmentItem item={i} deleteHandler={deleteHandler} />
       ))}
