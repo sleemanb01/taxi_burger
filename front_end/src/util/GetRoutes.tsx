@@ -5,7 +5,7 @@ import UpdateAssignment from "../FC/pages/CRUD/UpdateAssignment";
 import { StocksWActions } from "../types/types";
 
 const Stocks = React.lazy(() => import("../FC/pages/Stocks"));
-const DashBoard = React.lazy(() => import("../FC/pages/DashBoard"));
+const Attendace = React.lazy(() => import("../FC/pages/Attendace"));
 const Assignments = React.lazy(() => import("../FC/pages/Assignments"));
 const Users = React.lazy(() => import("../FC/pages/Users"));
 const NewStock = React.lazy(() => import("../FC/pages/CRUD/NewStock"));
@@ -23,7 +23,7 @@ export function GetRoutes({
   const routes = (
     <Routes>
       <Route path="/" element={<Stocks stocksWActions={stocksWActions} />} />
-      <Route path="/dashboard" element={<DashBoard />} />
+      <Route path="/attendace" element={<Attendace />} />
       <Route path="/assignments" element={<Assignments />} />
       <Route path="/assignments/new" element={<NewAssignment />} />
       <Route path="/assignments/:assignmentId" element={<UpdateAssignment />} />

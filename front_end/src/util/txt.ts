@@ -9,7 +9,7 @@ export const ERROR_IMAGE = "Please provide an image!";
 
 /* ************************************************************** */
 
-export const TXT_DASHBOARD = "נוכחות";
+export const TXT_ATTENDANCE = "נוכחות";
 export const TXT_STOCKS = "מלאי";
 export const TXT_ASSIGNMENTS = "משימות";
 

@@ -7,7 +7,7 @@ import { useState } from "react";
 import {
   TXT_STOCKS,
   TXT_ASSIGNMENTS,
-  TXT_DASHBOARD,
+  TXT_ATTENDANCE,
 } from "../../../../util/txt";
 
 export default function BasicTabs({ isManager }: { isManager: boolean }) {
@@ -33,9 +33,7 @@ export default function BasicTabs({ isManager }: { isManager: boolean }) {
             to="/assignments"
             sx={{ color: "red" }}
           />
-          {isManager && (
-            <Tab component={Link} label={TXT_DASHBOARD} to="/dashboard" />
-          )}
+          <Tab component={Link} label={TXT_ATTENDANCE} to="/attendace" />
         </Tabs>
       </Box>
     </Box>
