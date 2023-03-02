@@ -1,10 +1,6 @@
 import { Suspense, useContext, useEffect, useState } from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import LandingPage from "./FC/pages/util/LandingPage";
 import { useStocks } from "./hooks/useStocks";
 import { AuthContext } from "./hooks/auth-context";
@@ -21,7 +17,6 @@ function App() {
   const { user, login } = useContext(AuthContext);
 
   const stocksWActions = useStocks();
-  // const assignmentsWActions = useAssignments();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
