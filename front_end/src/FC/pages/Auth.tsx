@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
-import { Box, Card } from "@mui/material";
+import { Box } from "@mui/material";
 import { AuthContext } from "../../hooks/auth-context";
 import { useForm } from "../../hooks/form-hook";
 import { useHttpClient } from "../../hooks/http-hook";
